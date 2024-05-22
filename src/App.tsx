@@ -3,6 +3,11 @@ import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
 import GameLayout from "./GameLayout.tsx";
 
+window.addEventListener('resize', function(event) {
+  console.log(`w: ${window.innerWidth}`)
+  console.log(`h: ${window.innerHeight}`)
+}, true);
+
 function App() {
 
   return (

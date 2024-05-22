@@ -11,7 +11,7 @@ export default function GameStats() {
             direction="row"
             display="flex"
             justifyContent="space-evenly"
-            sx={{width:"100%"}}
+            sx={{width:"auto", height:"auto"}}
         >
             <Typography>
                 Round: 1/5

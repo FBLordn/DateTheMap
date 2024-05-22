@@ -4,20 +4,21 @@ import { styled } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { Stack } from '@mui/material';
+import { SxProps, Theme } from '@mui/material/styles';
 
-function valuetext(value: number) {
-  return `${value}°C`;
-}
-
-const minValue = 0;
+const minValue = 1000;
 const maxValue = 2024;
 
 const Input = styled(MuiInput)`
   width: 42px;
 `;
 
+interface ListHeaderProps {
+  children?: React.ReactNode;
+  sx?: SxProps<Theme>;
+}
 
-export default function MinimumDistanceSlider() {
+export default function YearSelection({sx = [], children }: ListHeaderProps) {
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
 
   const handleSliderChange = (
@@ -54,6 +55,7 @@ export default function MinimumDistanceSlider() {
     <Stack 
       direction="row"
       spacing={3}
+      sx={sx}
     >
 
       <Input
@@ -62,7 +64,7 @@ export default function MinimumDistanceSlider() {
         sx={{width:75}}
         onChange={handleMinInputChange}
         inputProps={{
-          step: 10,
+          step: 5,
           min: minValue,
           max: maxValue,
           type: 'number',
@@ -71,14 +73,14 @@ export default function MinimumDistanceSlider() {
       />
       
       <Slider
-        getAriaLabel={() => 'Minimum distance'}
+        getAriaLabel={() => 'year range'}
         sx={{ ml:5, mr:5,}}
         min={minValue} 
         max={maxValue}
         value={[value[0] || minValue, value[1] || maxValue]}
         onChange={handleSliderChange}
         valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
+        getAriaValueText={(v)=> `${v}`}
       />
 
       <Input
@@ -87,7 +89,7 @@ export default function MinimumDistanceSlider() {
         sx={{width:75}}
         onChange={handleMaxInputChange}
         inputProps={{
-          step: 10,
+          step: 5,
           min: minValue,
           max: maxValue,
           type: 'number',
