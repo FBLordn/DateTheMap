@@ -4,6 +4,9 @@
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 
+pub mod mapApi;
+pub mod stats;
+
 fn main() {
     tauri::Builder::default()
         .run(tauri::generate_context!())

@@ -1,18 +1,23 @@
+use rand::Rng;
 
+#[derive(Default)]
 pub struct WorldMap {
-    correctYear : i32,
+    correct_year : i32,
 }
 
 impl WorldMap {
 
-    pub fn getMap(&mut self){
+    pub fn get_new_year(&mut self) {
+        self.correct_year = rand::thread_rng().gen_range(1500..2025)
+    }
+
+    pub fn get_map(&mut self){
         //API call
-        //self.correctYear = year;
         //return HTML element
     }
 
-    pub fn getCorrectYear() -> i32 {
-        self.correctYear
+    pub fn get_correct_year(&mut self) -> i32 {
+        self.correct_year
     }
 }
 
