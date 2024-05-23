@@ -3,10 +3,11 @@
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
     "devPath": "http://localhost:1420",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "withGlobalTauri": true
   },
   "package": {
-    "productName": "date_the_map",
+    "productName": "DateTheMap",
     "version": "0.0.0"
   },
   "tauri": {
@@ -19,7 +20,7 @@
     },
     "windows": [
       {
-        "title": "date_the_map",
+        "title": "DateTheMap",
         "width": 800,
         "height": 600
       }
