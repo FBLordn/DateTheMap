@@ -1,4 +1,7 @@
+use std::sync::Mutex;
+
 use crate::map_api::WorldMap;
+use tauri::State;
 
 pub struct Range<A>
 where
@@ -27,6 +30,7 @@ where
     }
 }
 
+#[derive(Default)]
 pub struct GameState {
     round: i8,
     score: i16,
@@ -73,4 +77,23 @@ impl GameState {
         self.round = 0;
         self.score = 0;
     }
+}
+
+#[allow(clippy::must_use_candidate)]
+#[tauri::command]
+pub fn finish_round(guess: [i16; 2], state: State<Mutex<GameState>>) -> i8 {
+    let mut game = state.lock().unwrap();
+    game.end_round(guess)
+}
+
+#[tauri::command]
+pub fn new_round(state: State<Mutex<GameState>>) {
+    let mut game = state.lock().unwrap();
+    game.new_round();
+}
+
+#[tauri::command]
+pub fn reset(state: State<Mutex<GameState>>) {
+    let mut game = state.lock().unwrap();
+    game.reset();
 }
