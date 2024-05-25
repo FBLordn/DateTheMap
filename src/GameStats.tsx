@@ -2,9 +2,13 @@ import { Stack, Typography } from "@mui/material";
 import PublicIcon from '@mui/icons-material/Public';
 
 
-export default function GameStats() {
-    
-    
+interface ListHeaderProps {
+  children?: React.ReactNode;
+  round?: number;
+  score?: number;
+}
+
+export default function GameStats({round, score, children}: ListHeaderProps) {
     
     return(
         <Stack
@@ -14,13 +18,13 @@ export default function GameStats() {
             sx={{width:"auto", height:"auto"}}
         >
             <Typography>
-                Round: 1/5
+                Round: {round}/5
             </Typography>
         
             <PublicIcon />
 
             <Typography>
-                Score: 30000
+                Score: {score}
             </Typography>
         </Stack>
     );

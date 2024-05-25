@@ -17,11 +17,21 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const minValue = 1000;
+const maxValue = 2024;
+
+
 export default function GameLayout() {
+  
+  const [guessRange, setRange] = React.useState<(number)[]>([minValue, maxValue]);
+  
+  let round: number = 0;
+  let score: number = 0;
+
   return (
     <Stack spacing={3} height="100vh" display="flex" flexDirection="column">
-      <Item> <GameStats /> </Item>
-      <Item sx={{flexGrow:1}}> <WorldMap /> </Item>
+      <Item> <GameStats round={round} score={score} /> </Item>
+      <Item sx={{flexGrow:1}}> <WorldMap/> </Item>
       <Item> 
         <Stack
           direction="row"
@@ -29,9 +39,11 @@ export default function GameLayout() {
         >
           <YearSelection 
             sx={{width:"86%"}}
+            callbackFunction={setRange}
           /> 
           <SubmitButton
             sx={{width:"14%"}}
+            guess={guessRange}
           />
         </Stack>
       </Item>

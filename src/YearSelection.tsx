@@ -16,9 +16,10 @@ const Input = styled(MuiInput)`
 interface ListHeaderProps {
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
+  callbackFunction: (val: number[]) => void;
 }
 
-export default function YearSelection({sx = [], children }: ListHeaderProps) {
+export default function YearSelection({sx = [], callbackFunction, children }: ListHeaderProps) {
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
 
   const handleSliderChange = (
@@ -35,6 +36,8 @@ export default function YearSelection({sx = [], children }: ListHeaderProps) {
     } else {
       setValue([value[0], newValue[1]]);
     }
+    console.log("Slider", value);
+    callbackFunction([value[0] || minValue, value[1] || maxValue]);
   };
 
   const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +45,7 @@ export default function YearSelection({sx = [], children }: ListHeaderProps) {
       event.target.value === '' ? '' : Number(event.target.value),
       value[1]
     ]);
+    callbackFunction([value[0] || minValue, value[1] || maxValue]);
   };
 
   const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +53,7 @@ export default function YearSelection({sx = [], children }: ListHeaderProps) {
       value[0], 
       event.target.value === '' ? '' : Number(event.target.value)
     ]);
+    callbackFunction([value[0] || minValue, value[1] || maxValue]);
   };
 
   return (

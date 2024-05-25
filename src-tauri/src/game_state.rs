@@ -50,6 +50,12 @@ impl GameState {
 
     #[must_use]
     pub fn calculate_score(&self, guess_range: &Range<i16>) -> i16 {
+        println!(
+            "Range: {}-{}, Year: {}",
+            guess_range.lower_bound,
+            guess_range.upper_bound,
+            &self.world_map.get_correct_year()
+        );
         if guess_range.is_in_range(&self.world_map.get_correct_year()) {
             2024 - (guess_range.upper_bound - guess_range.lower_bound)
         } else {
@@ -61,10 +67,9 @@ impl GameState {
         self.score += self.calculate_score(&Range::new(guess));
     }
 
-    pub fn end_round(&mut self, guess: [i16; 2]) -> i8 {
+    pub fn end_round(&mut self, guess: [i16; 2]) {
         self.round += 1;
         self.update_score(guess);
-        self.round
     }
 
     pub fn new_round(&mut self) {
@@ -81,9 +86,21 @@ impl GameState {
 
 #[allow(clippy::must_use_candidate)]
 #[tauri::command]
-pub fn finish_round(guess: [i16; 2], state: State<Mutex<GameState>>) -> i8 {
+pub fn finish_round(guess: [i16; 2], state: State<Mutex<GameState>>) {
     let mut game = state.lock().unwrap();
-    game.end_round(guess)
+    game.end_round(guess);
+    println!(
+        "Round: {}, Score: {}, Year: {}",
+        game.get_round(),
+        game.get_score(),
+        game.world_map.get_correct_year()
+    );
+}
+
+#[tauri::command]
+pub fn get_round(state: State<Mutex<GameState>>) -> i8 {
+    let game = state.lock().unwrap();
+    game.get_round()
 }
 
 #[tauri::command]
