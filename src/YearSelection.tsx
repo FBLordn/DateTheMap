@@ -28,33 +28,33 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
     activeThumb: number,
   ) => {
     if (!Array.isArray(newValue)) {
-      return;
+      newValue = [newValue, newValue]
     }
 
     if (activeThumb === 0) {
       setValue([newValue[0], value[1]]);
-    } else {
+    } else if (activeThumb === 1) {
       setValue([value[0], newValue[1]]);
+    } else {
+      setValue(newValue)
     }
     console.log("Slider", value);
-    callbackFunction([value[0] || minValue, value[1] || maxValue]);
+    callbackFunction([newValue[0] || minValue, newValue[1] || maxValue]);
   };
 
+
   const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue([
-      event.target.value === '' ? '' : Number(event.target.value),
-      value[1]
-    ]);
-    callbackFunction([value[0] || minValue, value[1] || maxValue]);
+    handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 0)
   };
 
   const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue([
-      value[0], 
-      event.target.value === '' ? '' : Number(event.target.value)
-    ]);
-    callbackFunction([value[0] || minValue, value[1] || maxValue]);
+    handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 1)
   };
+
+  const onChangeCommited = (event: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) =>
+    {
+      handleSliderChange(event as unknown as Event, value, 2)
+    }
 
   return (
     <Stack 
@@ -84,6 +84,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
         max={maxValue}
         value={[value[0] || minValue, value[1] || maxValue]}
         onChange={handleSliderChange}
+        onChangeCommitted={onChangeCommited}
         valueLabelDisplay="auto"
         getAriaValueText={(v)=> `${v}`}
       />
