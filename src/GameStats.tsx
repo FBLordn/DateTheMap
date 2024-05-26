@@ -3,12 +3,11 @@ import PublicIcon from '@mui/icons-material/Public';
 
 
 interface ListHeaderProps {
-  children?: React.ReactNode;
-  round?: number;
-  score?: number;
+    children?: React.ReactNode;
+    scoreRound: number[];
 }
 
-export default function GameStats({round, score, children}: ListHeaderProps) {
+export default function GameStats({scoreRound, children}: ListHeaderProps) {
     
     return(
         <Stack
@@ -18,13 +17,13 @@ export default function GameStats({round, score, children}: ListHeaderProps) {
             sx={{width:"auto", height:"auto"}}
         >
             <Typography>
-                Round: {round}/5
+                Round: {scoreRound[1]}/5
             </Typography>
         
             <PublicIcon />
 
             <Typography>
-                Score: {score}
+                Score: {scoreRound[0]}
             </Typography>
         </Stack>
     );

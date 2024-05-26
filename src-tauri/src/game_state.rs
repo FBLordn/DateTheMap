@@ -1,6 +1,7 @@
 use std::sync::Mutex;
 
 use crate::map_api::WorldMap;
+use serde::Serialize;
 use tauri::State;
 
 pub struct Range<A>
@@ -30,7 +31,7 @@ where
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Clone, Serialize)]
 pub struct GameState {
     round: i8,
     score: i16,
@@ -97,20 +98,30 @@ pub fn finish_round(guess: [i16; 2], state: State<Mutex<GameState>>) {
     );
 }
 
+#[allow(clippy::must_use_candidate)]
 #[tauri::command]
 pub fn get_round(state: State<Mutex<GameState>>) -> i8 {
     let game = state.lock().unwrap();
     game.get_round()
 }
 
+#[allow(clippy::must_use_candidate)]
 #[tauri::command]
 pub fn new_round(state: State<Mutex<GameState>>) {
     let mut game = state.lock().unwrap();
     game.new_round();
 }
 
+#[allow(clippy::must_use_candidate)]
 #[tauri::command]
 pub fn reset(state: State<Mutex<GameState>>) {
     let mut game = state.lock().unwrap();
     game.reset();
+}
+
+#[allow(clippy::must_use_candidate)]
+#[tauri::command]
+pub fn get_game_state(state: State<Mutex<GameState>>) -> GameState {
+    let game = state.lock().unwrap();
+    game.clone()
 }

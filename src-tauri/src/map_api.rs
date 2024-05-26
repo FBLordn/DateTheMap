@@ -1,5 +1,7 @@
 use rand::Rng;
+use serde::Serialize;
 
+#[derive(Clone, Serialize)]
 pub struct WorldMap {
     correct_year: i16,
 }

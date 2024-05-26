@@ -28,7 +28,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
     activeThumb: number,
   ) => {
     if (!Array.isArray(newValue)) {
-      newValue = [newValue, newValue]
+      return
     }
 
     if (activeThumb === 0) {

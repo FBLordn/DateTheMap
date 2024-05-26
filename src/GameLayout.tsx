@@ -7,6 +7,8 @@ import WorldMap from './WorldMap';
 import YearSelection from './YearSelection';
 import GameStats from './GameStats';
 import SubmitButton from './SubmitButton';
+import { GameState } from './ApiTypes';
+import { invoke } from '@tauri-apps/api';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -23,14 +25,22 @@ const maxValue = 2024;
 
 export default function GameLayout() {
   
-  const [guessRange, setRange] = React.useState<(number)[]>([minValue, maxValue]);
+  const [guessRange, setRange] = React.useState<number[]>([minValue, maxValue]);
   
-  let round: number = 0;
-  let score: number = 0;
+  const [gameState, setGameState] = React.useState<GameState>();
+  React.useEffect(() => {
+    async function getGameState() {
+      const game: GameState = await invoke('get_game_state')
+      setGameState(game);
+    }
+    getGameState();
+  }, []);
 
   return (
     <Stack spacing={3} height="100vh" display="flex" flexDirection="column">
-      <Item> <GameStats round={round} score={score} /> </Item>
+    { gameState &&
+      <Item> <GameStats scoreRound={[gameState.score, gameState.round]} /> </Item>
+    }
       <Item sx={{flexGrow:1}}> <WorldMap/> </Item>
       <Item> 
         <Stack
@@ -44,6 +54,7 @@ export default function GameLayout() {
           <SubmitButton
             sx={{width:"14%"}}
             guess={guessRange}
+            setGameState={setGameState}
           />
         </Stack>
       </Item>

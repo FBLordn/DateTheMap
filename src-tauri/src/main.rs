@@ -4,7 +4,7 @@
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 use game_state::GameState;
-use std::{sync::Mutex};
+use std::sync::Mutex;
 
 pub mod game_state;
 pub mod map_api;
@@ -17,6 +17,7 @@ fn main() {
             game_state::new_round,
             game_state::reset,
             game_state::get_round,
+            game_state::get_game_state,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
