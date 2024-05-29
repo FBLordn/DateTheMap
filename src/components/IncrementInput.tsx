@@ -12,11 +12,6 @@ interface IncrementInputProps {
     onChange?: (event: SyntheticIncrementEvent) => void
 }
 
-interface SyntheticIncrementEvent {
-    target: {
-        value: number
-    }
-}
 
 export default function IncrementInput(props: InputProps & IncrementInputProps) {
     console.log(props.value)
