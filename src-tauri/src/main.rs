@@ -13,10 +13,9 @@ fn main() {
     tauri::Builder::default()
         .manage(Mutex::new(GameState::default()))
         .invoke_handler(tauri::generate_handler![
-            game_state::finish_round,
+            game_state::make_guess,
             game_state::new_round,
             game_state::reset,
-            game_state::get_round,
             game_state::get_game_state,
         ])
         .run(tauri::generate_context!())

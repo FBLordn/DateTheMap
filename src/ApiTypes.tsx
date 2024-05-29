@@ -2,8 +2,9 @@ import * as React from 'react';
 
 
 type GameState = {
-  score: number;
+  total: number;
   round: number;
+  score: number;
   worldMap: WorldMap;
 }
 
