@@ -11,7 +11,6 @@ import { invoke } from '@tauri-apps/api';
 
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
@@ -36,7 +35,7 @@ export default function GameLayout() {
   }, []);
 
   return (
-    <Stack spacing={3} height="100vh" display="flex" flexDirection="column">
+    <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
     { gameState &&
       <Item> <GameStats scoreRound={[gameState.score, gameState.round]} /> </Item>
     }
@@ -44,16 +43,17 @@ export default function GameLayout() {
       <Item> 
         <Stack
           direction="row"
-          spacing={3}
+          spacing={2}
         >
           <YearSelection 
-            sx={{width:"86%"}}
+            sx={{width:17/20}}
             callbackFunction={setRange}
           /> 
           <SubmitButton
-            sx={{width:"14%"}}
+            sx={{width:3/20}}
             guess={guessRange}
             setGameState={setGameState}
+            isLastRound={false}
           />
         </Stack>
       </Item>

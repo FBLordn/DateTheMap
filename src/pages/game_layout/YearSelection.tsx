@@ -27,7 +27,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
     activeThumb: number,
   ) => {
     if (!Array.isArray(newValue)) {
-      return
+      newValue = [newValue, newValue]
     }
 
     if (activeThumb === 0) {
@@ -65,7 +65,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
       <Input
         value={value[0]}
         size="small"
-        sx={{width:75}}
+        sx={{minWidth:65}}
         onChange={handleMinInputChange}
         inputProps={{
           step: 5,
@@ -78,6 +78,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
       
       <Slider
         getAriaLabel={() => 'year range'}
+        color='secondary'
         sx={{ ml:5, mr:5,}}
         min={minValue} 
         max={maxValue}
@@ -91,7 +92,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
       <Input
         value={value[1]}
         size="small"
-        sx={{width:75}}
+        sx={{minWidth:65}}
         onChange={handleMaxInputChange}
         inputProps={{
           step: 5,
