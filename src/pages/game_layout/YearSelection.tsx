@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
@@ -23,7 +22,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
 
   const handleSliderChange = (
-    event: Event,
+    _event: Event,
     newValue: number | number[],
     activeThumb: number,
   ) => {

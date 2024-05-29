@@ -1,6 +1,3 @@
-import * as React from 'react';
-
-
 type GameState = {
   score: number;
   round: number;
