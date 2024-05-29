@@ -14,8 +14,8 @@ interface IncrementInputProps extends InputPropsNoOnChange {
     onChange?: (event: SyntheticIncrementEvent) => void
 }
 
-export default function IncrementInput(props: IncrementInputProps) {
-    console.log(props.value)
+
+export default function IncrementInput(props: InputProps & IncrementInputProps) {
     const [value, setValue] = React.useState(props.value as number)
     const theme = useTheme();
     const step = React.useMemo(() => (props.inputProps?.step || 1), [props.inputProps])
