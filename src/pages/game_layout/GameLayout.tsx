@@ -53,7 +53,6 @@ export default function GameLayout() {
             sx={{width:3/20}}
             guess={guessRange}
             setGameState={setGameState}
-            isLastRound={false}
           />
         </Stack>
       </Item>

@@ -6,14 +6,15 @@ import React from "react";
 
 const WIDTH_MULTIPLIER = 13;
 
-interface IncrementInputProps {
+type InputPropsNoOnChange = Omit<InputProps, "onChange"> 
+
+interface IncrementInputProps extends InputPropsNoOnChange {
     bgColor?: PaletteColor,
     buttonColor?: PaletteColor,
     onChange?: (event: SyntheticIncrementEvent) => void
 }
 
-
-export default function IncrementInput(props: InputProps & IncrementInputProps) {
+export default function IncrementInput(props: IncrementInputProps) {
     console.log(props.value)
     const [value, setValue] = React.useState(props.value as number)
     const theme = useTheme();
@@ -67,7 +68,11 @@ export default function IncrementInput(props: InputProps & IncrementInputProps) 
                 ]}
                 disableUnderline={true}
                 value={value}
-                onChange={props.onChange}
+                onChange={(event) => {
+                    if (props?.onChange) {
+                        props.onChange({target: {value: Number(event.target.value)}})
+                    }
+                }}
             >
             </Input>
         <Stack direction="column">
