@@ -7,7 +7,7 @@ import WorldMap from './WorldMap';
 import YearSelection from './YearSelection';
 import GameStats from './GameStats';
 import SubmitButton from './SubmitButton';
-import { GameState } from './ApiTypes';
+import { GameState } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api';
 
 
