@@ -47,7 +47,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
     handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 0)
   };
 
-  const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMaxInputChange = (event: SyntheticIncrementEvent) => {
     handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 1)
   };
 
@@ -63,10 +63,11 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
       sx={sx}
     >
 
-      <Input
+      <IncrementInput
         value={value[0]}
         size="small"
         sx={{minWidth:65}}
+        //@ts-ignore
         onChange={handleMinInputChange}
         inputProps={{
           step: 5,
@@ -94,6 +95,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
         value={value[1]}
         size="small"
         sx={{minWidth:65}}
+        //@ts-ignore
         onChange={handleMaxInputChange}
         inputProps={{
           step: 5,

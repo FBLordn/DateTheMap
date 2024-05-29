@@ -14,7 +14,6 @@ interface IncrementInputProps {
 
 
 export default function IncrementInput(props: InputProps & IncrementInputProps) {
-    console.log(props.value)
     const [value, setValue] = React.useState(props.value as number)
     const theme = useTheme();
     const step = React.useMemo(() => (props.inputProps?.step || 1), [props.inputProps])
