@@ -4,6 +4,7 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { Stack } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import IncrementInput from '../../components/IncrementInput';
 
 const minValue = 1000;
 const maxValue = 2024;
@@ -89,7 +90,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
         getAriaValueText={(v)=> `${v}`}
       />
 
-      <Input
+      <IncrementInput
         value={value[1]}
         size="small"
         sx={{minWidth:65}}
