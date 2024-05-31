@@ -27,19 +27,15 @@ export default function IncrementInput(props: IncrementInputProps) {
     React.useEffect(() => { setValue(props.value as number) }, [props.value]);
 
     const onIncrement = () => {
-        const new_val = value + step
-        if ((new_val) <= (props.inputProps?.max || Number.MAX_VALUE)) {
-            setValue(new_val)
-            if (props?.onChange) {props?.onChange({target: {value: new_val}})}
-        }
+        const new_val = Math.min(value + step, (props.inputProps?.max || Number.MAX_VALUE))
+        setValue(new_val)
+        if (props?.onChange) {props?.onChange({target: {value: new_val}})}
     }
-
+﻿
     const onDecrement = () => {
-        const new_val = value - step
-        if ((new_val) >= (props.inputProps?.min || Number.MIN_VALUE)) {
-            setValue(value - step)
-            if (props?.onChange) {props?.onChange({target: {value: new_val}})}
-        }
+        const new_val = Math.max(value - step, (props.inputProps?.min || Number.MIN_VALUE))
+        setValue(new_val)
+        if (props?.onChange) {props?.onChange({target: {value: new_val}})}
     }
 
     return (
