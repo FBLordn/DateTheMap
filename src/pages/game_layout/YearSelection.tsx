@@ -68,6 +68,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
           step: 5,
           min: minValue,
           max: maxValue,
+          maxlength: 4,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
@@ -95,6 +96,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
           step: 5,
           min: minValue,
           max: maxValue,
+          maxlength: 4,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}

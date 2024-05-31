@@ -19,7 +19,7 @@ export default function IncrementInput(props: IncrementInputProps) {
     const [value, setValue] = React.useState(props.value as number)
     const theme = useTheme();
     const step = React.useMemo(() => (props.inputProps?.step || 1), [props.inputProps])
-    const max_input_length = React.useMemo(
+    const maxInputLength = React.useMemo(
         () => Math.max(props.value as number, props.inputProps?.min, props.inputProps?.max).toString().length,
         [props.value, props.inputProps?.min, props.inputProps?.max]
     )
@@ -27,16 +27,31 @@ export default function IncrementInput(props: IncrementInputProps) {
     React.useEffect(() => { setValue(props.value as number) }, [props.value]);
 
     const onIncrement = () => {
-        const new_val = Math.min(value + step, (props.inputProps?.max || Number.MAX_VALUE))
-        setValue(new_val)
-        if (props?.onChange) {props?.onChange({target: {value: new_val}})}
+        const newValue = Math.min(value + step, (props.inputProps?.max || Number.MAX_VALUE))
+        setValue(newValue)
+        if (props?.onChange) {props?.onChange({target: {value: newValue}})}
     }
 ﻿
     const onDecrement = () => {
-        const new_val = Math.max(value - step, (props.inputProps?.min || Number.MIN_VALUE))
-        setValue(new_val)
-        if (props?.onChange) {props?.onChange({target: {value: new_val}})}
+        const newValue = Math.max(value - step, (props.inputProps?.min || Number.MIN_VALUE))
+        setValue(newValue)
+        if (props?.onChange) {props?.onChange({target: {value: newValue}})}
     }
+
+    const onInputChange = (event : React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (event.target.value.length <= maxInputLength) {
+            if (props?.onChange) {props.onChange({target: {value: Number(event.target.value)}})}
+        }
+    }
+﻿
+    const onInputBlur = () => {
+        const newValue = Math.min(
+            (props.inputProps?.max || Number.MAX_VALUE),
+            Math.max(value, (props.inputProps?.min || Number.MIN_VALUE))
+        )
+        setValue(newValue)
+        if (props?.onChange) {props.onChange({target: {value: newValue}})}
+    } 
 
     return (
         <Stack direction="row">
@@ -53,7 +68,7 @@ export default function IncrementInput(props: IncrementInputProps) {
                     },
                     ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
                     {
-                        minWidth: max_input_length*WIDTH_MULTIPLIER,
+                        minWidth: maxInputLength*WIDTH_MULTIPLIER,
                         borderTopRightRadius: 0,
                         borderBottomRightRadius: 0,
                         borderTopLeftRadius: theme.shape.borderRadius,
@@ -64,11 +79,8 @@ export default function IncrementInput(props: IncrementInputProps) {
                 ]}
                 disableUnderline={true}
                 value={value}
-                onChange={(event) => {
-                    if (props?.onChange) {
-                        props.onChange({target: {value: Number(event.target.value)}})
-                    }
-                }}
+                onChange={onInputChange}
+                onBlur={onInputBlur}
             >
             </Input>
         <Stack direction="column">
