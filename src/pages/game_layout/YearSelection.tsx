@@ -9,10 +9,6 @@ import IncrementInput from '../../components/IncrementInput';
 const minValue = 1000;
 const maxValue = 2024;
 
-const Input = styled(MuiInput)`
-  width: 42px;
-`;
-
 interface ListHeaderProps {
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
@@ -43,7 +39,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
   };
 
 
-  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMinInputChange = (event: SyntheticIncrementEvent) => {
     handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 0)
   };
 
@@ -67,7 +63,6 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
         value={value[0]}
         size="small"
         sx={{minWidth:65}}
-        //@ts-ignore
         onChange={handleMinInputChange}
         inputProps={{
           step: 5,
@@ -95,7 +90,6 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
         value={value[1]}
         size="small"
         sx={{minWidth:65}}
-        //@ts-ignore
         onChange={handleMaxInputChange}
         inputProps={{
           step: 5,
