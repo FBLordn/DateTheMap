@@ -9,21 +9,28 @@ interface ListHeaderProps {
   sx?: SxProps<Theme>;
   guess: number[];
   setGameState: (newGameState: GameState) => void;
+  isLastRound: boolean;
+  setRoundEnded: (roundEnded: boolean) => void;
 }
 
-export default function SubmitButton({ sx = [], guess, setGameState: setGameState, children}: ListHeaderProps) {
+export default function SubmitButton({ sx = [], guess, setGameState: setGameState, isLastRound, setRoundEnded, children}: ListHeaderProps) {
 
-    function handleClick(){
-        console.log("Button", guess);
-        invoke('finish_round', {guess: guess});
-        invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));
-        return 
+  function handleClick(){
+    setRoundEnded(true);
+    invoke('make_guess', {guess: guess});
+    invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));    
+    if(!isLastRound) {
+      invoke('new_round');
+    } else {
+
     }
-    return (
-        <Button
-            sx={sx}
-            variant="contained"
-            onClick={handleClick}    
-        >Submit</Button>
-    );
+  }
+
+  return (
+    <Button
+      sx={sx}
+      variant="contained"
+      onClick={handleClick}    
+    >Submit</Button>
+  );
 }

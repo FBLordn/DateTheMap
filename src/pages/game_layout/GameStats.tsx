@@ -23,7 +23,7 @@ export default function GameStats({scoreRound, children}: ListHeaderProps) {
             <PublicIcon />
 
             <Typography>
-                Score: {scoreRound[0]}
+                Total: {scoreRound[0]}
             </Typography>
         </Stack>
     );
