@@ -1,17 +1,13 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { Stack } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
+import IncrementInput from '../../components/IncrementInput';
 
 const minValue = 1000;
 const maxValue = 2024;
-
-const Input = styled(MuiInput)`
-  width: 42px;
-`;
 
 interface ListHeaderProps {
   children?: React.ReactNode;
@@ -23,7 +19,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
 
   const handleSliderChange = (
-    event: Event,
+    _event: Event,
     newValue: number | number[],
     activeThumb: number,
   ) => {
@@ -43,11 +39,11 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
   };
 
 
-  const handleMinInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMinInputChange = (event: SyntheticIncrementEvent) => {
     handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 0)
   };
 
-  const handleMaxInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMaxInputChange = (event: SyntheticIncrementEvent) => {
     handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 1)
   };
 
@@ -63,7 +59,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
       sx={sx}
     >
 
-      <Input
+      <IncrementInput
         value={value[0]}
         size="small"
         sx={{minWidth:65}}
@@ -72,6 +68,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
           step: 5,
           min: minValue,
           max: maxValue,
+          maxlength: 4,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
@@ -90,7 +87,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
         getAriaValueText={(v)=> `${v}`}
       />
 
-      <Input
+      <IncrementInput
         value={value[1]}
         size="small"
         sx={{minWidth:65}}
@@ -99,6 +96,7 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
           step: 5,
           min: minValue,
           max: maxValue,
+          maxlength: 4,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
