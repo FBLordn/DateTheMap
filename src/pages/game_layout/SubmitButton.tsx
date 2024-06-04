@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import { SxProps, Theme } from '@mui/material/styles';
 import { invoke } from '@tauri-apps/api';
-import { GameState } from './ApiTypes';
+import { GameState } from '../../ApiTypes';
 
 interface ListHeaderProps {
   children?: React.ReactNode;
@@ -22,7 +22,7 @@ export default function SubmitButton({ sx = [], guess, setGameState: setGameStat
     if(!isLastRound) {
       invoke('new_round');
     } else {
-
+      invoke('reset')
     }
   }
 

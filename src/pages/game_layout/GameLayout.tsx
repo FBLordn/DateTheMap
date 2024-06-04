@@ -22,15 +22,22 @@ const Item = styled(Paper)(({ theme }) => ({
 const minValue = 1000;
 const maxValue = 2024;
 
+interface ListHeaderProps {
+  setIsPlaying: (isPlaying: boolean) => void;
+}
 
-export default function GameLayout() {
+export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   
   const [guessRange, setRange] = React.useState<number[]>([minValue, maxValue]);
   
   const [gameState, setGameState] = React.useState<GameState>();
+
+  const [roundEndOpen, setRoundEndOpen] = React.useState<boolean>(false);
   
-  const [RoundEndOpen, setRoundEndOpen] = React.useState(false);
-  
+  if (gameState && gameState.round > 5) {
+    setIsPlaying(false);
+  }
+
   React.useEffect(() => {
     async function getGameState() {
       const game: GameState = await invoke('get_game_state')
@@ -45,7 +52,7 @@ export default function GameLayout() {
       <RoundEnd 
         scoreRound={[gameState.score, gameState.round]} 
         isLastRound={gameState.round > 4} 
-        isOpen={RoundEndOpen} 
+        isOpen={roundEndOpen} 
         setClosed={setRoundEndOpen} 
       /> 
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">

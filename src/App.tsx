@@ -5,6 +5,7 @@ import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./Themes.tsx";
 import { CssBaseline, useMediaQuery } from "@mui/material";
+import GameMenu from "./GameMenu.tsx";
 
 window.addEventListener('resize', function(event) {
   console.log(`w: ${window.innerWidth}`)
@@ -13,20 +14,31 @@ window.addEventListener('resize', function(event) {
 
 function App() {
 
-const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-const theme = React.useMemo(
-  () =>
-    prefersDarkMode ? darkTheme : lightTheme,
-  [prefersDarkMode],
-);
+  const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
 
-  return (
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
-    <GameLayout />
-  </ThemeProvider>
+  const theme = React.useMemo(
+    () =>
+      prefersDarkMode ? darkTheme : lightTheme,
+    [prefersDarkMode],
   );
+
+  if (isPlaying) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <GameLayout setIsPlaying={setIsPlaying} />
+      </ThemeProvider>
+    );
+  } else {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <GameMenu setIsPlaying={setIsPlaying} />
+      </ThemeProvider>
+    );
+  }
 }
 
 export default App;
