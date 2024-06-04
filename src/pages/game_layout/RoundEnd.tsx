@@ -36,9 +36,11 @@ export default function CustomizedDialogs({scoreRound, isLastRound, isOpen, setC
   return (
     <React.Fragment>
       <BootstrapDialog
-        onClose={handleClose}
+        sx={{p:2}}
+        fullWidth={true}
         aria-labelledby="customized-dialog-title"
         open={isOpen}
+        onClose={handleClose}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
         Round {scoreRound[1]}

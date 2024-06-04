@@ -8,7 +8,7 @@ import GameStats from './GameStats';
 import SubmitButton from './SubmitButton';
 import { GameState } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api';
-import RoundEnd from '../../RoundEnd';
+import RoundEnd from './RoundEnd';
 import { Typography } from '@mui/material';
 
 
