@@ -5,7 +5,7 @@ import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./Themes.tsx";
 import { CssBaseline, useMediaQuery } from "@mui/material";
-import GameMenu from "./GameMenu.tsx";
+import GameMenu from "./Menu.tsx";
 
 window.addEventListener('resize', function(event) {
   console.log(`w: ${window.innerWidth}`)
@@ -24,21 +24,15 @@ function App() {
     [prefersDarkMode],
   );
 
-  if (isPlaying) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <GameLayout setIsPlaying={setIsPlaying} />
-      </ThemeProvider>
-    );
-  } else {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <GameMenu setIsPlaying={setIsPlaying} />
-      </ThemeProvider>
-    );
-  }
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      { isPlaying ? 
+        <GameLayout setIsPlaying={setIsPlaying} /> 
+        : 
+        <GameMenu onSubmit={() => setIsPlaying(true)} title="Date The Map" buttonName="Start Game"/> }
+    </ThemeProvider>
+  );
 }
 
 export default App;
