@@ -7,11 +7,6 @@ import { darkTheme, lightTheme } from "./Themes.tsx";
 import { CssBaseline, useMediaQuery } from "@mui/material";
 import GameMenu from "./Menu.tsx";
 
-window.addEventListener('resize', function(event) {
-  console.log(`w: ${window.innerWidth}`)
-  console.log(`h: ${window.innerHeight}`)
-}, true);
-
 function App() {
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');

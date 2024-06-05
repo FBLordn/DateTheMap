@@ -34,7 +34,6 @@ export default function YearSelection({sx = [], callbackFunction, children }: Li
     } else {
       setValue(newValue)
     }
-    console.log("Slider", value);
     callbackFunction([newValue[0] || minValue, newValue[1] || maxValue]);
   };
 
