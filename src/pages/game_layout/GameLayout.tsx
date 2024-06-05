@@ -34,7 +34,8 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
 
   const [roundEndOpen, setRoundEndOpen] = React.useState<boolean>(false);
   
-  if (gameState && gameState.round > 5) {
+  if (gameState && gameState.round === 6) {
+    invoke('reset')
     setIsPlaying(false);
   }
 
@@ -54,6 +55,7 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
         isLastRound={gameState.round > 4} 
         isOpen={roundEndOpen} 
         setClosed={setRoundEndOpen} 
+        setGameState={setGameState}
       /> 
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
       <Item> <GameStats scoreRound={[gameState.total, gameState.round]} /> </Item>
@@ -74,7 +76,6 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
               sx={{width:3/20}}
               guess={guessRange}
               setGameState={setGameState}
-              isLastRound={gameState.round > 4}
               setRoundEnded={setRoundEndOpen}
             />
           </Stack>

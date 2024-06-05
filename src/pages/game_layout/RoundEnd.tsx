@@ -6,6 +6,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
+import { invoke } from '@tauri-apps/api';
+import { GameState } from '../../ApiTypes';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -22,13 +24,16 @@ interface ListHeaderProps {
   isLastRound: boolean;
   isOpen: boolean;
   setClosed: (open: boolean) => void;
+  setGameState: (newGameState: GameState) => void;
 }
 
-export default function CustomizedDialogs({scoreRound, isLastRound, isOpen, setClosed, children}: ListHeaderProps) {
+export default function CustomizedDialogs({scoreRound, isLastRound, isOpen, setClosed, setGameState, children}: ListHeaderProps) {
 
   
   const handleClose = () => {
     setClosed(false);
+    invoke('new_round');
+    invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));    
   };
 
   const buttonName = isLastRound ? "Finish" : "Next Round";
