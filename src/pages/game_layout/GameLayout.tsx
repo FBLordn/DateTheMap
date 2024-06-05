@@ -8,7 +8,7 @@ import GameStats from './GameStats';
 import SubmitButton from './SubmitButton';
 import { GameState } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api';
-import RoundEnd from './RoundEnd';
+import RoundEndPopUp from './RoundEndPopUp';
 import { Typography } from '@mui/material';
 
 
@@ -50,7 +50,7 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   return (
     gameState ?
       <>
-      <RoundEnd 
+      <RoundEndPopUp 
         scoreRound={[gameState.score, gameState.round]} 
         isLastRound={gameState.round > 4} 
         isOpen={roundEndOpen} 

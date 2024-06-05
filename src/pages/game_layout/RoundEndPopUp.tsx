@@ -27,7 +27,7 @@ interface ListHeaderProps {
   setGameState: (newGameState: GameState) => void;
 }
 
-export default function CustomizedDialogs({scoreRound, isLastRound, isOpen, setClosed, setGameState, children}: ListHeaderProps) {
+export default function RoundEndPopUp({scoreRound, isLastRound, isOpen, setClosed, setGameState, children}: ListHeaderProps) {
 
   
   const handleClose = () => {
