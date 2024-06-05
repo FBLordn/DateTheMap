@@ -84,8 +84,9 @@ impl GameState {
     }
 
     pub fn reset(&mut self) {
-        self.round = 0;
+        self.round = 1;
         self.total = 0;
+        self.score = 0;
     }
 }
 
