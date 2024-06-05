@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import WorldMap from './WorldMap';
-import YearSelection from './YearSelection';
+import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
 import SubmitButton from './SubmitButton';
 import { GameState } from '../../ApiTypes';
@@ -64,9 +64,11 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
             direction="row"
             spacing={2}
           >
-            <YearSelection 
+            <InputRangeSlider 
               sx={{width:17/20}}
               callbackFunction={setRange}
+              minValue={minValue}
+              maxValue={maxValue}
             /> 
             <SubmitButton
               sx={{width:3/20}}

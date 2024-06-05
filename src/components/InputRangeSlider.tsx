@@ -4,18 +4,18 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import { Stack } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import IncrementInput from '../../components/IncrementInput';
+import IncrementInput from './IncrementInput';
 
-const minValue = 1000;
-const maxValue = 2024;
 
 interface ListHeaderProps {
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
   callbackFunction: (val: number[]) => void;
+  minValue: number
+  maxValue: number
 }
 
-export default function YearSelection({sx = [], callbackFunction, children }: ListHeaderProps) {
+export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, children }: ListHeaderProps) {
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
 
   const handleSliderChange = (
