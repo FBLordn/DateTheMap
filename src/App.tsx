@@ -5,7 +5,7 @@ import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./Themes.tsx";
 import { CssBaseline, useMediaQuery } from "@mui/material";
-import GameMenu from "./Menu.tsx";
+import GameMenu from "./components/Menu.tsx";
 
 function App() {
 
