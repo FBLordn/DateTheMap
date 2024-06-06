@@ -8,6 +8,7 @@ use std::sync::Mutex;
 
 pub mod game_state;
 pub mod map_api;
+pub mod range;
 
 fn main() {
     tauri::Builder::default()
