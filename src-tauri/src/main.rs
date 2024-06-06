@@ -6,18 +6,19 @@
 use game_state::GameState;
 use std::sync::Mutex;
 
-pub mod game_state;
-pub mod map_api;
-pub mod range;
+mod game_state;
+mod map_api;
+mod range;
+mod tauri_api;
 
 fn main() {
     tauri::Builder::default()
         .manage(Mutex::new(GameState::default()))
         .invoke_handler(tauri::generate_handler![
-            game_state::make_guess,
-            game_state::new_round,
-            game_state::reset,
-            game_state::get_game_state,
+            tauri_api::make_guess,
+            tauri_api::new_round,
+            tauri_api::reset,
+            tauri_api::get_game_state,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

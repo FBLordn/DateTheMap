@@ -10,7 +10,7 @@ pub struct GameState {
     round: i8,
     total: i16,
     score: i16,
-    world_map: WorldMap,
+    pub world_map: WorldMap,
 }
 
 impl GameState {
@@ -73,38 +73,4 @@ impl Default for GameState {
             world_map: WorldMap::default(),
         }
     }
-}
-
-#[allow(clippy::must_use_candidate)]
-#[tauri::command]
-pub fn make_guess(guess: [i16; 2], state: State<Mutex<GameState>>) {
-    let mut game = state.lock().unwrap();
-    game.make_guess(guess);
-    println!(
-        "Round: {}, Score: {}, Year: {}",
-        game.get_round(),
-        game.get_score(),
-        game.world_map.get_correct_year()
-    );
-}
-
-#[allow(clippy::must_use_candidate)]
-#[tauri::command]
-pub fn new_round(state: State<Mutex<GameState>>) {
-    let mut game = state.lock().unwrap();
-    game.new_round();
-}
-
-#[allow(clippy::must_use_candidate)]
-#[tauri::command]
-pub fn reset(state: State<Mutex<GameState>>) {
-    let mut game = state.lock().unwrap();
-    game.reset();
-}
-
-#[allow(clippy::must_use_candidate)]
-#[tauri::command]
-pub fn get_game_state(state: State<Mutex<GameState>>) -> GameState {
-    let game = state.lock().unwrap();
-    game.clone()
 }
