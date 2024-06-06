@@ -1,9 +1,6 @@
-use std::sync::Mutex;
-
 use crate::map_api::WorldMap;
 use crate::range::Range;
 use serde::Serialize;
-use tauri::State;
 
 #[derive(Clone, Serialize)]
 pub struct GameState {
@@ -25,18 +22,7 @@ impl GameState {
     }
 
     #[must_use]
-    pub fn get_score_of_round(&self) -> i16 {
-        self.score
-    }
-
-    #[must_use]
     pub fn calculate_score(&self, guess_range: &Range<i16>) -> i16 {
-        println!(
-            "Range: {}-{}, Year: {}",
-            guess_range.lower_bound,
-            guess_range.upper_bound,
-            &self.world_map.get_correct_year()
-        );
         if guess_range.is_in_range(&self.world_map.get_correct_year()) {
             2024 - (guess_range.upper_bound - guess_range.lower_bound)
         } else {
