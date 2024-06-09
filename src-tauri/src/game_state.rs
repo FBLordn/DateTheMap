@@ -6,26 +6,16 @@ use serde::Serialize;
 #[derive(Clone, Serialize)]
 pub struct GameState {
     /// Round in which the ongoing game is in
-    round: i8,
+    pub round: i8,
     /// Total score of all played rounds in the current game
-    total: i16,
+    pub total: i16,
     /// Score of the round after a guess was made
-    score: i16,
+    pub score: i16,
     /// Struct representing the world map
     pub world_map: WorldMap,
 }
 
 impl GameState {
-    #[must_use]
-    pub fn get_round(&self) -> i8 {
-        self.round
-    }
-
-    #[must_use]
-    pub fn get_score(&self) -> i16 {
-        self.total
-    }
-
     /// Returns the score achieved by a given guess
     ///
     /// The score is lower the broader the guess is and 0 if the correct year is outside of the range
@@ -55,9 +45,7 @@ impl GameState {
 
     /// Resets the game state entirely
     pub fn reset(&mut self) {
-        self.round = 1;
-        self.total = 0;
-        self.score = 0;
+        *self = GameState::default();
     }
 }
 
