@@ -70,7 +70,7 @@ mod tests {
         }
         #[allow(clippy::derive_ord_xor_partial_ord)]
         impl Ord for GenericTest {
-            fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+            fn cmp(&self, _other: &Self) -> std::cmp::Ordering {
                 if self.first == 'l' {
                     std::cmp::Ordering::Greater
                 } else {
