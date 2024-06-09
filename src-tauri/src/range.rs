@@ -1,9 +1,12 @@
+/// Represents a range of any data type
 #[derive(PartialEq, Debug)]
 pub struct Range<A>
 where
     A: std::cmp::Ord,
 {
+    /// Lowest value of the range
     pub lower_bound: A,
+    /// Highest value of the range
     pub upper_bound: A,
 }
 
@@ -11,6 +14,10 @@ impl<A> Range<A>
 where
     A: std::cmp::Ord,
 {
+    /// Creates new Range from given values
+    ///
+    /// Returns Range struct from the two values passed in the aray
+    /// Order of the values in the array does not matter
     pub fn new(range: [A; 2]) -> Self
     where
         A: Copy,
@@ -21,6 +28,7 @@ where
         }
     }
 
+    /// Returns if a given value is in the range
     pub fn is_in_range(&self, value: &A) -> bool {
         value >= &self.lower_bound && value <= &self.upper_bound
     }
