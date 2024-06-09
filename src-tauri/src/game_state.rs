@@ -21,7 +21,7 @@ impl GameState {
     /// The score is lower the broader the guess is and 0 if the correct year is outside of the range
     #[must_use]
     pub fn calculate_score(&self, guess_range: &Range<i16>) -> i16 {
-        if guess_range.is_in_range(&self.world_map.get_correct_year()) {
+        if guess_range.is_in_range(&self.world_map.correct_year) {
             2024 - (guess_range.upper_bound - guess_range.lower_bound)
         } else {
             0

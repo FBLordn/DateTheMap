@@ -1,20 +1,16 @@
 use rand::Rng;
 use serde::Serialize;
 
+/// Represents a world map
 #[derive(Clone, Serialize)]
 pub struct WorldMap {
-    correct_year: i16,
+    /// Correct year of the shown world map
+    pub correct_year: i16,
 }
 
 impl WorldMap {
     pub fn get_map(&self) {
-        //API call
-        //return HTML element
-    }
-
-    #[must_use]
-    pub fn get_correct_year(&self) -> i16 {
-        self.correct_year
+        todo!("implement API call and return HTML element");
     }
 }
 
