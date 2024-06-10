@@ -10,7 +10,7 @@ interface ListHeaderProps {
   index: number;
 }
 
-export default function PolyButtons({ sx = [], labels, clickHandlers, index, children}: ListHeaderProps) {
+export default function PolyButtons({ sx = [], labels, clickHandlers, index}: ListHeaderProps) {
 
   return (
     <Button

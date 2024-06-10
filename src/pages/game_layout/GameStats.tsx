@@ -7,7 +7,7 @@ interface ListHeaderProps {
   scoreRound: number[];
 }
 
-export default function GameStats({scoreRound, children}: ListHeaderProps) {
+export default function GameStats({scoreRound}: ListHeaderProps) {
   
   return(
     <Stack

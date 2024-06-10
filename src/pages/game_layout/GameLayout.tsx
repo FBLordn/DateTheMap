@@ -7,7 +7,7 @@ import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
 import { GameState } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
 
 
