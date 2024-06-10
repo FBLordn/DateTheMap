@@ -5,11 +5,10 @@ import { styled } from '@mui/material/styles';
 import WorldMap from './WorldMap';
 import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
-import SubmitButton from './SubmitButton';
 import { GameState } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api';
-import RoundEndPopUp from './RoundEndPopUp';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import PolyButtons from '../../components/PolyButtons';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -32,33 +31,48 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   
   const [gameState, setGameState] = React.useState<GameState>();
 
-  const [roundEndOpen, setRoundEndOpen] = React.useState<boolean>(false);
+  const [roundOver, setRoundOver] = React.useState<boolean>(false);
   
-  if (gameState && gameState.round === 6) {
+
+  function getGameState() {
+    invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));    
+  }
+
+  React.useEffect(() => {
+    getGameState();
+  }, []);
+
+  function getActiveButtonIndex(roundOver: boolean, round: number | undefined) {
+    if (roundOver) {
+      return round===5 ? 2 : 1;
+    } else {
+      return 0;
+    }
+  }
+
+  const buttonInUse = React.useMemo( () => getActiveButtonIndex(roundOver, gameState?.round),[roundOver, gameState?.round],);
+
+  function handleSubmitButtonClick(){
+    invoke('make_guess', {guess: guessRange});
+    getGameState();
+    setRoundOver(true);
+  }
+
+  function handleNextRoundButtonClick() {
+    setRoundOver(false);
+    invoke('new_round');
+    getGameState();
+  };
+
+  function handleFinishButtonClick() {
     invoke('reset')
     setIsPlaying(false);
   }
 
-  React.useEffect(() => {
-    async function getGameState() {
-      const game: GameState = await invoke('get_game_state')
-      setGameState(game);
-    }
-    getGameState();
-  }, []);
-
   return (
     gameState ?
-      <>
-      <RoundEndPopUp 
-        gameState={gameState}
-        isOpen={roundEndOpen}
-        setClosed={setRoundEndOpen} 
-        setGameState={setGameState}
-      /> 
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
-      <Item> <GameStats scoreRound={[gameState.total, gameState.round]} /> </Item>
-
+        <Item> <GameStats scoreRound={[gameState.total, gameState.round]} /> </Item>
         <Item sx={{flexGrow:1}}> <WorldMap/> </Item>
         <Item> 
           <Stack
@@ -70,17 +84,16 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
               callbackFunction={setRange}
               minValue={minValue}
               maxValue={maxValue}
-            /> 
-            <SubmitButton
+            />
+            <PolyButtons
               sx={{width:3/20}}
-              guess={guessRange}
-              setGameState={setGameState}
-              setRoundEnded={setRoundEndOpen}
+              labels={["Submit", "Continue", "Finish"]}
+              clickHandlers={[handleSubmitButtonClick, handleNextRoundButtonClick, handleFinishButtonClick]}
+              index={buttonInUse}
             />
           </Stack>
         </Item>
       </Stack>
-      </>
       :
       <Item>
         <Typography> "Sorgy, accident" </Typography>
