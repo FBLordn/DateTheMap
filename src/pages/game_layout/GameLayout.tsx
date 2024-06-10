@@ -51,9 +51,8 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
     gameState ?
       <>
       <RoundEndPopUp 
-        scoreRound={[gameState.score, gameState.round]} 
-        isLastRound={gameState.round > 4} 
-        isOpen={roundEndOpen} 
+        gameState={gameState}
+        isOpen={roundEndOpen}
         setClosed={setRoundEndOpen} 
         setGameState={setGameState}
       /> 

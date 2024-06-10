@@ -20,14 +20,13 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 interface ListHeaderProps {
   children?: React.ReactNode;
-  scoreRound: number[];
-  isLastRound: boolean;
+  gameState: GameState
   isOpen: boolean;
   setClosed: (open: boolean) => void;
   setGameState: (newGameState: GameState) => void;
 }
 
-export default function RoundEndPopUp({scoreRound, isLastRound, isOpen, setClosed, setGameState, children}: ListHeaderProps) {
+export default function RoundEndPopUp({gameState, isOpen, setClosed, setGameState, children}: ListHeaderProps) {
 
   
   const handleClose = () => {
@@ -36,7 +35,7 @@ export default function RoundEndPopUp({scoreRound, isLastRound, isOpen, setClose
     invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));    
   };
 
-  const buttonName = isLastRound ? "Finish" : "Next Round";
+  const buttonName = gameState.round === 5 ? "Finish" : "Next Round";
 
   return (
     <React.Fragment>
@@ -47,12 +46,15 @@ export default function RoundEndPopUp({scoreRound, isLastRound, isOpen, setClose
         open={isOpen}
         onClose={handleClose}
       >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-        Round {scoreRound[1]}
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title" align='center' variant='h3'>
+        Round {gameState.round}
         </DialogTitle>
         <DialogContent dividers> 
-        <Typography > 
-          Score: {scoreRound[0]} 
+        <Typography sx={{p:1}} color={'secondary'} variant='h5' align='center'> 
+          Correct Year: {gameState.world_map.correct_year}
+        </Typography>
+        <Typography sx={{}} color={'secondary'} variant='h5'> 
+          Score: {gameState.score} 
         </Typography>
         </DialogContent>
         <DialogActions>

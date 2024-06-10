@@ -2,7 +2,7 @@ use std::sync::Mutex;
 
 use tauri::State;
 
-use crate::game_state::GameState;
+use crate::game_state::{self, GameState};
 
 #[allow(clippy::needless_pass_by_value)]
 #[tauri::command]

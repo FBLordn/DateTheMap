@@ -2,11 +2,11 @@ type GameState = {
   total: number;
   round: number;
   score: number;
-  worldMap: WorldMap;
+  world_map: WorldMapAPI;
 }
 
-type WorldMap = {
-    correctYear: number;
+type WorldMapAPI = {
+    correct_year: number;
 }
 
-export type { GameState, WorldMap };
+export type { GameState, WorldMapAPI};
