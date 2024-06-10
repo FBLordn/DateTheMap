@@ -39,8 +39,8 @@ impl GameState {
         self.round += 1;
         self.score = 0;
         self.world_map = WorldMap::default();
-        self.world_map.get_map();
-        todo!("return HMTL element from get_map");
+        //self.world_map.get_map();
+        //todo!("return HMTL element from get_map");
     }
 
     /// Resets the game state entirely
