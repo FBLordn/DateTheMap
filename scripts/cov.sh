@@ -11,6 +11,7 @@ machine=$(echo $path | awk -F "\\" '{print $NF}' | awk -F "/" '{print $NF}' | aw
 rm -rf target/
 RUSTFLAGS="-C instrument-coverage" cargo test --tests
 "$path/lib/rustlib/$machine/bin/llvm-profdata$ext" merge -sparse default_*.profraw -o date_the_map.profdata
-bin=$(find target/ -name "date_the_map-*$ext")
-"$path/lib/rustlib/$machine/bin/llvm-cov$ext" show --use-color --ignore-filename-regex='(.*registry.*|.*build.*)' --instr-profile=date_the_map.profdata --object $bin --show-instantiations --show-line-counts-or-regions
-"$path/lib/rustlib/$machine/bin/llvm-cov$ext" report --use-color --ignore-filename-regex='(.*registry.*|.*build.*)' --instr-profile=date_the_map.profdata --object $bin
+name=$(find target/ -name "date_the_map-*.*" | head -n 1)
+bin="${name%.*}"
+"$path/lib/rustlib/$machine/bin/llvm-cov$ext" show --use-color --ignore-filename-regex='(.*registry.*|.*build.*)' --instr-profile=date_the_map.profdata --object $bin$ext --show-instantiations --show-line-counts-or-regions
+"$path/lib/rustlib/$machine/bin/llvm-cov$ext" report --use-color --ignore-filename-regex='(.*registry.*|.*build.*)' --instr-profile=date_the_map.profdata --object $bin$ext
