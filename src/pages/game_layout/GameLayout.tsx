@@ -86,7 +86,7 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
               maxValue={maxValue}
             />
             <PolyButtons
-              sx={{width:3/20}}
+              sx={{width:3/20, minWidth:90}}
               labels={["Submit", "Continue", "Finish"]}
               clickHandlers={[handleSubmitButtonClick, handleNextRoundButtonClick, handleFinishButtonClick]}
               index={buttonInUse}
