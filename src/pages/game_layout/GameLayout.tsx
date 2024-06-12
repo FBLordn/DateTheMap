@@ -9,6 +9,7 @@ import { GameState } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api';
 import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
+import { ThemeProvider } from '@emotion/react';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -84,6 +85,8 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
               callbackFunction={setRange}
               minValue={minValue}
               maxValue={maxValue}
+              disabled={roundOver}
+              additionalThumbs={roundOver ? [gameState.world_map.correct_year] : []}
             />
             <PolyButtons
               sx={{width:3/20, minWidth:90}}
