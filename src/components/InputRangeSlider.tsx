@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Slider from '@mui/material/Slider';
-import { Stack } from '@mui/material';
+import { Stack, useTheme } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import IncrementInput from './IncrementInput';
 
@@ -17,7 +17,8 @@ interface ListHeaderProps {
 
 export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, disabled, additionalThumbs, children }: ListHeaderProps) {
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
-
+  const thumbs = [value[0] || minValue, value[1] || maxValue, ...additionalThumbs || []];
+  const theme = useTheme();
   const handleSliderChange = (
     _event: Event,
     newValue: number | number[],
@@ -51,6 +52,37 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
     {
       handleSliderChange(event as unknown as Event, value, 2)
     }
+  
+  function isInGuessRange(val: number) {
+    const first = value[0] || minValue;
+    const second = value[1] || maxValue;
+    return ((val >= first && val <= second) || (val <= first && val >= second));
+  }
+
+  function getThumbColours(thumbs: number[]) { 
+    const sortedThumbs = thumbs.sort();
+    let list = {};
+    let index = 0;
+    for(let thumb of sortedThumbs) {
+      list = {
+        ...list, 
+        ...({[`&[data-index='${index}']`]: 
+          { backgroundColor: 
+            ((additionalThumbs || []).includes(thumb)) ? 
+              (isInGuessRange(thumb) ? 
+                theme.palette.success.main 
+                : 
+                theme.palette.error.main
+              ) 
+              : 
+              theme.palette.secondary.main
+          }
+        })
+      }; //I'm sorry
+      index += 1;
+    }
+    return list;
+  }
 
   return (
     <Stack 
@@ -78,10 +110,15 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
       <Slider
         getAriaLabel={() => 'year range'}
         color='secondary'
-        sx={{ ml:5, mr:5,}}
+        sx={{ ml:5, mr:5,
+          "& .MuiSlider-thumb": {
+            ...getThumbColours(thumbs)
+          }
+        }}
+        track={disabled ? false : "normal"}
         min={minValue} 
         max={maxValue}
-        value={[value[0] || minValue, value[1] || maxValue].concat(additionalThumbs || [])}
+        value={thumbs}
         onChange={handleSliderChange}
         onChangeCommitted={onChangeCommited}
         valueLabelDisplay="auto"

@@ -96,7 +96,7 @@ export default function IncrementInput(props : IncrementInputProps) {
             borderBottomRightRadius: 0,
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
-            backgroundColor: props.bgColor?.main || theme.palette.primary.main,
+            backgroundColor: props.buttonColor?.main || theme.palette.primary.main,
             padding: 0
           }}
           onClick={onIncrement}
@@ -111,7 +111,7 @@ export default function IncrementInput(props : IncrementInputProps) {
             borderBottomRightRadius: theme.shape.borderRadius,
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
-            backgroundColor: props.bgColor?.main || theme.palette.primary.main,
+            backgroundColor: props.buttonColor?.main || theme.palette.primary.main,
             padding: 0
           }}
           onClick={onDecrement}
