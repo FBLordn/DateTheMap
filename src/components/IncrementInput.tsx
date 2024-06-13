@@ -9,14 +9,13 @@ const WIDTH_MULTIPLIER = 13;
 type InputPropsNoOnChange = Omit<InputProps, "onChange">
 
 interface IncrementInputProps extends InputPropsNoOnChange {
-  isDisabled?: boolean
   bgColor?: PaletteColor,
   buttonColor?: PaletteColor,
   onChange?: (event: SyntheticIncrementEvent) => void
 }
 
 
-export default function IncrementInput({ isDisabled, ...props }: IncrementInputProps) {
+export default function IncrementInput(props : IncrementInputProps) {
   const [value, setValue] = React.useState(props.value as number)
   const theme = useTheme();
   const step = React.useMemo(() => (props.inputProps?.step || 1), [props.inputProps])
@@ -28,7 +27,7 @@ export default function IncrementInput({ isDisabled, ...props }: IncrementInputP
   React.useEffect(() => { setValue(props.value as number) }, [props.value]);
 
   const onIncrement = () => {
-    if (!isDisabled) {
+    if (!props.disabled) {
       const newValue = Math.min(value + step, (props.inputProps?.max || Number.MAX_VALUE))
       setValue(newValue)
       if (props?.onChange) { props?.onChange({ target: { value: newValue } }) }
@@ -36,7 +35,7 @@ export default function IncrementInput({ isDisabled, ...props }: IncrementInputP
   }
 
   const onDecrement = () => {
-    if (!isDisabled) {
+    if (!props.disabled) {
       const newValue = Math.max(value - step, (props.inputProps?.min || Number.MIN_VALUE))
       setValue(newValue)
       if (props?.onChange) { props?.onChange({ target: { value: newValue } }) }
@@ -101,7 +100,6 @@ export default function IncrementInput({ isDisabled, ...props }: IncrementInputP
             padding: 0
           }}
           onClick={onIncrement}
-          disabled={props.disabled}
         >
           <ArrowDropUpIcon sx={{ fontSize: 14 }} />
         </IconButton>
@@ -117,7 +115,6 @@ export default function IncrementInput({ isDisabled, ...props }: IncrementInputP
             padding: 0
           }}
           onClick={onDecrement}
-          disabled={props.disabled}
         >
           <ArrowDropDownIcon sx={{ fontSize: 14 }} />
         </IconButton>

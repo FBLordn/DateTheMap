@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
-import MuiInput from '@mui/material/Input';
-import { Stack, colors, withStyles } from '@mui/material';
+import { Stack } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import IncrementInput from './IncrementInput';
 
@@ -62,6 +60,7 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
     >
 
       <IncrementInput
+        disabled={disabled}
         value={value[0]}
         size="small"
         sx={{minWidth:65}}
@@ -74,7 +73,6 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
-        isDisabled={disabled}
       />
       
       <Slider
@@ -91,6 +89,7 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
       />
 
       <IncrementInput
+        disabled={disabled}
         value={value[1]}
         size="small"
         sx={{minWidth:65}}
@@ -103,7 +102,6 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
-        isDisabled={disabled}
       />
         
     </Stack>
