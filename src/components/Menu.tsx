@@ -1,17 +1,18 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, SxProps, Theme, Typography } from '@mui/material';
 import * as React from 'react';
 
 
 interface ListHeaderProps {
-  onSubmit?: React.MouseEventHandler<HTMLButtonElement> | undefined
+  sx?: SxProps<Theme>;
+  onSubmit?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   title?: string;
   buttonName?: string;
 }
 
-export default function Menu({onSubmit, title, buttonName, children}: React.PropsWithChildren<ListHeaderProps>) {
+export default function Menu({sx, onSubmit, title, buttonName, children}: React.PropsWithChildren<ListHeaderProps>) {
 
   return (
-    <Stack sx={{p:2}} direction={'column'} >
+    <Stack sx={sx}>
       <Typography variant='h1'>
         {title}
       </Typography>

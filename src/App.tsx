@@ -25,7 +25,13 @@ function App() {
       { isPlaying ? 
         <GameLayout setIsPlaying={setIsPlaying} /> 
         : 
-        <GameMenu onSubmit={() => setIsPlaying(true)} title="Date The Map" buttonName="Start Game"/> }
+        <GameMenu 
+          sx={{p:2, justifyContent:"center", minHeight:'100vh'}}
+          onSubmit={() => setIsPlaying(true)} 
+          title="Date The Map" 
+          buttonName="Start Game"
+        /> 
+      }
     </ThemeProvider>
   );
 }
