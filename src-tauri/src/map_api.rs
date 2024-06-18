@@ -5,7 +5,11 @@ use serde::Serialize;
 #[derive(Clone, Serialize)]
 pub struct WorldMap {
     /// Correct year of the shown world map
-    pub correct_year: i16,
+    pub correct: i16,
+    /// Minimum year map can be from
+    pub min: i16,
+    /// Maximum year map can be from
+    pub max: i16,
 }
 
 impl WorldMap {
@@ -17,7 +21,9 @@ impl WorldMap {
 impl Default for WorldMap {
     fn default() -> Self {
         Self {
-            correct_year: rand::thread_rng().gen_range(1500..2025),
+            min: 1500,
+            max: 2024,
+            correct: rand::thread_rng().gen_range(1500..2025),
         }
     }
 }

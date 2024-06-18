@@ -19,21 +19,15 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const minValue = 1000;
-const maxValue = 2024;
-
 interface ListHeaderProps {
   setIsPlaying: (isPlaying: boolean) => void;
 }
 
 export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   
-  const [guessRange, setRange] = React.useState<number[]>([minValue, maxValue]);
-  
   const [gameState, setGameState] = React.useState<GameState>();
 
   const [roundOver, setRoundOver] = React.useState<boolean>(false);
-  
 
   function getGameState() {
     invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));    
@@ -43,9 +37,11 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
     getGameState();
   }, []);
 
+  const [guessRange, setRange] = React.useState([gameState?.world_map.min, gameState?.world_map.max]);
+
   function getActiveButtonIndex(roundOver: boolean, round: number | undefined) {
     if (roundOver) {
-      return round===5 ? 2 : 1;
+      return round===gameState?.round_amount ? 2 : 1;
     } else {
       return 0;
     }
@@ -83,10 +79,10 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
             <InputRangeSlider 
               sx={{width:17/20}}
               callbackFunction={setRange}
-              minValue={minValue}
-              maxValue={maxValue}
+              minValue={gameState.world_map.min}
+              maxValue={gameState.world_map.max}
               disabled={roundOver}
-              additionalThumbs={roundOver ? [gameState.world_map.correct_year] : []}
+              additionalThumbs={roundOver ? [gameState.world_map.correct] : []}
             />
             <PolyButtons
               sx={{width:3/20, minWidth:90}}

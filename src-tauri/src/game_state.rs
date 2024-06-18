@@ -7,6 +7,8 @@ use serde::Serialize;
 pub struct GameState {
     /// Round in which the ongoing game is in
     pub round: i8,
+    /// Amount of rounds in one game
+    pub round_amount: i8,
     /// Total score of all played rounds in the current game
     pub total: i16,
     /// Score of the round after a guess was made
@@ -21,7 +23,7 @@ impl GameState {
     /// The score is lower the broader the guess is and 0 if the correct year is outside of the range
     #[must_use]
     pub fn calculate_score(&self, guess_range: &Range<i16>) -> i16 {
-        if guess_range.is_in_range(&self.world_map.correct_year) {
+        if guess_range.is_in_range(&self.world_map.correct) {
             2024 - (guess_range.upper_bound - guess_range.lower_bound)
         } else {
             0
@@ -55,6 +57,7 @@ impl Default for GameState {
             round: 1,
             score: 0,
             total: 0,
+            round_amount: 5,
             world_map: WorldMap::default(),
         }
     }
@@ -68,16 +71,16 @@ mod tests {
     fn test_calculate_score() {
         let game_state = GameState::default();
         let wrong_guess_over = Range::new([
-            game_state.world_map.correct_year + 7,
-            game_state.world_map.correct_year + 3642,
+            game_state.world_map.correct + 7,
+            game_state.world_map.correct + 3642,
         ]);
         let wrong_guess_under = Range::new([
-            game_state.world_map.correct_year - 3,
-            game_state.world_map.correct_year - 6,
+            game_state.world_map.correct - 3,
+            game_state.world_map.correct - 6,
         ]);
         let correct_guess = Range::new([
-            game_state.world_map.correct_year - 39,
-            game_state.world_map.correct_year + 10,
+            game_state.world_map.correct - 39,
+            game_state.world_map.correct + 10,
         ]);
         assert_eq!(game_state.calculate_score(&wrong_guess_over), 0);
         assert_eq!(game_state.calculate_score(&wrong_guess_under), 0);
@@ -91,8 +94,8 @@ mod tests {
             ..Default::default()
         };
         let correct_guess = Range::new([
-            game_state.world_map.correct_year - 39,
-            game_state.world_map.correct_year + 10,
+            game_state.world_map.correct - 39,
+            game_state.world_map.correct + 10,
         ]);
         let score = game_state.calculate_score(&correct_guess);
         game_state.make_guess([correct_guess.lower_bound, correct_guess.upper_bound]);
