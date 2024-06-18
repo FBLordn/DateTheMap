@@ -54,13 +54,13 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
     }
   
   function isInGuessRange(val: number) {
-    const first = value[0] || minValue;
-    const second = value[1] || maxValue;
+    const first = thumbs[0];
+    const second = thumbs[1];
     return ((val >= first && val <= second) || (val <= first && val >= second));
   }
 
-  function getThumbColours(thumbs: number[]) { 
-    const sortedThumbs = thumbs.sort();
+  function getThumbColours() { 
+    const sortedThumbs = thumbs.toSorted();
     let list = {};
     let index = 0;
     for(let thumb of sortedThumbs) {
@@ -112,7 +112,7 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
         color='secondary'
         sx={{ ml:5, mr:5,
           "& .MuiSlider-thumb": {
-            ...getThumbColours(thumbs)
+            ...getThumbColours()
           }
         }}
         track={disabled ? false : "normal"}
