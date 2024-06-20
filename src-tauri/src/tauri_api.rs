@@ -2,7 +2,7 @@ use std::sync::{Mutex, MutexGuard};
 
 use tauri::State;
 
-use crate::logic::GameState;
+use crate::logic::{GameState, GameStateToTS};
 
 #[allow(clippy::needless_pass_by_value)]
 #[tauri::command]
@@ -27,7 +27,7 @@ pub fn reset(state: State<Mutex<GameState>>) {
 
 #[allow(clippy::needless_pass_by_value)]
 #[tauri::command]
-pub fn get_game_state(state: State<Mutex<GameState>>) -> GameState {
+pub fn get_game_state(state: State<Mutex<GameState>>) -> GameStateToTS {
     let game = state.lock().unwrap();
-    game.clone()
+    game.clone().into()
 }

@@ -5,6 +5,7 @@ use serde::Serialize;
 
 pub const MINIMUM_YEAR: usize = 1600;
 pub const MAXIMUM_YEAR: usize = 2024;
+pub const ROUND_AMOUNT: usize = 5;
 
 /// Represents the game state
 #[derive(Clone, Serialize)]
@@ -62,8 +63,28 @@ impl Default for GameState {
             round: 1,
             score: 0,
             total: 0,
-            round_amount: 5,
+            round_amount: ROUND_AMOUNT,
             world_map: WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default()),
+        }
+    }
+}
+
+pub struct GameStateToTS {
+    pub round: i8,
+    pub round_amount: i8,
+    pub total: i16,
+    pub score: i16,
+    pub world_map: WorldMap,
+}
+
+impl From<GameState> for GameStateToTS {
+    fn from(value: GameState) -> Self {
+        GameStateToTS {
+            round: (value.round),
+            round_amount: (value.round_amount),
+            total: (value.total),
+            score: (value.score),
+            world_map: (value.world_map),
         }
     }
 }

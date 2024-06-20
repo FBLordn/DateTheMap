@@ -28,6 +28,20 @@ impl WorldMap {
     }
 }
 
+pub struct WorldMapToTS {
+    pub correct: i16,
+    pub range: Range<i16>,
+}
+
+impl From<WorldMap> for WorldMapToTS {
+    fn from(value: WorldMap) -> Self {
+        WorldMapToTS {
+            correct: value.correct,
+            range: value.range,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{
