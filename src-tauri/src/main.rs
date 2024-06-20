@@ -11,8 +11,8 @@ use game_state::GameState;
 use std::sync::Mutex;
 
 mod game_state;
-mod range;
 mod tauri_api;
+mod util;
 mod world_map;
 mod world_map_backend;
 
