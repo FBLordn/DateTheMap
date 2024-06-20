@@ -29,6 +29,8 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
 
   const [roundOver, setRoundOver] = React.useState<boolean>(false);
 
+  const [guessRange, setRange] = React.useState([gameState?.world_map.min, gameState?.world_map.max]);
+
   function getGameState() {
     invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));    
   }
@@ -36,8 +38,6 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   React.useEffect(() => {
     getGameState();
   }, []);
-
-  const [guessRange, setRange] = React.useState([gameState?.world_map.min, gameState?.world_map.max]);
 
   function getActiveButtonIndex(roundOver: boolean, round: number | undefined) {
     if (roundOver) {
