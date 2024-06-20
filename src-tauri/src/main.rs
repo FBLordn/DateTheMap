@@ -11,9 +11,10 @@ use game_state::GameState;
 use std::sync::Mutex;
 
 mod game_state;
-mod map_api;
 mod range;
 mod tauri_api;
+mod world_map;
+mod world_map_backend;
 
 fn main() {
     tauri::Builder::default()

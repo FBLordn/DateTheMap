@@ -1,6 +1,10 @@
-use crate::map_api::WorldMap;
 use crate::range::Range;
+use crate::world_map::WorldMap;
+use crate::world_map_backend::Library;
 use serde::Serialize;
+
+pub const MINIMUM_YEAR: usize = 1600;
+pub const MAXIMUM_YEAR: usize = 2024;
 
 /// Represents the game state
 #[derive(Clone, Serialize)]
@@ -24,7 +28,7 @@ impl GameState {
     #[must_use]
     pub fn calculate_score(&self, guess_range: &Range<i16>) -> i16 {
         if guess_range.is_in_range(&self.world_map.correct) {
-            2024 - (guess_range.upper_bound - guess_range.lower_bound)
+            MAXIMUM_YEAR - (guess_range.upper_bound - guess_range.lower_bound)
         } else {
             0
         }
@@ -40,7 +44,8 @@ impl GameState {
     pub fn new_round(&mut self) {
         self.round += 1;
         self.score = 0;
-        self.world_map = WorldMap::default();
+        self.world_map =
+            WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default());
         //self.world_map.get_map();
         //todo!("return HMTL element from get_map");
     }
@@ -58,7 +63,7 @@ impl Default for GameState {
             score: 0,
             total: 0,
             round_amount: 5,
-            world_map: WorldMap::default(),
+            world_map: WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default()),
         }
     }
 }
