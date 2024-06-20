@@ -1,7 +1,7 @@
 use rand::Rng;
 use serde::Serialize;
 
-use crate::{range::Range, world_map_backend::MapInterface};
+use crate::{util::Range, world_map_backend::MapInterface};
 
 /// Represents a world map
 #[derive(Clone, Serialize)]

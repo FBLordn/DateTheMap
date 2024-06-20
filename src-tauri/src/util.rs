@@ -1,1 +1,2 @@
-pub mod range;
+mod range;
+pub use range::Range;

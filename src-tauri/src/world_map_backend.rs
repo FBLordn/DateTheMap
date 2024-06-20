@@ -1,4 +1,4 @@
-use crate::range::Range;
+use crate::util::Range;
 
 pub trait MapInterface {
     fn get_raw_map(&self, range: Range<i16>) -> Vec<u8>;
@@ -188,5 +188,6 @@ impl MapInterface for Test {
             24, 152, 24, 19, 15, 106, 7, 5, 5, 44, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 3,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         ]
+        .to_vec()
     }
 }

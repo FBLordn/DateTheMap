@@ -1,4 +1,4 @@
-use crate::range::Range;
+use crate::util::Range;
 use crate::world_map::WorldMap;
 use crate::world_map_backend::Library;
 use serde::Serialize;
