@@ -7,18 +7,15 @@
 //!
 //! Manages the game and internal data and handles events via an API exposed to the front end
 
-use game_state::GameState;
 use std::sync::Mutex;
 
-mod game_state;
+mod logic;
 mod tauri_api;
 mod util;
-mod world_map;
-mod world_map_backend;
 
 fn main() {
     tauri::Builder::default()
-        .manage(Mutex::new(GameState::default()))
+        .manage(Mutex::new(logic::GameState::default()))
         .invoke_handler(tauri::generate_handler![
             tauri_api::make_guess,
             tauri_api::new_round,

@@ -1,7 +1,7 @@
 use rand::Rng;
 use serde::Serialize;
 
-use crate::{util::Range, world_map_backend::MapInterface};
+use crate::{logic::world_map_backend::MapInterface, util::Range};
 
 /// Represents a world map
 #[derive(Clone, Serialize)]
@@ -31,8 +31,8 @@ impl WorldMap {
 #[cfg(test)]
 mod tests {
     use crate::{
-        game_state::{MAXIMUM_YEAR, MINIMUM_YEAR},
-        world_map_backend::Test,
+        logic::game_state::{MAXIMUM_YEAR, MINIMUM_YEAR},
+        logic::world_map_backend::Test,
     };
 
     use super::*;
