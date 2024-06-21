@@ -4,7 +4,7 @@ use crate::logic::world_map::WorldMap;
 use crate::logic::world_map_backend::Library;
 use crate::util::Range;
 
-use super::world_map::WorldMapToTS;
+use super::world_map::WorldMapToJS;
 
 pub const MINIMUM_YEAR: i16 = 1600;
 pub const MAXIMUM_YEAR: i16 = 2024;
@@ -50,7 +50,7 @@ impl GameState {
         self.score = 0;
         self.world_map = WorldMap::new(
             Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
-            Box::new(Library::default()),
+            Box::<Library>::default(),
         );
         //self.world_map.get_map();
         //todo!("return HMTL element from get_map");
@@ -71,24 +71,24 @@ impl Default for GameState {
             round_amount: ROUND_AMOUNT,
             world_map: WorldMap::new(
                 Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
-                Box::new(Library::default()),
+                Box::<Library>::default(),
             ),
         }
     }
 }
 
 #[derive(Debug, Serialize)]
-pub struct GameStateToTS {
+pub struct GameStateToJS {
     pub round: i8,
     pub round_amount: i8,
     pub total: i16,
     pub score: i16,
-    pub world_map: WorldMapToTS,
+    pub world_map: WorldMapToJS,
 }
 
-impl From<GameState> for GameStateToTS {
+impl From<GameState> for GameStateToJS {
     fn from(value: GameState) -> Self {
-        GameStateToTS {
+        GameStateToJS {
             round: (value.round),
             round_amount: (value.round_amount),
             total: (value.total),

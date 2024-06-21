@@ -31,14 +31,14 @@ impl WorldMap {
 }
 
 #[derive(Debug, Serialize)]
-pub struct WorldMapToTS {
+pub struct WorldMapToJS {
     pub correct: i16,
     pub range: Range<i16>,
 }
 
-impl From<WorldMap> for WorldMapToTS {
+impl From<WorldMap> for WorldMapToJS {
     fn from(value: WorldMap) -> Self {
-        WorldMapToTS {
+        WorldMapToJS {
             correct: value.correct,
             range: value.range,
         }
