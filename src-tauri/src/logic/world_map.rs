@@ -1,10 +1,12 @@
+use std::fmt::Debug;
+
 use rand::Rng;
 use serde::Serialize;
 
 use crate::{logic::world_map_backend::MapInterface, util::Range};
 
+#[derive(Debug, Clone)]
 /// Represents a world map
-#[derive(Clone, Serialize)]
 pub struct WorldMap {
     /// Correct year of the shown world map
     pub correct: i16,
@@ -15,7 +17,7 @@ pub struct WorldMap {
 }
 
 impl WorldMap {
-    pub fn new(range: Range<i16>, interface: Box<dyn MapInterface>) -> Self {
+    pub fn new(range: Range<i16>, interface: Box<dyn MapInterface + Send>) -> Self {
         Self {
             range,
             correct: rand::thread_rng().gen_range(range.lower_bound..=range.upper_bound),
@@ -28,6 +30,7 @@ impl WorldMap {
     }
 }
 
+#[derive(Debug, Serialize)]
 pub struct WorldMapToTS {
     pub correct: i16,
     pub range: Range<i16>,
@@ -52,7 +55,10 @@ mod tests {
     use super::*;
 
     fn test_get_map_returns_png() {
-        let world_map = WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Test::default());
+        let world_map = WorldMap::new(
+            Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
+            Box::new(Test::default()),
+        );
         let map = world_map.get_map();
         png::Decoder::new(map).unwrap();
     }

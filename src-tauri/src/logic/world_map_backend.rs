@@ -1,10 +1,31 @@
+use std::fmt::Debug;
+
 use crate::util::Range;
 
-pub trait MapInterface {
+pub trait MapInterface: MapInterfaceClone + Debug + Send {
     fn get_raw_map(&self, range: Range<i16>) -> Vec<u8>;
 }
 
-#[derive(Default)]
+trait MapInterfaceClone {
+    fn clone_box(&self) -> Box<dyn MapInterface>;
+}
+
+impl<T> MapInterfaceClone for T
+where
+    T: 'static + MapInterface + Clone,
+{
+    fn clone_box(&self) -> Box<dyn MapInterface> {
+        Box::new(self.clone())
+    }
+}
+
+impl Clone for Box<dyn MapInterface> {
+    fn clone(&self) -> Box<dyn MapInterface> {
+        self.clone_box()
+    }
+}
+
+#[derive(Debug, Default, Clone)]
 pub struct Library {}
 impl MapInterface for Library {
     fn get_raw_map(&self, range: Range<i16>) -> Vec<u8> {
@@ -12,7 +33,7 @@ impl MapInterface for Library {
     }
 }
 
-#[derive(Default)]
+#[derive(Debug, Default, Clone)]
 pub struct Test {}
 impl MapInterface for Test {
     fn get_raw_map(&self, range: Range<i16>) -> Vec<u8> {

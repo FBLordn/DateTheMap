@@ -1,14 +1,17 @@
+use serde::Serialize;
+
 use crate::logic::world_map::WorldMap;
 use crate::logic::world_map_backend::Library;
 use crate::util::Range;
-use serde::Serialize;
 
-pub const MINIMUM_YEAR: usize = 1600;
-pub const MAXIMUM_YEAR: usize = 2024;
-pub const ROUND_AMOUNT: usize = 5;
+use super::world_map::WorldMapToTS;
+
+pub const MINIMUM_YEAR: i16 = 1600;
+pub const MAXIMUM_YEAR: i16 = 2024;
+pub const ROUND_AMOUNT: i8 = 5;
 
 /// Represents the game state
-#[derive(Clone, Serialize)]
+#[derive(Clone)]
 pub struct GameState {
     /// Round in which the ongoing game is in
     pub round: i8,
@@ -45,8 +48,10 @@ impl GameState {
     pub fn new_round(&mut self) {
         self.round += 1;
         self.score = 0;
-        self.world_map =
-            WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default());
+        self.world_map = WorldMap::new(
+            Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
+            Box::new(Library::default()),
+        );
         //self.world_map.get_map();
         //todo!("return HMTL element from get_map");
     }
@@ -64,17 +69,21 @@ impl Default for GameState {
             score: 0,
             total: 0,
             round_amount: ROUND_AMOUNT,
-            world_map: WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default()),
+            world_map: WorldMap::new(
+                Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
+                Box::new(Library::default()),
+            ),
         }
     }
 }
 
+#[derive(Debug, Serialize)]
 pub struct GameStateToTS {
     pub round: i8,
     pub round_amount: i8,
     pub total: i16,
     pub score: i16,
-    pub world_map: WorldMap,
+    pub world_map: WorldMapToTS,
 }
 
 impl From<GameState> for GameStateToTS {
@@ -84,7 +93,7 @@ impl From<GameState> for GameStateToTS {
             round_amount: (value.round_amount),
             total: (value.total),
             score: (value.score),
-            world_map: (value.world_map),
+            world_map: (value.world_map.into()),
         }
     }
 }
