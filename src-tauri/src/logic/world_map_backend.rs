@@ -6,7 +6,7 @@ pub trait MapInterface: MapInterfaceClone + Debug + Send {
     fn get_raw_map(&self, range: Range<i16>) -> Vec<u8>;
 }
 
-trait MapInterfaceClone {
+pub trait MapInterfaceClone {
     fn clone_box(&self) -> Box<dyn MapInterface>;
 }
 
@@ -36,7 +36,7 @@ impl MapInterface for Library {
 #[derive(Debug, Default, Clone)]
 pub struct Test {}
 impl MapInterface for Test {
-    fn get_raw_map(&self, range: Range<i16>) -> Vec<u8> {
+    fn get_raw_map(&self, _range: Range<i16>) -> Vec<u8> {
         [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 2, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 13, 11, 9, 18, 38, 32, 25, 66, 63, 53, 43,
