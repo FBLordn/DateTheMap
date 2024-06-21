@@ -19,8 +19,8 @@ pub struct WorldMap {
 impl WorldMap {
     pub fn new(range: Range<i16>, interface: Box<dyn MapInterface + Send>) -> Self {
         Self {
-            range,
             correct: rand::thread_rng().gen_range(range.lower_bound..=range.upper_bound),
+            range,
             interface,
         }
     }

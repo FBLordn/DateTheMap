@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 /// Represents a range of any data type
-#[derive(PartialEq, Debug, Serialize)]
+#[derive(PartialEq, Debug, Serialize, Clone)]
 pub struct Range<A>
 where
     A: std::cmp::Ord,
