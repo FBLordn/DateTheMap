@@ -17,6 +17,7 @@ impl MapInterface for Library {
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
 pub struct Test {}
 impl MapInterface for Test {
+    #[allow(clippy::too_many_lines)]
     fn get_raw_map(&self, _range: Range<i16>) -> Vec<u8> {
         [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
