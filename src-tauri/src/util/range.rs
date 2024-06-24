@@ -1,7 +1,8 @@
-use serde::Serialize;
+use core::fmt;
+use std::fmt::Display;
 
 /// Represents a range of any data type
-#[derive(PartialEq, Debug, Serialize, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
 pub struct Range<A>
 where
     A: std::cmp::Ord,
@@ -33,6 +34,15 @@ where
     /// Returns if a given value is in the range
     pub fn is_in_range(&self, value: &A) -> bool {
         value >= &self.lower_bound && value <= &self.upper_bound
+    }
+}
+
+impl<A> fmt::Display for Range<A>
+where
+    A: std::cmp::Ord + Display,
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "[{}, {}]", self.lower_bound, self.upper_bound)
     }
 }
 
