@@ -1,22 +1,29 @@
-use std::fmt::Debug;
+use std::{fmt::Debug, hash::Hash};
 
 use rand::Rng;
+use serde::Serialize;
 
 use crate::{logic::world_map_backend::MapInterface, util::Range};
 
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
 /// Represents a world map
-pub struct WorldMap {
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
+pub struct WorldMap<I>
+where
+    I: MapInterface,
+{
     /// Correct year of the shown world map
     pub correct: i16,
     /// Range of years map can be from
     pub range: Range<i16>,
     /// Interface for world map
-    pub interface: Box<dyn MapInterface>,
+    pub interface: I,
 }
 
-impl WorldMap {
-    pub fn new(range: Range<i16>, interface: Box<dyn MapInterface + Send>) -> Self {
+impl<I> WorldMap<I>
+where
+    I: MapInterface,
+{
+    pub fn new(range: Range<i16>, interface: I) -> Self {
         Self {
             correct: rand::thread_rng().gen_range(range.lower_bound..=range.upper_bound),
             range,
@@ -25,18 +32,21 @@ impl WorldMap {
     }
 
     pub fn get_map(&self) -> Vec<u8> {
-        return self.interface.get_raw_map(self.range);
+        self.interface.get_raw_map(self.range)
     }
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
 pub struct WorldMapToJS {
     pub correct: i16,
     pub range: Range<i16>,
 }
 
-impl From<WorldMap> for WorldMapToJS {
-    fn from(value: WorldMap) -> Self {
+impl<I> From<WorldMap<I>> for WorldMapToJS
+where
+    I: MapInterface,
+{
+    fn from(value: WorldMap<I>) -> Self {
         WorldMapToJS {
             correct: value.correct,
             range: value.range,
@@ -57,10 +67,7 @@ mod tests {
 
     #[test]
     fn test_get_map_returns_png() {
-        let world_map = WorldMap::new(
-            Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
-            Box::<Test>::default(),
-        );
+        let world_map = WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Test::default());
         let map = world_map.get_map();
         png::Decoder::new(Cursor::new(map));
     }

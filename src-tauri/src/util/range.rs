@@ -1,8 +1,10 @@
 use core::fmt;
 use std::fmt::Display;
 
+use serde::Serialize;
+
 /// Represents a range of any data type
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
 pub struct Range<A>
 where
     A: std::cmp::Ord,

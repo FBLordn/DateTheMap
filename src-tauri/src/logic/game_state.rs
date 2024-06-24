@@ -22,7 +22,7 @@ pub struct GameState {
     /// Score of the round after a guess was made
     pub score: i16,
     /// Struct representing the world map
-    pub world_map: WorldMap,
+    pub world_map: WorldMap<Library>,
 }
 
 impl GameState {
@@ -48,10 +48,8 @@ impl GameState {
     pub fn new_round(&mut self) {
         self.round += 1;
         self.score = 0;
-        self.world_map = WorldMap::new(
-            Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
-            Box::<Library>::default(),
-        );
+        self.world_map =
+            WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default());
         //self.world_map.get_map();
         //todo!("return HMTL element from get_map");
     }
@@ -69,15 +67,12 @@ impl Default for GameState {
             score: 0,
             total: 0,
             round_amount: ROUND_AMOUNT,
-            world_map: WorldMap::new(
-                Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
-                Box::<Library>::default(),
-            ),
+            world_map: WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default()),
         }
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
 pub struct GameStateToJS {
     pub round: i8,
     pub round_amount: i8,
