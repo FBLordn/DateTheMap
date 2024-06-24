@@ -1,11 +1,10 @@
 use std::fmt::Debug;
 
 use rand::Rng;
-use serde::Serialize;
 
 use crate::{logic::world_map_backend::MapInterface, util::Range};
 
-#[derive(Debug, Clone)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
 /// Represents a world map
 pub struct WorldMap {
     /// Correct year of the shown world map
@@ -26,11 +25,11 @@ impl WorldMap {
     }
 
     pub fn get_map(&self) -> Vec<u8> {
-        todo!("implement API call and return HTML element");
+        return self.interface.get_raw_map(self.range);
     }
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
 pub struct WorldMapToJS {
     pub correct: i16,
     pub range: Range<i16>,
@@ -47,6 +46,8 @@ impl From<WorldMap> for WorldMapToJS {
 
 #[cfg(test)]
 mod tests {
+    use std::io::Cursor;
+
     use crate::{
         logic::game_state::{MAXIMUM_YEAR, MINIMUM_YEAR},
         logic::world_map_backend::Test,
@@ -54,12 +55,13 @@ mod tests {
 
     use super::*;
 
+    #[test]
     fn test_get_map_returns_png() {
         let world_map = WorldMap::new(
             Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]),
-            Box::new(Test::default()),
+            Box::<Test>::default(),
         );
         let map = world_map.get_map();
-        png::Decoder::new(map).unwrap();
+        png::Decoder::new(Cursor::new(map));
     }
 }
