@@ -69,6 +69,7 @@ mod tests {
     fn test_get_map_returns_png() {
         let world_map = WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Test::default());
         let map = world_map.get_map();
-        png::Decoder::new(Cursor::new(map));
+        let decoder = png::Decoder::new(Cursor::new(map));
+        decoder.read_info().unwrap();
     }
 }
