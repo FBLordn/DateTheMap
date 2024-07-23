@@ -27,3 +27,6 @@ dist-ssr
 # Coverage files
 *.profdata
 *.profraw
+
+# Misc
+libraryTests/*
