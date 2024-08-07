@@ -2,13 +2,12 @@ type GameState = {
   total: number;
   round: number;
   score: number;
-  round_amount: number;
   world_map: WorldMapAPI;
 }
 
 type WorldMapAPI = {
     correct: number;
-    range: Range;
+    html: string;
 }
 
 type Range = {
@@ -16,4 +15,4 @@ type Range = {
   upper_bound: any
 }
 
-export type { GameState, WorldMapAPI};
+export type { GameState, WorldMapAPI, Range};

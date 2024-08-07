@@ -21,6 +21,8 @@ fn main() {
             tauri_api::new_round,
             tauri_api::reset,
             tauri_api::get_game_state,
+            tauri_api::get_possible_range,
+            tauri_api::get_round_amount
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
