@@ -1,45 +1,54 @@
 use std::{fmt::Debug, hash::Hash};
 
-use rand::Rng;
 use serde::Serialize;
 
 use crate::{logic::world_map_backend::MapInterface, util::Range};
 
+use super::{
+    game_state::{MAXIMUM_YEAR, MINIMUM_YEAR},
+    world_map_backend::InterfaceReturn,
+};
+
 /// Represents a world map
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
 pub struct WorldMap<I>
 where
     I: MapInterface,
 {
     /// Correct year of the shown world map
     pub correct: i16,
-    /// Range of years map can be from
-    pub range: Range<i16>,
     /// Interface for world map
     pub interface: I,
+    /// html element of the map
+    pub html: String,
 }
 
 impl<I> WorldMap<I>
 where
     I: MapInterface,
 {
-    pub fn new(range: Range<i16>, interface: I) -> Self {
+    pub fn new(interface: I) -> Self {
         Self {
-            correct: rand::thread_rng().gen_range(range.lower_bound..=range.upper_bound),
-            range,
+            html: String::new(),
+            correct: 2024,
             interface,
         }
     }
 
-    pub fn get_map(&self) -> Vec<u8> {
-        self.interface.get_raw_map(self.range)
+    pub fn get_map(&mut self) -> &str {
+        let response: InterfaceReturn = self
+            .interface
+            .get_raw_map(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]));
+        self.correct = response.correct_year;
+        self.html = response.html;
+        &self.html
     }
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
 pub struct WorldMapToJS {
     pub correct: i16,
-    pub range: Range<i16>,
+    pub html: String,
 }
 
 impl<I> From<WorldMap<I>> for WorldMapToJS
@@ -49,27 +58,21 @@ where
     fn from(value: WorldMap<I>) -> Self {
         WorldMapToJS {
             correct: value.correct,
-            range: value.range,
+            html: value.html,
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use std::io::Cursor;
-
-    use crate::{
-        logic::game_state::{MAXIMUM_YEAR, MINIMUM_YEAR},
-        logic::world_map_backend::Test,
-    };
+    use crate::logic::world_map_backend::OHMLibrary;
 
     use super::*;
 
     #[test]
-    fn test_get_map_returns_png() {
-        let world_map = WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Test::default());
+    fn test_get_map_returns_html() {
+        let mut world_map = WorldMap::new(OHMLibrary::default());
         let map = world_map.get_map();
-        let decoder = png::Decoder::new(Cursor::new(map));
-        decoder.read_info().unwrap();
+        //TODO: Test returns html
     }
 }

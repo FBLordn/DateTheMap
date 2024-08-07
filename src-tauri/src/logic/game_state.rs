@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 use crate::logic::world_map::WorldMap;
-use crate::logic::world_map_backend::Library;
+use crate::logic::world_map_backend::OHMLibrary;
 use crate::util::Range;
 
 use super::world_map::WorldMapToJS;
@@ -15,14 +15,12 @@ pub const ROUND_AMOUNT: i8 = 5;
 pub struct GameState {
     /// Round in which the ongoing game is in
     pub round: i8,
-    /// Amount of rounds in one game
-    pub round_amount: i8,
     /// Total score of all played rounds in the current game
     pub total: i16,
     /// Score of the round after a guess was made
     pub score: i16,
     /// Struct representing the world map
-    pub world_map: WorldMap<Library>,
+    pub world_map: WorldMap<OHMLibrary>,
 }
 
 impl GameState {
@@ -45,13 +43,10 @@ impl GameState {
     }
 
     /// Updates the round, resets the score and gets a new world map
-    pub fn new_round(&mut self) {
+    pub fn new_round(&mut self) -> &str {
         self.round += 1;
         self.score = 0;
-        self.world_map =
-            WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default());
-        //self.world_map.get_map();
-        //todo!("return HMTL element from get_map");
+        self.world_map.get_map()
     }
 
     /// Resets the game state entirely
@@ -66,16 +61,14 @@ impl Default for GameState {
             round: 1,
             score: 0,
             total: 0,
-            round_amount: ROUND_AMOUNT,
-            world_map: WorldMap::new(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]), Library::default()),
+            world_map: WorldMap::new(OHMLibrary::default()),
         }
     }
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
 pub struct GameStateToJS {
     pub round: i8,
-    pub round_amount: i8,
     pub total: i16,
     pub score: i16,
     pub world_map: WorldMapToJS,
@@ -85,7 +78,6 @@ impl From<GameState> for GameStateToJS {
     fn from(value: GameState) -> Self {
         GameStateToJS {
             round: (value.round),
-            round_amount: (value.round_amount),
             total: (value.total),
             score: (value.score),
             world_map: (value.world_map.into()),
