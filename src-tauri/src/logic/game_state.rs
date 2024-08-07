@@ -28,7 +28,7 @@ impl GameState {
     ///
     /// The score is lower the broader the guess is and 0 if the correct year is outside of the range
     #[must_use]
-    pub fn calculate_score(&self, guess_range: &Range<i16>) -> i16 {
+    pub fn calculate_score(&self, guess_range: Range<i16>) -> i16 {
         if guess_range.is_in_range(&self.world_map.correct) {
             MAXIMUM_YEAR - (guess_range.upper_bound - guess_range.lower_bound)
         } else {
@@ -38,7 +38,7 @@ impl GameState {
 
     /// Updates the score and total based on the result of a given guess
     pub fn make_guess(&mut self, guess: [i16; 2]) {
-        self.score = self.calculate_score(&Range::new(guess));
+        self.score = self.calculate_score(Range::new(guess));
         self.total += self.score;
     }
 
@@ -104,9 +104,9 @@ mod tests {
             game_state.world_map.correct - 39,
             game_state.world_map.correct + 10,
         ]);
-        assert_eq!(game_state.calculate_score(&wrong_guess_over), 0);
-        assert_eq!(game_state.calculate_score(&wrong_guess_under), 0);
-        assert!(game_state.calculate_score(&correct_guess) > 0);
+        assert_eq!(game_state.calculate_score(wrong_guess_over), 0);
+        assert_eq!(game_state.calculate_score(wrong_guess_under), 0);
+        assert!(game_state.calculate_score(correct_guess) > 0);
     }
 
     #[test]
@@ -119,7 +119,7 @@ mod tests {
             game_state.world_map.correct - 39,
             game_state.world_map.correct + 10,
         ]);
-        let score = game_state.calculate_score(&correct_guess);
+        let score = game_state.calculate_score(correct_guess);
         game_state.make_guess([correct_guess.lower_bound, correct_guess.upper_bound]);
         assert_eq!(score, game_state.score);
         assert_eq!(score, game_state.total - 42);
