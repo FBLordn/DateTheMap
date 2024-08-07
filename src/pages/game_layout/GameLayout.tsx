@@ -22,6 +22,8 @@ interface ListHeaderProps {
   setIsPlaying: (isPlaying: boolean) => void;
 }
 
+const css:React.CSSProperties={"height":"100%", "maxWidth":"100%"};
+
 let round_amount: number;
 invoke('get_round_amount').then((result) => round_amount = result as number);
 let possible_range: Range;
@@ -36,7 +38,7 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   const [guessRange, setRange] = React.useState([possible_range.lower_bound, possible_range.upper_bound]);
 
   function getGameState() {
-    invoke('get_game_state').then((gameState) => setGameState(gameState as GameState));    
+    invoke('get_game_state').then((gameState) => setGameState(gameState as GameState));
   }
 
   React.useEffect(() => {
@@ -74,7 +76,7 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
     gameState ?
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
         <Item> <GameStats scoreRound={[gameState.total, gameState.round]} /> </Item>
-        <Item sx={{flexGrow:1}}> <WorldMap/> </Item>
+        <Item sx={{m:1, flexGrow:1}}> <div dangerouslySetInnerHTML={{__html: gameState.world_map.html}} style={css} /> </Item>
         <Item> 
           <Stack
             direction="row"
