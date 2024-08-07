@@ -2,10 +2,9 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-import WorldMap from './WorldMap';
 import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
-import { GameState } from '../../ApiTypes';
+import { GameState, Range } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api';
 import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
@@ -23,16 +22,21 @@ interface ListHeaderProps {
   setIsPlaying: (isPlaying: boolean) => void;
 }
 
+let round_amount: number;
+invoke('get_round_amount').then((result) => round_amount = result as number);
+let possible_range: Range;
+invoke('get_possible_range').then((range) =>  possible_range = range as Range);
+
 export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   
   const [gameState, setGameState] = React.useState<GameState>();
 
   const [roundOver, setRoundOver] = React.useState<boolean>(false);
 
-  const [guessRange, setRange] = React.useState([gameState?.world_map.min, gameState?.world_map.max]);
+  const [guessRange, setRange] = React.useState([possible_range.lower_bound, possible_range.upper_bound]);
 
   function getGameState() {
-    invoke('get_game_state').then((gS) => gS as GameState).then((gameState) => setGameState(gameState));    
+    invoke('get_game_state').then((gameState) => setGameState(gameState as GameState));    
   }
 
   React.useEffect(() => {
@@ -41,7 +45,7 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
 
   function getActiveButtonIndex(roundOver: boolean, round: number | undefined) {
     if (roundOver) {
-      return round===gameState?.round_amount ? 2 : 1;
+      return round===round_amount ? 2 : 1;
     } else {
       return 0;
     }
@@ -79,8 +83,8 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
             <InputRangeSlider 
               sx={{width:17/20}}
               callbackFunction={setRange}
-              minValue={gameState.world_map.range.lower_bound}
-              maxValue={gameState.world_map.range.upper_bound}
+              minValue={possible_range.lower_bound}
+              maxValue={possible_range.upper_bound}
               disabled={roundOver}
               additionalThumbs={roundOver ? [gameState.world_map.correct] : []}
             />
