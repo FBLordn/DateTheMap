@@ -43,10 +43,10 @@ impl GameState {
     }
 
     /// Updates the round, resets the score and gets a new world map
-    pub fn new_round(&mut self) -> &str {
+    pub fn new_round(&mut self) {
         self.round += 1;
         self.score = 0;
-        self.world_map.get_map()
+        self.world_map.get_map();
     }
 
     /// Resets the game state entirely

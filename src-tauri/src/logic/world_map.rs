@@ -28,20 +28,21 @@ where
     I: MapInterface,
 {
     pub fn new(interface: I) -> Self {
+        let round: InterfaceReturn =
+            interface.get_raw_map(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]));
         Self {
-            html: String::new(),
-            correct: 2024,
+            html: round.html,
+            correct: round.correct_year,
             interface,
         }
     }
 
-    pub fn get_map(&mut self) -> &str {
+    pub fn get_map(&mut self) {
         let response: InterfaceReturn = self
             .interface
             .get_raw_map(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]));
         self.correct = response.correct_year;
         self.html = response.html;
-        &self.html
     }
 }
 
