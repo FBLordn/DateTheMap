@@ -8,8 +8,12 @@ type GameState = {
 
 type WorldMapAPI = {
     correct: number;
-    min: number;
-    max: number;
+    range: Range;
+}
+
+type Range = {
+  lower_bound: any;
+  upper_bound: any
 }
 
 export type { GameState, WorldMapAPI};

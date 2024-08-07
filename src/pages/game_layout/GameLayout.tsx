@@ -79,8 +79,8 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
             <InputRangeSlider 
               sx={{width:17/20}}
               callbackFunction={setRange}
-              minValue={gameState.world_map.min}
-              maxValue={gameState.world_map.max}
+              minValue={gameState.world_map.range.lower_bound}
+              maxValue={gameState.world_map.range.upper_bound}
               disabled={roundOver}
               additionalThumbs={roundOver ? [gameState.world_map.correct] : []}
             />
