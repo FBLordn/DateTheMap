@@ -66,14 +66,14 @@ where
 
 #[cfg(test)]
 mod tests {
+
     use crate::logic::world_map_backend::OHMLibrary;
 
     use super::*;
 
     #[test]
     fn test_get_map_returns_html() {
-        let mut world_map = WorldMap::new(OHMLibrary::default());
-        let map = world_map.get_map();
-        //TODO: Test returns html
+        let world_map = WorldMap::new(OHMLibrary::default());
+        assert!(tl::parse(&world_map.html, tl::ParserOptions::default()).is_ok());
     }
 }
