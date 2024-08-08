@@ -1,5 +1,5 @@
 use rand::Rng;
-use std::{fmt::Debug, thread::current};
+use std::fmt::Debug;
 
 use crate::util::Range;
 
