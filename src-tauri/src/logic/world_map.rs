@@ -2,12 +2,9 @@ use std::{fmt::Debug, hash::Hash};
 
 use serde::Serialize;
 
-use crate::{logic::world_map_backend::MapInterface, util::Range};
+use crate::logic::world_map_backend::MapInterface;
 
-use super::{
-    game_state::{MAXIMUM_YEAR, MINIMUM_YEAR},
-    world_map_backend::InterfaceReturn,
-};
+use super::world_map_backend::InterfaceReturn;
 
 /// Represents a world map
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default, Serialize)]
@@ -28,8 +25,7 @@ where
     I: MapInterface,
 {
     pub fn new(interface: I) -> Self {
-        let round: InterfaceReturn =
-            interface.get_raw_map(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]));
+        let round: InterfaceReturn = interface.get_raw_map();
         Self {
             html: round.html,
             correct: round.correct_year,
@@ -38,9 +34,7 @@ where
     }
 
     pub fn get_map(&mut self) {
-        let response: InterfaceReturn = self
-            .interface
-            .get_raw_map(Range::new([MINIMUM_YEAR, MAXIMUM_YEAR]));
+        let response: InterfaceReturn = self.interface.get_raw_map();
         self.correct = response.correct_year;
         self.html = response.html;
     }
