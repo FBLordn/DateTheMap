@@ -6,7 +6,7 @@ use crate::util::Range;
 
 use super::world_map::WorldMapToJS;
 
-pub const MINIMUM_YEAR: i16 = 1600;
+pub const MINIMUM_YEAR: i16 = 1400;
 pub const MAXIMUM_YEAR: i16 = 2024;
 pub const ROUND_AMOUNT: i8 = 5;
 
@@ -27,10 +27,12 @@ impl GameState {
     /// Returns the score achieved by a given guess
     ///
     /// The score is lower the broader the guess is and 0 if the correct year is outside of the range
+    #[allow(clippy::cast_possible_truncation)]
     #[must_use]
     pub fn calculate_score(&self, guess_range: Range<i16>) -> i16 {
         if guess_range.is_in_range(&self.world_map.correct) {
-            MAXIMUM_YEAR - (guess_range.upper_bound - guess_range.lower_bound)
+            let diff = f32::from(guess_range.upper_bound - guess_range.lower_bound);
+            (5000_f32 * f32::powf(1.08, -diff.sqrt())).round() as i16
         } else {
             0
         }
