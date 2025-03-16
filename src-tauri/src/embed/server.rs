@@ -1,8 +1,6 @@
-use std::io::Read;
-
 use axum::{extract::Query, http::header, response::IntoResponse, routing::get, Router};
-use regex::bytes::Regex;
-use reqwest::header::{CONTENT_ENCODING, CONTENT_TYPE};
+use regex::bytes::{Captures, Regex};
+use reqwest::header::CONTENT_TYPE;
 use serde::Deserialize;
 use tokio::net::TcpListener;
 
@@ -27,18 +25,16 @@ async fn filter(query: Query<Coords>) -> impl IntoResponse {
     let uri = format!("https://vtiles.openhistoricalmap.org/maps/{path}/{z}/{x}/{y}.pbf");
 
     let resp = reqwest::get(uri).await.unwrap().bytes().await.unwrap();
+    let re = Regex::new(r"(?-u)\x28\d+\x2d\d+\x29").unwrap();
 
-    let re = Regex::new(r"\x28\d+\x2d\d+\x29").unwrap();
     let resp = re
-        .replace(&resp, b"\x28\x74\x65\x65\x20\x68\x65\x65\x29")
+        .replace_all(&resp, |captured: &Captures| {
+            let res = captured.extract::<0>().0.to_vec();
+            String::from_utf8_lossy(&res)
+                .replace(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], "X")
+        })
         .into_owned();
-    (
-        [
-            (CONTENT_ENCODING, "gzip"),
-            (CONTENT_TYPE, "application/vnd.mapbox-vector-tile"),
-        ],
-        resp,
-    )
+    ([(CONTENT_TYPE, "application/vnd.mapbox-vector-tile")], resp)
 }
 
 pub async fn start() {
