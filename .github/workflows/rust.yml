@@ -17,8 +17,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - with:
-        path: ${{ env.CARGO_HOME }}
     - uses: actions/checkout@v4
     - name: Build
       run: cargo build --verbose
