@@ -8,6 +8,8 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  
+  CARGO_HOME: ${{ github.workspace }}/src-tauri
 
 jobs:
   build:
@@ -15,8 +17,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - with:
+        path: ${{ env.CARGO_HOME }}
     - uses: actions/checkout@v4
-    - run: cd src-tauri
     - name: Build
       run: cargo build --verbose
     - name: Run tests
