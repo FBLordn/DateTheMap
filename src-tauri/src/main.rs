@@ -9,11 +9,15 @@
 
 use std::sync::Mutex;
 
+mod embed;
 mod logic;
 mod tauri_api;
 mod util;
 
-fn main() {
+#[tokio::main]
+async fn main() {
+    tokio::spawn(embed::server::start());
+
     tauri::Builder::default()
         .manage(Mutex::new(logic::GameState::default()))
         .invoke_handler(tauri::generate_handler![
