@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Slider from '@mui/material/Slider';
-import { Stack, useTheme } from '@mui/material';
+import { Stack, Tooltip, useTheme } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import IncrementInput from './IncrementInput';
 
@@ -84,6 +84,26 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
     return list;
   }
 
+  interface CustomValueLabelProps {
+    children: React.ReactElement;
+    open: boolean;
+    value: number;
+    index: number;
+  }
+
+  const CustomValueLabel: React.FC<CustomValueLabelProps> = ({ children, open, value, index }) => {
+    return (
+      <Tooltip
+        open={open || (additionalThumbs || []).includes(value) } // Always show correct button
+        enterTouchDelay={0}
+        placement="top"
+        title={value}
+      >
+        {children}
+      </Tooltip>
+    );
+  };
+
   return (
     <Stack 
       direction="row"
@@ -121,8 +141,9 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
         value={thumbs}
         onChange={handleSliderChange}
         onChangeCommitted={onChangeCommited}
-        valueLabelDisplay="auto"
         getAriaValueText={(v)=> `${v}`}
+        valueLabelDisplay='auto'
+        slotProps={{valueLabel: CustomValueLabel}}
       />
 
       <IncrementInput
