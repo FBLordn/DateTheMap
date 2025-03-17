@@ -9,12 +9,17 @@
 
 use std::sync::Mutex;
 
+mod embed;
 mod logic;
 mod tauri_api;
 mod util;
 
-fn main() {
+#[tokio::main]
+async fn main() {
+    tokio::spawn(embed::server::start());
+
     tauri::Builder::default()
+        .plugin(tauri_plugin_shell::init())
         .manage(Mutex::new(logic::GameState::default()))
         .invoke_handler(tauri::generate_handler![
             tauri_api::make_guess,

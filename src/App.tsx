@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
+import React from "react";
 import "./App.css";
 import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
