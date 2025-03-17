@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Slider from '@mui/material/Slider';
-import { Stack, useTheme } from '@mui/material';
+import { Stack, Tooltip, useTheme } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
 import IncrementInput from './IncrementInput';
 
@@ -16,7 +16,14 @@ interface ListHeaderProps {
 }
 
 export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, disabled, additionalThumbs, children }: ListHeaderProps) {
+  const [wasDisabled, setDisabled] = React.useState<boolean>(disabled || false);
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
+  if(wasDisabled != disabled) {
+    if(wasDisabled) {
+      setValue([minValue, maxValue]);
+    }
+    setDisabled(disabled || false);
+  }
   const thumbs = [value[0] || minValue, value[1] || maxValue, ...additionalThumbs || []];
   const theme = useTheme();
   const handleSliderChange = (
@@ -41,11 +48,11 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
   };
 
   const handleMinInputChange = (event: SyntheticIncrementEvent) => {
-    handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 0)
+    handleSliderChange(event as unknown as Event, Number(event.target.value), 0)
   };
 
   const handleMaxInputChange = (event: SyntheticIncrementEvent) => {
-    handleSliderChange(event as unknown as Event, '' ? 0 : Number(event.target.value), 1)
+    handleSliderChange(event as unknown as Event, Number(event.target.value), 1)
   };
 
   const onChangeCommited = (event: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) =>
@@ -84,6 +91,26 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
     return list;
   }
 
+  interface CustomValueLabelProps {
+    children: React.ReactElement;
+    open: boolean;
+    value: number;
+    index: number;
+  }
+
+  const CustomValueLabel: React.FC<CustomValueLabelProps> = ({ children, open, value, index }) => {
+    return (
+      <Tooltip
+        open={open || (additionalThumbs || []).includes(value) } // Always show correct button
+        enterTouchDelay={0}
+        placement="top"
+        title={value}
+      >
+        {children}
+      </Tooltip>
+    );
+  };
+
   return (
     <Stack 
       direction="row"
@@ -121,8 +148,9 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
         value={thumbs}
         onChange={handleSliderChange}
         onChangeCommitted={onChangeCommited}
-        valueLabelDisplay="auto"
         getAriaValueText={(v)=> `${v}`}
+        valueLabelDisplay='auto'
+        slotProps={{valueLabel: CustomValueLabel}}
       />
 
       <IncrementInput

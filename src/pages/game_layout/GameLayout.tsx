@@ -8,6 +8,9 @@ import { GameState, Range } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api/core';
 import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
+import GameEndDialog from './GameEndDialog';
+import { ThemeProvider } from '@emotion/react';
+
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -65,9 +68,17 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
     getGameState();
   };
 
-  function handleFinishButtonClick() {
-    invoke('reset')
-    setIsPlaying(false);
+  const [gameEndOpen, setGameEndOpen] = React.useState(false);
+
+  function handleFinishGameButton() {
+    setGameEndOpen(true);
+  }
+  
+  function resetGame() {
+    invoke('reset');
+    getGameState();
+    setRange([possible_range.lower_bound,possible_range.upper_bound]);
+    setRoundOver(false);
   }
 
   return (
@@ -91,8 +102,15 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
             <PolyButtons
               sx={{width:3/20, minWidth:90}}
               labels={["Submit", "Continue", "Finish"]}
-              clickHandlers={[handleSubmitButtonClick, handleNextRoundButtonClick, handleFinishButtonClick]}
+              clickHandlers={[handleSubmitButtonClick, handleNextRoundButtonClick, handleFinishGameButton]}
               index={buttonInUse}
+            />
+            <GameEndDialog 
+              resetGame={resetGame}
+              isOpen={gameEndOpen}
+              setIsOpen={setGameEndOpen}
+              setIsPlaying={setIsPlaying}
+              scoreText= {`${gameState.total} / ${5000*round_amount}`}
             />
           </Stack>
         </Item>
