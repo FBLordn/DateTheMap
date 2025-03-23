@@ -1,4 +1,4 @@
-import { Button, Stack, SxProps, Theme, Typography } from '@mui/material';
+import { Button, Stack, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import * as React from 'react';
 
 
@@ -10,7 +10,6 @@ interface ListHeaderProps {
 }
 
 export default function Menu({sx, onSubmit, title, buttonName, children}: React.PropsWithChildren<ListHeaderProps>) {
-
   return (
     <Stack sx={sx}>
       <Typography variant='h1'>
@@ -19,7 +18,7 @@ export default function Menu({sx, onSubmit, title, buttonName, children}: React.
 
       {children}
 
-      <Button onClick={onSubmit}>
+      <Button onClick={onSubmit} color="primary" variant="contained">
         {buttonName}
       </Button>
     </Stack>
