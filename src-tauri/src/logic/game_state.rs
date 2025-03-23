@@ -1,5 +1,6 @@
 use serde::Serialize;
 
+use crate::audio::provider::AUDIO_PROVIDER;
 use crate::logic::world_map::WorldMap;
 use crate::logic::world_map_backend::OHMLibrary;
 use crate::util::Range;
@@ -31,9 +32,11 @@ impl GameState {
     #[must_use]
     pub fn calculate_score(&self, guess_range: Range<i16>) -> i16 {
         if guess_range.is_in_range(&self.world_map.correct) {
+            AUDIO_PROVIDER.success();
             let diff = f32::from(guess_range.upper_bound - guess_range.lower_bound);
             (5000_f32 * f32::powf(1.08, -diff.sqrt())).round() as i16
         } else {
+            AUDIO_PROVIDER.fail();
             0
         }
     }
@@ -46,6 +49,7 @@ impl GameState {
 
     /// Updates the round, resets the score and gets a new world map
     pub fn new_round(&mut self) {
+        AUDIO_PROVIDER.next_question();
         self.round += 1;
         self.score = 0;
         self.world_map.get_map();
