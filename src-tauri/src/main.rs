@@ -9,6 +9,7 @@
 
 use std::sync::Mutex;
 
+mod cache;
 mod embed;
 mod logic;
 mod tauri_api;
