@@ -17,7 +17,7 @@ pub struct AudioData<'a, const N: usize> {
     bg_thread: Option<Sender<bool>>,
 }
 
-pub struct Provider<'a, const N: usize>(pub Mutex<AudioData<'a, N>>);
+pub struct Provider<'a, const N: usize>(Mutex<AudioData<'a, N>>);
 
 pub static AUDIO_PROVIDER: Provider<'_, 4> = Provider(Mutex::new(AudioData {
     success: include_bytes!("data/chime.ogg"),
