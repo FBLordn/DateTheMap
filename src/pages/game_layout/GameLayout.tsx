@@ -9,8 +9,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
-import { ThemeProvider } from '@emotion/react';
-
+import { Page } from '../../Definitions';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -20,7 +19,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 interface ListHeaderProps {
-  setIsPlaying: (isPlaying: boolean) => void;
+  setCurrentPage: (page: Page) => void;
 }
 
 const css:React.CSSProperties={"height":"100%", "maxWidth":"100%"};
@@ -30,7 +29,7 @@ invoke('get_round_amount').then((result) => round_amount = result as number);
 let possible_range: Range;
 invoke('get_possible_range').then((range) =>  possible_range = range as Range);
 
-export default function GameLayout({setIsPlaying}: ListHeaderProps) {
+export default function GameLayout({setCurrentPage}: ListHeaderProps) {
   
   const [gameState, setGameState] = React.useState<GameState>();
 
@@ -109,7 +108,7 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
               resetGame={resetGame}
               isOpen={gameEndOpen}
               setIsOpen={setGameEndOpen}
-              setIsPlaying={setIsPlaying}
+              returnToMenu={() => setCurrentPage(Page.MENU)}
               scoreText= {`${gameState.total} / ${5000*round_amount}`}
             />
           </Stack>

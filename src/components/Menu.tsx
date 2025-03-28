@@ -1,4 +1,4 @@
-import { Button, Stack, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Button, Stack, SxProps, Theme, Typography } from '@mui/material';
 import * as React from 'react';
 
 
@@ -18,7 +18,7 @@ export default function Menu({sx, onSubmit, title, buttonName, children}: React.
 
       {children}
 
-      <Button onClick={onSubmit} color="primary" variant="contained">
+      <Button onClick={onSubmit} color="primary" variant="contained" sx={{minWidth:1/4, maxWidth:1/3, alignSelf:'center'}}>
         {buttonName}
       </Button>
     </Stack>
