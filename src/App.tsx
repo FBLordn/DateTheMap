@@ -3,11 +3,11 @@ import "./App.css";
 import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./Themes.tsx";
-import { CssBaseline, IconButton, Stack, useMediaQuery } from "@mui/material";
-import GameMenu from "./components/Menu.tsx";
-import SettingsIcon from '@mui/icons-material/Settings';
+import { CssBaseline, useMediaQuery } from "@mui/material";
 import { Page } from "./Definitions.ts";
 import _default from "@emotion/styled";
+import MainMenu from "./pages/MainMenu.tsx";
+import Settings from "./pages/Settings.tsx";
 
 function App() {
 
@@ -24,27 +24,12 @@ function App() {
   function getPageHtml(page: Page) {
     switch (page) {
       case Page.PLAYING:
-        return <GameLayout setCurrentPage={setCurrentPage} /> 
+        return <GameLayout onMainMenuSelect={() => setCurrentPage(Page.MENU)} /> 
       case Page.SETTINGS:
-        return 
+        return <Settings onApply={() => setCurrentPage(Page.MENU)}/>
+      case Page.MENU:
       default:
-        return (
-          <Stack
-            sx={{p:2, minHeight:'100vh'}}
-            spacing={3}
-          >
-            <SettingsIcon 
-              sx={{fontSize:'xxx-large', alignSelf:'flex-end', margin:"1%"}} 
-              onClick={() => setCurrentPage(Page.SETTINGS)}
-            />
-            <GameMenu 
-              sx={{flexGrow:1, justifyContent:"center"}}
-              onSubmit={() => setCurrentPage(Page.PLAYING)} 
-              title="Date The Map" 
-              buttonName="Start Game"
-            /> 
-          </Stack>
-        )
+        return <MainMenu onPageSelect={setCurrentPage}/>
     }
   }
 

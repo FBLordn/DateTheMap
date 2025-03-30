@@ -9,7 +9,6 @@ import { invoke } from '@tauri-apps/api/core';
 import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
-import { Page } from '../../Definitions';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -18,8 +17,8 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-interface ListHeaderProps {
-  setCurrentPage: (page: Page) => void;
+interface GameLayoutProps {
+  onMainMenuSelect: () => void;
 }
 
 const css:React.CSSProperties={"height":"100%", "maxWidth":"100%"};
@@ -29,7 +28,7 @@ invoke('get_round_amount').then((result) => round_amount = result as number);
 let possible_range: Range;
 invoke('get_possible_range').then((range) =>  possible_range = range as Range);
 
-export default function GameLayout({setCurrentPage}: ListHeaderProps) {
+export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
   
   const [gameState, setGameState] = React.useState<GameState>();
 
@@ -108,7 +107,7 @@ export default function GameLayout({setCurrentPage}: ListHeaderProps) {
               resetGame={resetGame}
               isOpen={gameEndOpen}
               setIsOpen={setGameEndOpen}
-              returnToMenu={() => setCurrentPage(Page.MENU)}
+              onReturnToMenu={onMainMenuSelect}
               scoreText= {`${gameState.total} / ${5000*round_amount}`}
             />
           </Stack>
