@@ -5,7 +5,7 @@ import { SxProps, Theme } from '@mui/material/styles';
 import IncrementInput from './IncrementInput';
 
 
-interface ListHeaderProps {
+interface InputRangeSliderProps {
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
   disabled?: boolean;
@@ -15,7 +15,7 @@ interface ListHeaderProps {
   maxValue: number
 }
 
-export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, disabled, additionalThumbs, children }: ListHeaderProps) {
+export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, disabled, additionalThumbs, children }: InputRangeSliderProps) {
   const [wasDisabled, setDisabled] = React.useState<boolean>(disabled || false);
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
   if(wasDisabled != disabled) {

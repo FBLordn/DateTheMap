@@ -6,17 +6,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { SxProps, Theme } from '@mui/material/styles';
 
-interface ListHeaderProps {
+interface GameEndDialogProps {
   children?: React.ReactNode; 
   sx?: SxProps<Theme>;
-  returnToMenu: () => void;
+  onReturnToMenu: () => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   scoreText: string;
   resetGame: () => void;
 }
 
-export default function GameEndDialog({sx, returnToMenu, scoreText, setIsOpen, isOpen, resetGame} : ListHeaderProps) {
+export default function GameEndDialog({sx, onReturnToMenu, scoreText, setIsOpen, isOpen, resetGame} : GameEndDialogProps) {
 
   const handleClose = () => {
     setIsOpen(false);
@@ -24,7 +24,7 @@ export default function GameEndDialog({sx, returnToMenu, scoreText, setIsOpen, i
 
   function handleFinishButton() {
     resetGame();
-    returnToMenu();
+    onReturnToMenu();
     handleClose();
   }
 
