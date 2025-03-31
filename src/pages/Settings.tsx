@@ -2,13 +2,15 @@ import { Divider, Stack } from "@mui/material";
 import Menu from "../components/Menu";
 import VolumeSlider from "../components/VolumeSlider";
 import PrefLine from "../components/PrefLine";
-import { SpaceBar } from "@mui/icons-material";
+import { Theme } from "../Definitions";
+import ThemeButtons from "../components/ThemeButtons";
 
 interface SettingsProps {
     onApply : () => void
+    onThemeSelected : (theme: Theme) => void;
 }
 
-export default function Settings({onApply}: SettingsProps) {
+export default function Settings({onApply, onThemeSelected}: SettingsProps) {
     
     function applySettings() {
         //save stuff    
@@ -33,6 +35,9 @@ export default function Settings({onApply}: SettingsProps) {
         </PrefLine>
         <PrefLine title="Sound Volume">
           <VolumeSlider/>
+        </PrefLine>
+        <PrefLine title="Theme">
+          <ThemeButtons onThemeChange={onThemeSelected}/>
         </PrefLine>
       <Divider/>
       </Stack>
