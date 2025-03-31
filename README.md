@@ -1,6 +1,7 @@
-# Tauri + React + Typescript
+# Date The Map
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+A game in which it is the goal to guess the year portrayed by a historic map.
+(not a dating sim)
 
 ## Recommended IDE Setup
 
