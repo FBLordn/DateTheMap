@@ -1,7 +1,11 @@
 import { Box, Slider, Stack } from "@mui/material";
 import React from "react";
 
-export default function VolumeSlider() {
+interface VolumeSliderProps {
+  onChange: (volume: number) => void;
+}
+
+export default function VolumeSlider({ onChange } : VolumeSliderProps) {
   const [volume, setVolume] = React.useState<number>(50);
   
   function onVolumeChange(_event: Event, value: number | number[], _activeThumb: number) {
@@ -17,6 +21,7 @@ export default function VolumeSlider() {
           valueLabelFormat={(value: number) => `${value}%`}
           onChange={onVolumeChange} 
           valueLabelDisplay="auto"
+          onChangeCommitted={() => onChange(volume/100)}
         />
       </Stack> 
     </Box>

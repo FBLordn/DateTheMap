@@ -4,6 +4,7 @@ import VolumeSlider from "../components/VolumeSlider";
 import PrefLine from "../components/PrefLine";
 import { Theme } from "../Definitions";
 import ThemeButtons from "../components/ThemeButtons";
+import { invoke } from "@tauri-apps/api/core";
 
 interface SettingsProps {
     onApply : () => void
@@ -31,10 +32,10 @@ export default function Settings({onApply, onThemeSelected}: SettingsProps) {
         divider={<Divider flexItem orientation="horizontal"/>}
       >
         <PrefLine title="Music Volume">
-          <VolumeSlider/>
+          <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume})}/>
         </PrefLine>
         <PrefLine title="Sound Volume">
-          <VolumeSlider/>
+          <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume})}/>
         </PrefLine>
         <PrefLine title="Theme">
           <ThemeButtons onThemeChange={onThemeSelected}/>

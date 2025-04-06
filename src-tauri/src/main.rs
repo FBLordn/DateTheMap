@@ -32,7 +32,9 @@ async fn main() {
             tauri_api::reset,
             tauri_api::get_game_state,
             tauri_api::get_possible_range,
-            tauri_api::get_round_amount
+            tauri_api::get_round_amount,
+            tauri_api::set_music_volume,
+            tauri_api::set_sound_volume
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

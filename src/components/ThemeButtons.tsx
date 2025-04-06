@@ -27,12 +27,13 @@ export default function ThemeButtons({onThemeChange}: ThemeButtonProps) {
       exclusive
       onChange={handleClick}
       aria-label="theme setting"
+      color="primary"
     >
-      <ToggleButton value={Theme.SYSTEM} aria-label="system">
-        <DisplaySettingsIcon/>
-      </ToggleButton>
       <ToggleButton value={Theme.LIGHT} aria-label="light">
         <LightModeIcon/>
+      </ToggleButton>
+      <ToggleButton value={Theme.SYSTEM} aria-label="system">
+        <DisplaySettingsIcon/>
       </ToggleButton>
       <ToggleButton value={Theme.DARK} aria-label="dark">
         <DarkModeIcon/>
