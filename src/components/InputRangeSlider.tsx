@@ -15,12 +15,13 @@ interface InputRangeSliderProps {
   maxValue: number
 }
 
-export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, disabled, additionalThumbs, children }: InputRangeSliderProps) {
+export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, disabled, additionalThumbs }: InputRangeSliderProps) {
   const [wasDisabled, setDisabled] = React.useState<boolean>(disabled || false);
   const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
   if(wasDisabled != disabled) {
     if(wasDisabled) {
       setValue([minValue, maxValue]);
+      callbackFunction([minValue, maxValue]);
     }
     setDisabled(disabled || false);
   }
@@ -98,7 +99,7 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
     index: number;
   }
 
-  const CustomValueLabel: React.FC<CustomValueLabelProps> = ({ children, open, value, index }) => {
+  const CustomValueLabel: React.FC<CustomValueLabelProps> = ({ children, open, value }) => {
     return (
       <Tooltip
         open={open || (additionalThumbs || []).includes(value) } // Always show correct button
