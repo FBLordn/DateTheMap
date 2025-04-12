@@ -4,33 +4,47 @@ import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./Themes.tsx";
 import { CssBaseline, useMediaQuery } from "@mui/material";
-import GameMenu from "./components/Menu.tsx";
+import { Page, Theme } from "./Definitions.ts";
+import _default from "@emotion/styled";
+import MainMenu from "./pages/MainMenu.tsx";
+import Settings from "./pages/Settings.tsx";
 
 function App() {
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
+  const [currentPage, setCurrentPage] = React.useState<Page>(Page.MENU);
 
-  const theme = React.useMemo(
-    () =>
-      prefersDarkMode ? darkTheme : lightTheme,
-    [prefersDarkMode],
-  );
+  const [theme, setTheme] = React.useState<Theme>(Theme.SYSTEM);
+
+  function getThemeFromEnum(theme: Theme) {
+    switch(theme) {
+      case Theme.DARK:
+        return darkTheme;
+      case Theme.LIGHT:
+        return lightTheme;
+      case Theme.SYSTEM:
+      default:
+        return prefersDarkMode ? darkTheme : lightTheme;
+    }
+  }
+
+  function getPageHtml(page: Page) {
+    switch (page) {
+      case Page.PLAYING:
+        return <GameLayout onMainMenuSelect={() => setCurrentPage(Page.MENU)} /> 
+      case Page.SETTINGS:
+        return <Settings onApply={() => setCurrentPage(Page.MENU)} onThemeSelected={setTheme}/>
+      case Page.MENU:
+      default:
+        return <MainMenu onPageSelect={setCurrentPage}/>
+    }
+  }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={getThemeFromEnum(theme)}>
       <CssBaseline />
-      { isPlaying ? 
-        <GameLayout setIsPlaying={setIsPlaying} /> 
-        : 
-        <GameMenu 
-          sx={{p:2, justifyContent:"center", minHeight:'100vh'}}
-          onSubmit={() => setIsPlaying(true)} 
-          title="Date The Map" 
-          buttonName="Start Game"
-        /> 
-      }
+      {getPageHtml(currentPage)}
     </ThemeProvider>
   );
 }

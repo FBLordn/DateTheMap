@@ -5,19 +5,18 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { SxProps, Theme } from '@mui/material/styles';
-import { invoke } from '@tauri-apps/api';
 
-interface ListHeaderProps {
+interface GameEndDialogProps {
   children?: React.ReactNode; 
   sx?: SxProps<Theme>;
-  setIsPlaying: (isPlaying: boolean) => void;
+  onReturnToMenu: () => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   scoreText: string;
   resetGame: () => void;
 }
 
-export default function GameEndDialog({sx, setIsPlaying, scoreText, setIsOpen, isOpen, resetGame} : ListHeaderProps) {
+export default function GameEndDialog({sx, onReturnToMenu, scoreText, setIsOpen, isOpen, resetGame} : GameEndDialogProps) {
 
   const handleClose = () => {
     setIsOpen(false);
@@ -25,7 +24,7 @@ export default function GameEndDialog({sx, setIsPlaying, scoreText, setIsOpen, i
 
   function handleFinishButton() {
     resetGame();
-    setIsPlaying(false);
+    onReturnToMenu();
     handleClose();
   }
 

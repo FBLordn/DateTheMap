@@ -3,6 +3,7 @@ use std::sync::Mutex;
 use tauri::State;
 
 use crate::{
+    audio::provider::AUDIO_PROVIDER,
     logic::{GameState, GameStateToJS, MAXIMUM_YEAR, MINIMUM_YEAR, ROUND_AMOUNT},
     util::Range,
 };
@@ -43,4 +44,15 @@ pub fn get_possible_range() -> Range<i16> {
 #[tauri::command]
 pub fn get_round_amount() -> i8 {
     ROUND_AMOUNT
+}
+
+#[tauri::command]
+pub fn set_music_volume(volume: f32) {
+    AUDIO_PROVIDER.set_music_volume(volume);
+}
+
+#[tauri::command]
+pub fn set_sound_volume(volume: f32) {
+    AUDIO_PROVIDER.set_sound_volume(volume);
+    AUDIO_PROVIDER.success();
 }

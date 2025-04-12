@@ -9,6 +9,9 @@
 
 use std::sync::Mutex;
 
+use audio::provider::AUDIO_PROVIDER;
+
+mod audio;
 mod embed;
 mod logic;
 mod tauri_api;
@@ -17,6 +20,8 @@ mod util;
 #[tokio::main]
 async fn main() {
     tokio::spawn(embed::server::start());
+
+    AUDIO_PROVIDER.start_bg_music();
 
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
@@ -27,7 +32,9 @@ async fn main() {
             tauri_api::reset,
             tauri_api::get_game_state,
             tauri_api::get_possible_range,
-            tauri_api::get_round_amount
+            tauri_api::get_round_amount,
+            tauri_api::set_music_volume,
+            tauri_api::set_sound_volume
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
