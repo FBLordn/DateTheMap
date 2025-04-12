@@ -22,7 +22,7 @@ jobs:
     - name: update apt
       run: sudo rm -rf /var/lib/apt/lists/*; sudo apt update
     - name: install glib
-      run: sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+      run: sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev alsa-lib
     - name: Build
       run: cargo build --manifest-path src-tauri/Cargo.toml --verbose
     - name: Run tests

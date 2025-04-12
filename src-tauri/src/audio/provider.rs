@@ -6,8 +6,8 @@ use std::{
     },
 };
 
-use rand::{seq::SliceRandom, thread_rng};
-use rodio::{Decoder, OutputStream, Sink, Source};
+use rand::{rng, seq::SliceRandom};
+use rodio::{Decoder, OutputStream, Sink};
 
 pub struct AudioData<'a, const N: usize> {
     success: &'a [u8],
@@ -59,7 +59,7 @@ impl<const N: usize> AudioData<'_, N> {
     }
 
     fn start_loop(&mut self, mut audio: Vec<Vec<u8>>) {
-        audio.shuffle(&mut thread_rng());
+        audio.shuffle(&mut rng());
         let (tx, rx) = mpsc::channel::<Action>();
         let volume = self.music_volume;
         std::thread::spawn(move || {
