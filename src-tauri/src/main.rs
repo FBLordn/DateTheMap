@@ -11,9 +11,11 @@ use std::sync::Mutex;
 
 use audio::provider::AUDIO_PROVIDER;
 
+mod FileManager;
 mod audio;
 mod embed;
 mod logic;
+mod settings;
 mod tauri_api;
 mod util;
 
