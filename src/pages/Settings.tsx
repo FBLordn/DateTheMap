@@ -2,21 +2,20 @@ import { Divider, Stack } from "@mui/material";
 import Menu from "../components/Menu";
 import VolumeSlider from "../components/VolumeSlider";
 import PrefLine from "../components/PrefLine";
-import { Theme } from "../Definitions";
 import ThemeButtons from "../components/ThemeButtons";
 import { invoke } from "@tauri-apps/api/core";
+import { SettingType, Theme } from "../Definitions";
 
 interface SettingsProps {
     onApply : () => void
-    onThemeSelected : (theme: Theme) => void;
+    onSettingsChanged : (new_val: number | Theme, type: SettingType) => void;
 }
 
-export default function Settings({onApply, onThemeSelected}: SettingsProps) {
-    
-    function applySettings() {
-        //save stuff    
-        onApply();
-    }    
+export default function Settings({onApply, onSettingsChanged}: SettingsProps) {
+
+  function applySettings() {
+    onApply();
+  }
 
   return (
     <Menu
@@ -32,13 +31,13 @@ export default function Settings({onApply, onThemeSelected}: SettingsProps) {
         divider={<Divider flexItem orientation="horizontal"/>}
       >
         <PrefLine title="Music Volume">
-          <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume})}/>
+          <VolumeSlider onChange={(volume) => {invoke('set_music_volume', {volume: volume}); onSettingsChanged(volume, SettingType.MUSIC)}}/>
         </PrefLine>
         <PrefLine title="Sound Volume">
-          <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume})}/>
+          <VolumeSlider onChange={(volume) => {invoke('set_sound_volume', {volume: volume}); onSettingsChanged(volume, SettingType.SOUND)}}/>
         </PrefLine>
         <PrefLine title="Theme">
-          <ThemeButtons onThemeChange={onThemeSelected}/>
+          <ThemeButtons onThemeChange={(theme) => {onSettingsChanged(theme, SettingType.THEME)}}/>
         </PrefLine>
       <Divider/>
       </Stack>

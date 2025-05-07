@@ -1,27 +1,39 @@
-use super::FileManager::FileManager;
+use serde::{Deserialize, Serialize};
 
+use crate::file_manager::{FileManager, RequestType};
+
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub enum Theme {
     Dark,
     Light,
+    #[default]
     System,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Settings {
-    theme: Theme,
+    pub theme: Theme,
     sound_volume: f32,
     music_volume: f32,
 }
 
 impl Settings {
-    fn write_theme() {}
+    pub fn push_settings(self) {
+        println!("{self:?}");
+        FileManager::write(&RequestType::Config, self);
+    }
 
-    fn write_sound() {}
+    pub fn pull_settings() -> Settings {
+        FileManager::read(&RequestType::Config)
+    }
+}
 
-    fn write_music() {}
-
-    fn read_theme() {}
-
-    fn read_sound() {}
-
-    fn read_music() {}
+impl Default for Settings {
+    fn default() -> Settings {
+        Settings {
+            theme: Theme::default(),
+            sound_volume: 0.5,
+            music_volume: 0.5,
+        }
+    }
 }

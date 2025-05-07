@@ -5,9 +5,15 @@ enum Page {
 }
 
 enum Theme {
-    DARK,
-    LIGHT,
-    SYSTEM
+    Dark="Dark",
+    Light="Light",
+    System="System"
 }
 
-export {Page, Theme};
+enum SettingType {
+SOUND,
+MUSIC,
+THEME
+}
+
+export {Page, Theme, SettingType};

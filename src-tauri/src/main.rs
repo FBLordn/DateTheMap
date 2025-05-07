@@ -11,9 +11,9 @@ use std::sync::Mutex;
 
 use audio::provider::AUDIO_PROVIDER;
 
-mod FileManager;
 mod audio;
 mod embed;
+mod file_manager;
 mod logic;
 mod settings;
 mod tauri_api;
@@ -36,7 +36,8 @@ async fn main() {
             tauri_api::get_possible_range,
             tauri_api::get_round_amount,
             tauri_api::set_music_volume,
-            tauri_api::set_sound_volume
+            tauri_api::set_sound_volume,
+            tauri_api::set_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

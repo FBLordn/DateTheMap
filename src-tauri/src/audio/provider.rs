@@ -15,12 +15,12 @@ pub struct AudioData<'a, const N: usize> {
     next: &'a [u8],
     background: [&'a [u8]; N],
     bg_thread: Option<Sender<Action>>,
-    sound_volume: f32,
-    music_volume: f32,
+    pub sound_volume: f32,
+    pub music_volume: f32,
 }
 
 pub struct Provider<'a, const N: usize> {
-    audio: Mutex<AudioData<'a, N>>,
+    pub audio: Mutex<AudioData<'a, N>>,
 }
 
 pub static AUDIO_PROVIDER: Provider<'_, 4> = Provider {

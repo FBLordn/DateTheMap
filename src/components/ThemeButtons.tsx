@@ -11,7 +11,7 @@ interface ThemeButtonProps {
 
 
 export default function ThemeButtons({onThemeChange}: ThemeButtonProps) {
-  const [theme, setTheme] = React.useState<Theme>(Theme.SYSTEM);
+  const [theme, setTheme] = React.useState<Theme>(Theme.System);
 
   const handleClick = (
     _event: React.MouseEvent<HTMLElement>,
@@ -29,13 +29,13 @@ export default function ThemeButtons({onThemeChange}: ThemeButtonProps) {
       aria-label="theme setting"
       color="primary"
     >
-      <ToggleButton value={Theme.LIGHT} aria-label="light">
+      <ToggleButton value={Theme.Light} aria-label="light">
         <LightModeIcon/>
       </ToggleButton>
-      <ToggleButton value={Theme.SYSTEM} aria-label="system">
+      <ToggleButton value={Theme.System} aria-label="system">
         <DisplaySettingsIcon/>
       </ToggleButton>
-      <ToggleButton value={Theme.DARK} aria-label="dark">
+      <ToggleButton value={Theme.Dark} aria-label="dark">
         <DarkModeIcon/>
       </ToggleButton>
     </ToggleButtonGroup>
