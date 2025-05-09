@@ -10,6 +10,7 @@
 use std::sync::Mutex;
 
 use audio::provider::AUDIO_PROVIDER;
+use settings::Settings;
 
 mod audio;
 mod embed;
@@ -22,6 +23,10 @@ mod util;
 #[tokio::main]
 async fn main() {
     tokio::spawn(embed::server::start());
+    let settings = Settings::pull_settings();
+    println!("In rust-main: {settings:?}");
+    AUDIO_PROVIDER.set_music_volume(settings.music_volume);
+    AUDIO_PROVIDER.set_sound_volume(settings.sound_volume);
 
     AUDIO_PROVIDER.start_bg_music();
 
@@ -37,7 +42,8 @@ async fn main() {
             tauri_api::get_round_amount,
             tauri_api::set_music_volume,
             tauri_api::set_sound_volume,
-            tauri_api::set_settings
+            tauri_api::set_settings,
+            tauri_api::get_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

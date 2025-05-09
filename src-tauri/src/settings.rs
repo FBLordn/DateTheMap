@@ -13,8 +13,8 @@ pub enum Theme {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Settings {
     pub theme: Theme,
-    sound_volume: f32,
-    music_volume: f32,
+    pub sound_volume: f32,
+    pub music_volume: f32,
 }
 
 impl Settings {

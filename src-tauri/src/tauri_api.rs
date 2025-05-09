@@ -62,3 +62,8 @@ pub fn set_sound_volume(volume: f32) {
 pub fn set_settings(settings: Settings) {
     settings.push_settings();
 }
+
+#[tauri::command]
+pub fn get_settings() -> Settings {
+    Settings::pull_settings()
+}

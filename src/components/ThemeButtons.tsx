@@ -6,19 +6,18 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 
 interface ThemeButtonProps {
-  onThemeChange: (theme: Theme) => void;
+  theme: Theme;
+  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 }
 
 
-export default function ThemeButtons({onThemeChange}: ThemeButtonProps) {
-  const [theme, setTheme] = React.useState<Theme>(Theme.System);
+export default function ThemeButtons({theme, setTheme}: ThemeButtonProps) {
 
   const handleClick = (
     _event: React.MouseEvent<HTMLElement>,
     newTheme: Theme,
   ) => { 
     setTheme(newTheme);
-    onThemeChange(newTheme);
   }
 
   return (
