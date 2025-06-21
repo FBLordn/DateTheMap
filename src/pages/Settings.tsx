@@ -1,22 +1,17 @@
 import { Divider, Stack } from "@mui/material";
 import Menu from "../components/Menu";
-import VolumeSlider from "../components/VolumeSlider";
 import PrefLine from "../components/PrefLine";
-import { Theme } from "../Definitions";
-import ThemeButtons from "../components/ThemeButtons";
-import { invoke } from "@tauri-apps/api/core";
 
 interface SettingsProps {
     onApply : () => void
-    onThemeSelected : (theme: Theme) => void;
+    children: [string, JSX.Element][];
 }
 
-export default function Settings({onApply, onThemeSelected}: SettingsProps) {
-    
-    function applySettings() {
-        //save stuff    
-        onApply();
-    }    
+export default function Settings({onApply, children}: SettingsProps) {
+
+  function applySettings() {
+    onApply();
+  }
 
   return (
     <Menu
@@ -31,15 +26,7 @@ export default function Settings({onApply, onThemeSelected}: SettingsProps) {
         direction="column" sx={{ alignItems: 'center', mb: 1 }}
         divider={<Divider flexItem orientation="horizontal"/>}
       >
-        <PrefLine title="Music Volume">
-          <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume})}/>
-        </PrefLine>
-        <PrefLine title="Sound Volume">
-          <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume})}/>
-        </PrefLine>
-        <PrefLine title="Theme">
-          <ThemeButtons onThemeChange={onThemeSelected}/>
-        </PrefLine>
+        {children.map((child) => <PrefLine title={child[0]}> {child[1]} </PrefLine>)}
       <Divider/>
       </Stack>
     </Menu>

@@ -6,19 +6,18 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 
 interface ThemeButtonProps {
-  onThemeChange: (theme: Theme) => void;
+  theme: Theme;
+  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 }
 
 
-export default function ThemeButtons({onThemeChange}: ThemeButtonProps) {
-  const [theme, setTheme] = React.useState<Theme>(Theme.SYSTEM);
+export default function ThemeButtons({theme, setTheme}: ThemeButtonProps) {
 
   const handleClick = (
     _event: React.MouseEvent<HTMLElement>,
     newTheme: Theme,
   ) => { 
     setTheme(newTheme);
-    onThemeChange(newTheme);
   }
 
   return (
@@ -29,13 +28,13 @@ export default function ThemeButtons({onThemeChange}: ThemeButtonProps) {
       aria-label="theme setting"
       color="primary"
     >
-      <ToggleButton value={Theme.LIGHT} aria-label="light">
+      <ToggleButton value={Theme.Light} aria-label="light">
         <LightModeIcon/>
       </ToggleButton>
-      <ToggleButton value={Theme.SYSTEM} aria-label="system">
+      <ToggleButton value={Theme.System} aria-label="system">
         <DisplaySettingsIcon/>
       </ToggleButton>
-      <ToggleButton value={Theme.DARK} aria-label="dark">
+      <ToggleButton value={Theme.Dark} aria-label="dark">
         <DarkModeIcon/>
       </ToggleButton>
     </ToggleButtonGroup>

@@ -3,10 +3,11 @@ import React from "react";
 
 interface VolumeSliderProps {
   onChange: (volume: number) => void;
+  volume: number;
+  setVolume: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function VolumeSlider({ onChange } : VolumeSliderProps) {
-  const [volume, setVolume] = React.useState<number>(50);
+export default function VolumeSlider({ onChange, volume, setVolume} : VolumeSliderProps) {
   
   function onVolumeChange(_event: Event, value: number | number[], _activeThumb: number) {
     setVolume(Array.isArray(value) ? value[0] : value);
