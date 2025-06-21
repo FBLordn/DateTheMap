@@ -25,6 +25,7 @@ async fn main() {
     tokio::spawn(embed::server::start());
     let settings = Settings::pull_settings();
     println!("In rust-main: {settings:?}");
+
     AUDIO_PROVIDER.set_music_volume(settings.music_volume);
     AUDIO_PROVIDER.set_sound_volume(settings.sound_volume);
 

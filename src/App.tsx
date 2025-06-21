@@ -25,12 +25,14 @@ function App() {
   const [theme, setTheme] = React.useState<Theme>(settings.theme);
 
   React.useEffect(() => {
-    invoke('get_settings').then((setting) => setSettings(setting as SettingsAPI));
-    console.log(settings);
-    setMusic(settings.music_volume);
-    setSound(settings.sound_volume);
-    setTheme(settings.theme);
-  }, [true]);
+    invoke('get_settings').then((setting) => {
+      let sett = setting as SettingsAPI;
+      setSettings(sett); 
+      setMusic(sett.music_volume*100);
+      setSound(sett.sound_volume*100);
+      setTheme(sett.theme);
+    });
+  }, []);
 
   function getPageHtml(page: Page) {
     switch (page) {
@@ -39,9 +41,10 @@ function App() {
       case Page.SETTINGS:
         return <Settings 
             onApply={() => {
-              setCurrentPage(Page.MENU)
-              setSettings({music_volume:music/100, sound_volume:sound/100, theme} as SettingsAPI);
-              invoke('set_settings', {settings: settings})}}
+              setCurrentPage(Page.MENU);
+              let sett = {music_volume:music/100, sound_volume:sound/100, theme} as SettingsAPI;
+              setSettings(sett);
+              invoke('set_settings', {settings: sett})}}
             children={
               [["Music", <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume})} volume={music} setVolume={setMusic}/>],
               ["Sound", <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume})} volume={sound} setVolume={setSound}/>],

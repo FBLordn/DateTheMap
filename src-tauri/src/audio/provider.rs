@@ -141,10 +141,12 @@ impl<const N: usize> Provider<'_, N> {
     }
 
     pub fn set_music_volume(&self, volume: f32) {
+        AUDIO_PROVIDER.audio.lock().unwrap().music_volume = volume;
         self.run(|x| x.set_bg_volume(volume));
     }
 
     pub fn set_sound_volume(&self, volume: f32) {
+        AUDIO_PROVIDER.audio.lock().unwrap().sound_volume = volume;
         self.run(|mut x| x.sound_volume = volume);
     }
 }
