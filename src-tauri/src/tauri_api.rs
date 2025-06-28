@@ -67,3 +67,8 @@ pub fn set_settings(settings: Settings) {
 pub fn get_settings() -> Settings {
     Settings::pull_settings()
 }
+
+#[tauri::command]
+pub fn close_game() {
+    std::process::exit(0);
+}

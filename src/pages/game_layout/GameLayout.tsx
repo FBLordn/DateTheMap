@@ -4,11 +4,15 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
-import { GameState, Range } from '../../ApiTypes';
+import { GameState, Range, SettingsAPI } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api/core';
-import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
+import Settings from '../Settings';
+import VolumeSlider from '../../components/VolumeSlider';
+import ThemeButtons from '../../components/ThemeButtons';
+import { Button } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -19,6 +23,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 interface GameLayoutProps {
   onMainMenuSelect: () => void;
+  settings: SettingsAPI;
+  setSettings: React.Dispatch<React.SetStateAction<SettingsAPI>>;
 }
 
 const css:React.CSSProperties={"height":"100%", "maxWidth":"100%"};
@@ -28,8 +34,10 @@ invoke('get_round_amount').then((result) => round_amount = result as number);
 let possible_range: Range;
 invoke('get_possible_range').then((range) =>  possible_range = range as Range);
 
-export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
+export default function GameLayout({onMainMenuSelect, settings, setSettings}: GameLayoutProps) {
   
+  const [inSettings, setInSettings] = React.useState<boolean>(false);
+
   const [gameState, setGameState] = React.useState<GameState>();
 
   const [roundOver, setRoundOver] = React.useState<boolean>(false);
@@ -80,9 +88,26 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
   }
 
   return (
-    gameState ?
+    (gameState && !inSettings) ?
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
-        <Item> <GameStats scoreRound={[gameState.total, gameState.round]} /> </Item>
+        <Item style={{boxShadow:'none', background:'transparent'}} sx={{p:0}}>
+          <Stack direction="row">
+            <Item sx={{flexGrow:50, marginRight:1, flexDirection:"column", alignContent:"center"}}> 
+              <GameStats scoreRound={[gameState.total, gameState.round]} /> 
+            </Item>
+            <Item sx={{flexGrow:1, marginLeft:1}}>
+              <Button
+                sx={{alignSelf:'flex-end', p:0}}
+                disableElevation
+              >
+                <SettingsIcon
+                  sx={{fontSize:'xx-large'}}
+                  onClick={() => setInSettings(true)}
+                />
+              </Button>
+            </Item>
+          </Stack> 
+        </Item>
         <Item sx={{m:1, flexGrow:1}}> <div dangerouslySetInnerHTML={{__html: gameState.world_map.html}} style={css} /> </Item>
         <Item> 
           <Stack
@@ -114,8 +139,14 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
         </Item>
       </Stack>
       :
-      <Item>
-        <Typography> "Sorgy, accident" </Typography>
-      </Item>
+      <Settings 
+        onApply={() => {
+          setInSettings(false);
+          invoke('set_settings', {settings: settings})}}
+        children={
+          [["Music", <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={settings.music_volume*100} setVolume={(volume) => setSettings({music_volume:volume/100, sound_volume:settings.sound_volume, theme:settings.theme})}/>],
+          ["Sound", <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={settings.sound_volume*100} setVolume={(volume) => setSettings({music_volume:settings.music_volume, sound_volume:volume/100, theme:settings.theme})}/>],
+          ["Theme", <ThemeButtons theme={settings.theme} setTheme={(theme) => setSettings({music_volume:settings.music_volume, sound_volume:settings.sound_volume, theme:theme})}/>]]}
+      />
   );
 }

@@ -15,40 +15,31 @@ import VolumeSlider from "./components/VolumeSlider.tsx";
 
 function App() {
 
-  const [settings, setSettings] = React.useState({music_volume: 50, sound_volume:50, theme:Theme.System} as SettingsAPI);
+  const [settings, setSettings] = React.useState({music_volume: 0.5, sound_volume:0.5, theme:Theme.System} as SettingsAPI);
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const [currentPage, setCurrentPage] = React.useState<Page>(Page.MENU);
-  const [music, setMusic] = React.useState<number>(settings.music_volume);
-  const [sound, setSound] = React.useState<number>(settings.sound_volume);
-  const [theme, setTheme] = React.useState<Theme>(settings.theme);
 
   React.useEffect(() => {
     invoke('get_settings').then((setting) => {
-      let sett = setting as SettingsAPI;
-      setSettings(sett); 
-      setMusic(sett.music_volume*100);
-      setSound(sett.sound_volume*100);
-      setTheme(sett.theme);
+      setSettings(setting as SettingsAPI);
     });
   }, []);
 
   function getPageHtml(page: Page) {
     switch (page) {
       case Page.PLAYING:
-        return <GameLayout onMainMenuSelect={() => setCurrentPage(Page.MENU)} /> 
+        return <GameLayout onMainMenuSelect={() => setCurrentPage(Page.MENU)} settings={settings} setSettings={setSettings}/>
       case Page.SETTINGS:
         return <Settings 
             onApply={() => {
               setCurrentPage(Page.MENU);
-              let sett = {music_volume:music/100, sound_volume:sound/100, theme} as SettingsAPI;
-              setSettings(sett);
-              invoke('set_settings', {settings: sett})}}
+              invoke('set_settings', {settings: settings})}}
             children={
-              [["Music", <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume})} volume={music} setVolume={setMusic}/>],
-              ["Sound", <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume})} volume={sound} setVolume={setSound}/>],
-              ["Theme", <ThemeButtons theme={theme} setTheme={setTheme}/>]]}/>
+              [["Music", <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={settings.music_volume*100} setVolume={(volume) => setSettings({music_volume:volume/100, sound_volume:settings.sound_volume, theme:settings.theme})}/>],
+              ["Sound", <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={settings.sound_volume*100} setVolume={(volume) => setSettings({music_volume:settings.music_volume, sound_volume:volume/100, theme:settings.theme})}/>],
+              ["Theme", <ThemeButtons theme={settings.theme} setTheme={(theme) => setSettings({music_volume:settings.music_volume, sound_volume:settings.sound_volume, theme:theme})}/>]]}/>
       case Page.MENU:
       default:
         return <MainMenu onPageSelect={setCurrentPage}/>
@@ -68,7 +59,7 @@ function App() {
   }
 
   return (
-    <ThemeProvider theme={getThemeFromEnum(theme)}>
+    <ThemeProvider theme={getThemeFromEnum(settings.theme)}>
       <CssBaseline />
       {getPageHtml(currentPage)}
     </ThemeProvider>
