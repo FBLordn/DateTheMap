@@ -1,5 +1,4 @@
-import { Divider, Stack } from "@mui/material";
-import Menu from "../components/Menu";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 import PrefLine from "../components/PrefLine";
 import { useContext } from "react";
 import { SettingsContext } from "../App";
@@ -38,12 +37,10 @@ export default function Settings({onApply}: SettingsProps) {
   }
 
   return (
-    <Menu
-      onSubmit={applySettings}
-      title="Settings"
-      buttonName="Apply"
-      sx={{height:'100vh'}}
-    >
+    <Stack height="100vh">
+      <Typography variant='h1'>
+        {"Settings"}
+      </Typography>
       <Stack 
         spacing={2}
         margin={5} 
@@ -63,8 +60,18 @@ export default function Settings({onApply}: SettingsProps) {
             }}
           />
         </PrefLine>
-      <Divider/>
+      <Stack direction="row" display="flex" justifyContent="space-evenly" width="100vw">
+        <Button onClick={() => invoke('close_game')} color="warning" variant="contained">
+          {"Exit Game"}
+        </Button>
+        <Button onClick={() => {invoke('reset'); window.location.reload()}} color="info" variant="contained">
+          {"Main Menu"}
+        </Button>
+        <Button onClick={applySettings} color="primary" variant="contained">
+          {"Apply"}
+        </Button>
       </Stack>
-    </Menu>
+      </Stack>
+    </Stack>
   );
 }

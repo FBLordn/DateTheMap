@@ -9,7 +9,7 @@ import { invoke } from '@tauri-apps/api/core';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
 import Settings from '../Settings';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -84,7 +84,12 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
   }
 
   return (
-    (gameState && !inSettings) ?
+    inSettings ? 
+      <Settings
+        onApply={() => setInSettings(false)}
+      /> 
+    :
+    gameState ?
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
         <Item style={{boxShadow:'none', background:'transparent'}} sx={{p:0}}>
           <Stack direction="row">
@@ -135,8 +140,8 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
         </Item>
       </Stack>
       :
-      <Settings
-        onApply={() => setInSettings(false)}
-      />
+      <Typography> 
+      {":3"}
+      </Typography>
   );
 }

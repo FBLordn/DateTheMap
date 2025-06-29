@@ -69,7 +69,7 @@ mod tests {
     fn test_is_in_range() {
         let input: [i32; 2] = [rand::random(), rand::random()];
         let range = Range::new(input);
-        let correct = rand::thread_rng().gen_range(range.lower_bound..range.upper_bound);
+        let correct = rand::rng().random_range(range.lower_bound..range.upper_bound);
         let wrong = range.upper_bound.saturating_add(2);
         assert!(range.is_in_range(&correct));
         assert!(!range.is_in_range(&wrong));
