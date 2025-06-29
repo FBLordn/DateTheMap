@@ -1,10 +1,9 @@
 import { Box, Slider, Stack } from "@mui/material";
-import React from "react";
 
 interface VolumeSliderProps {
   onChange: (volume: number) => void;
   volume: number;
-  setVolume: React.Dispatch<React.SetStateAction<number>>;
+  setVolume: (volume: number) => void;
 }
 
 export default function VolumeSlider({ onChange, volume, setVolume} : VolumeSliderProps) {
@@ -18,11 +17,11 @@ export default function VolumeSlider({ onChange, volume, setVolume} : VolumeSlid
       <Stack direction={"row"}>
         <Slider 
           aria-label="Volume" 
-          value={volume} 
-          valueLabelFormat={(value: number) => `${value}%`}
+          value={volume}
+          valueLabelFormat={(value: number) => `${value.toFixed(0)}%`}
           onChange={onVolumeChange} 
           valueLabelDisplay="auto"
-          onChangeCommitted={() => onChange(volume/100)}
+          onChangeCommitted={() => onChange(volume)}
         />
       </Stack> 
     </Box>

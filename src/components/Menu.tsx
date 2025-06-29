@@ -17,7 +17,7 @@ export default function Menu({sx, onSubmit, title, buttonName, children}: React.
       </Typography>
 
       {children}
-
+      
       <Button onClick={onSubmit} color="primary" variant="contained" sx={{minWidth:1/4, maxWidth:1/3, alignSelf:'center'}}>
         {buttonName}
       </Button>

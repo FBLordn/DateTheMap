@@ -7,7 +7,7 @@ import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 
 interface ThemeButtonProps {
   theme: Theme;
-  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
+  setTheme: (theme: Theme) => void;
 }
 
 
