@@ -26,7 +26,7 @@ mod osfs {
             "LOCALAPPDATA",
             "C:\\Users\\{username}\\AppData\\Local".to_string(),
         );
-        path.push(OsStr::new("\\config.json"));
+        path.push_str(&String::from("\\config.json"));
         path
     });
     pub static CACHE_PATH: LazyLock<String> = LazyLock::new(|| {
@@ -44,7 +44,7 @@ fn check_path_var(var: &str, alternative: String) -> String {
         .unwrap();
     if !fs::exists(&path).unwrap_or(true) {
         path = alternative;
-    };
+    }
     path = PathBuf::from(path)
         .join("DateTheMap")
         .to_str()

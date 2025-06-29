@@ -9,8 +9,6 @@ import { invoke } from '@tauri-apps/api/core';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
 import Settings from '../Settings';
-import VolumeSlider from '../../components/VolumeSlider';
-import ThemeButtons from '../../components/ThemeButtons';
 import { Button } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 
@@ -23,8 +21,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 interface GameLayoutProps {
   onMainMenuSelect: () => void;
-  settings: SettingsAPI;
-  setSettings: React.Dispatch<React.SetStateAction<SettingsAPI>>;
 }
 
 const css:React.CSSProperties={"height":"100%", "maxWidth":"100%"};
@@ -34,7 +30,7 @@ invoke('get_round_amount').then((result) => round_amount = result as number);
 let possible_range: Range;
 invoke('get_possible_range').then((range) =>  possible_range = range as Range);
 
-export default function GameLayout({onMainMenuSelect, settings, setSettings}: GameLayoutProps) {
+export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
   
   const [inSettings, setInSettings] = React.useState<boolean>(false);
 
@@ -139,14 +135,8 @@ export default function GameLayout({onMainMenuSelect, settings, setSettings}: Ga
         </Item>
       </Stack>
       :
-      <Settings 
-        onApply={() => {
-          setInSettings(false);
-          invoke('set_settings', {settings: settings})}}
-        children={
-          [["Music", <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={settings.music_volume*100} setVolume={(volume) => setSettings({music_volume:volume/100, sound_volume:settings.sound_volume, theme:settings.theme})}/>],
-          ["Sound", <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={settings.sound_volume*100} setVolume={(volume) => setSettings({music_volume:settings.music_volume, sound_volume:volume/100, theme:settings.theme})}/>],
-          ["Theme", <ThemeButtons theme={settings.theme} setTheme={(theme) => setSettings({music_volume:settings.music_volume, sound_volume:settings.sound_volume, theme:theme})}/>]]}
+      <Settings
+        onApply={() => setInSettings(false)}
       />
   );
 }
