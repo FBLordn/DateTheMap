@@ -24,7 +24,7 @@ impl Settings {
     }
 
     pub fn pull_settings() -> Settings {
-        FileManager::read(&RequestType::Config)
+        FileManager::read(&RequestType::Config).unwrap_or_default()
     }
 }
 

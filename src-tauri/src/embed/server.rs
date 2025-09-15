@@ -4,7 +4,7 @@ use reqwest::header::CONTENT_TYPE;
 use serde::Deserialize;
 use tokio::net::TcpListener;
 
-use crate::cache::{Cache, MapCachent};
+use crate::cache::MapCache;
 
 const ADDR: &str = "127.0.0.1:3456";
 const INDEX_HTML: &str = include_str!("index.html");
@@ -22,7 +22,7 @@ pub struct Coords {
     pub z: String,
 }
 
-async fn filter<C: Cache>(query: Query<Coords>, cache: C) -> impl IntoResponse {
+async fn filter(query: Query<Coords>, cache: MapCache) -> impl IntoResponse {
     let re = Regex::new(r"(?-u)\x28\d+\x2d\d+\x29").unwrap();
     let resp = cache.get_tile(query.0).await;
     let resp = re
@@ -36,9 +36,9 @@ async fn filter<C: Cache>(query: Query<Coords>, cache: C) -> impl IntoResponse {
 }
 
 pub async fn start() {
-    let cache = MapCachent::new(
-        "https://vtiles.openhistoricalmap.org/maps/{path}/{z}/{x}/{y}.pbf".to_string(),
-    );
+    let cache = MapCache {
+        uri: "https://vtiles.openhistoricalmap.org/maps/{path}/{z}/{x}/{y}.pbf".to_string(),
+    };
     let app = Router::new()
         .route("/map-styles/main/main.json", get(json))
         .route(

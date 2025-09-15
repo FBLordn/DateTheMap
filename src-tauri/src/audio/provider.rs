@@ -85,7 +85,7 @@ impl<const N: usize> AudioData<'_, N> {
                         Action::SetVolume(v) => {
                             sink.set_volume(v);
                         }
-                    };
+                    }
                 }
             }
         });

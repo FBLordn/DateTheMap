@@ -56,9 +56,13 @@ fn check_path_var(var: &str, alternative: String) -> String {
     path
 }
 
-pub enum RequestType {
+pub enum RequestType<'a> {
     Config,
-    OfflineMap(Coords),
+    OfflineMap(&'a Coords),
+}
+pub enum FileError {
+    ConfigReadError,
+    CacheReadError,
 }
 
 pub struct FileManager {}
@@ -83,13 +87,15 @@ impl FileManager {
         }
     }
 
-    pub fn read<T: for<'a> Deserialize<'a> + Default>(request: &RequestType) -> T {
+    pub fn read<T: for<'a> Deserialize<'a> + Default>(
+        request: &RequestType,
+    ) -> Result<T, FileError> {
         match request {
             RequestType::Config => {
                 if let Ok(data) = fs::read_to_string(&*CONFIG_PATH) {
-                    serde_json::from_str::<T>(&data).unwrap()
+                    serde_json::from_str::<T>(&data).map_err(|_| FileError::ConfigReadError)
                 } else {
-                    T::default()
+                    Err(FileError::ConfigReadError)
                 }
             }
             RequestType::OfflineMap(coords) => {
@@ -99,8 +105,12 @@ impl FileManager {
                     y = coords.y,
                     z = coords.z
                 ));
-                let data = fs::read_to_string(path).unwrap();
-                serde_json::from_str::<T>(&data).unwrap()
+                let data = fs::read_to_string(path);
+                if let Ok(unwrapped) = data {
+                    serde_json::from_str::<T>(&unwrapped).map_err(|_| FileError::CacheReadError)
+                } else {
+                    Err(FileError::CacheReadError)
+                }
             }
         }
     }
