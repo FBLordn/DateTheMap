@@ -1,3 +1,5 @@
+import { Theme } from "./Definitions";
+
 type GameState = {
   total: number;
   round: number;
@@ -15,4 +17,10 @@ type Range = {
   upper_bound: any
 }
 
-export type { GameState, WorldMapAPI, Range};
+type SettingsAPI = {
+  sound_volume: number;
+  music_volume: number;
+  theme: Theme
+}
+
+export type { GameState, WorldMapAPI, Range, SettingsAPI};

@@ -2,15 +2,14 @@ import { Button, Stack, SxProps, Theme, Typography } from '@mui/material';
 import * as React from 'react';
 
 
-interface ListHeaderProps {
+interface MenuProps {
   sx?: SxProps<Theme>;
   onSubmit?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   title?: string;
   buttonName?: string;
 }
 
-export default function Menu({sx, onSubmit, title, buttonName, children}: React.PropsWithChildren<ListHeaderProps>) {
-
+export default function Menu({sx, onSubmit, title, buttonName, children}: React.PropsWithChildren<MenuProps>) {
   return (
     <Stack sx={sx}>
       <Typography variant='h1'>
@@ -18,8 +17,8 @@ export default function Menu({sx, onSubmit, title, buttonName, children}: React.
       </Typography>
 
       {children}
-
-      <Button onClick={onSubmit}>
+      
+      <Button onClick={onSubmit} color="primary" variant="contained" sx={{minWidth:1/4, maxWidth:1/3, alignSelf:'center'}}>
         {buttonName}
       </Button>
     </Stack>

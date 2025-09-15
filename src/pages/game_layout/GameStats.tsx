@@ -2,12 +2,12 @@ import { Stack, Typography } from "@mui/material";
 import PublicIcon from '@mui/icons-material/Public';
 
 
-interface ListHeaderProps {
+interface GameStatsProps {
   children?: React.ReactNode;
   scoreRound: number[];
 }
 
-export default function GameStats({scoreRound}: ListHeaderProps) {
+export default function GameStats({scoreRound}: GameStatsProps) {
   
   return(
     <Stack

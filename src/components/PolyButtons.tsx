@@ -2,7 +2,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import { SxProps, Theme } from '@mui/material/styles';
 
-interface ListHeaderProps {
+interface PolyButtonsProp {
   children?: React.ReactNode;
   sx?: SxProps<Theme>;
   labels?: string[];
@@ -10,7 +10,7 @@ interface ListHeaderProps {
   index: number;
 }
 
-export default function PolyButtons({ sx = [], labels, clickHandlers, index}: ListHeaderProps) {
+export default function PolyButtons({ sx = [], labels, clickHandlers, index}: PolyButtonsProp) {
 
   return (
     <Button

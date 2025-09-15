@@ -4,13 +4,13 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
-import { GameState, Range } from '../../ApiTypes';
+import { GameState, Range, SettingsAPI } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api/core';
-import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
-import { ThemeProvider } from '@emotion/react';
-
+import Settings from '../Settings';
+import { Button, Typography } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -19,8 +19,8 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-interface ListHeaderProps {
-  setIsPlaying: (isPlaying: boolean) => void;
+interface GameLayoutProps {
+  onMainMenuSelect: () => void;
 }
 
 const css:React.CSSProperties={"height":"100%", "maxWidth":"100%"};
@@ -30,8 +30,10 @@ invoke('get_round_amount').then((result) => round_amount = result as number);
 let possible_range: Range;
 invoke('get_possible_range').then((range) =>  possible_range = range as Range);
 
-export default function GameLayout({setIsPlaying}: ListHeaderProps) {
+export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
   
+  const [inSettings, setInSettings] = React.useState<boolean>(false);
+
   const [gameState, setGameState] = React.useState<GameState>();
 
   const [roundOver, setRoundOver] = React.useState<boolean>(false);
@@ -82,9 +84,31 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
   }
 
   return (
+    inSettings ? 
+      <Settings
+        onApply={() => setInSettings(false)}
+      /> 
+    :
     gameState ?
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
-        <Item> <GameStats scoreRound={[gameState.total, gameState.round]} /> </Item>
+        <Item style={{boxShadow:'none', background:'transparent'}} sx={{p:0}}>
+          <Stack direction="row">
+            <Item sx={{flexGrow:50, marginRight:1, flexDirection:"column", alignContent:"center"}}> 
+              <GameStats scoreRound={[gameState.total, gameState.round]} /> 
+            </Item>
+            <Item sx={{flexGrow:1, marginLeft:1}}>
+              <Button
+                sx={{alignSelf:'flex-end', p:0}}
+                disableElevation
+              >
+                <SettingsIcon
+                  sx={{fontSize:'xx-large'}}
+                  onClick={() => setInSettings(true)}
+                />
+              </Button>
+            </Item>
+          </Stack> 
+        </Item>
         <Item sx={{m:1, flexGrow:1}}> <div dangerouslySetInnerHTML={{__html: gameState.world_map.html}} style={css} /> </Item>
         <Item> 
           <Stack
@@ -109,15 +133,15 @@ export default function GameLayout({setIsPlaying}: ListHeaderProps) {
               resetGame={resetGame}
               isOpen={gameEndOpen}
               setIsOpen={setGameEndOpen}
-              setIsPlaying={setIsPlaying}
+              onReturnToMenu={onMainMenuSelect}
               scoreText= {`${gameState.total} / ${5000*round_amount}`}
             />
           </Stack>
         </Item>
       </Stack>
       :
-      <Item>
-        <Typography> "Sorgy, accident" </Typography>
-      </Item>
+      <Typography> 
+      {":3"}
+      </Typography>
   );
 }
