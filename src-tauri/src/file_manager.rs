@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::{env, fs};
 
+use crate::embed::server::Coords;
+
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 mod osfs {
     use super::check_path_var;
@@ -23,8 +25,8 @@ mod osfs {
     use std::sync::LazyLock;
     pub static CONFIG_PATH: LazyLock<String> = LazyLock::new(|| {
         let mut path = check_path_var(
-            "LOCALAPPDATA",
-            "C:\\Users\\{username}\\AppData\\Local".to_string(),
+            "APPDATA",
+            "C:\\Users\\{username}\\AppData\\Roaming".to_string(),
         );
         path.push_str(&String::from("\\config.json"));
         path
@@ -56,7 +58,7 @@ fn check_path_var(var: &str, alternative: String) -> String {
 
 pub enum RequestType {
     Config,
-    OfflineMap((u8, u8)),
+    OfflineMap(Coords),
 }
 
 pub struct FileManager {}
@@ -70,8 +72,12 @@ impl FileManager {
             }
             RequestType::OfflineMap(coords) => {
                 let serialised = serde_json::to_string(&data).unwrap();
-                let mut path = PathBuf::from(&*CACHE_PATH);
-                path = path.join(format!("{}_{}", coords.0, coords.1));
+                let path = PathBuf::from(&*CACHE_PATH).join(format!(
+                    "tile_{x}_{y}_{z}.pbf",
+                    x = coords.x,
+                    y = coords.y,
+                    z = coords.z
+                ));
                 let _ = fs::write(path, serialised);
             }
         }
@@ -87,8 +93,12 @@ impl FileManager {
                 }
             }
             RequestType::OfflineMap(coords) => {
-                let mut path = PathBuf::from(&*CACHE_PATH);
-                path = path.join(format!("{}_{}", coords.0, coords.1));
+                let path = PathBuf::from(&*CACHE_PATH).join(format!(
+                    "tile_{x}_{y}_{z}.pbf",
+                    x = coords.x,
+                    y = coords.y,
+                    z = coords.z
+                ));
                 let data = fs::read_to_string(path).unwrap();
                 serde_json::from_str::<T>(&data).unwrap()
             }
