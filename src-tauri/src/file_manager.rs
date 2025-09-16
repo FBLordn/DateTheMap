@@ -16,8 +16,12 @@ mod osfs {
         );
         path + "/config.json"
     });
-    pub static CACHE_PATH: LazyLock<String> =
-        LazyLock::new(|| check_path_var("XDG_CACHE_HOME", "~/.cache/".to_string()));
+    pub static CACHE_PATH: LazyLock<String> = LazyLock::new(|| {
+        check_path_var(
+            "XDG_CACHE_HOME",
+            env::var_os("HOME").unwrap().into_string().unwrap() + "/.cache",
+        )
+    });
 }
 #[cfg(target_os = "windows")]
 mod osfs {
@@ -34,7 +38,7 @@ mod osfs {
     pub static CACHE_PATH: LazyLock<String> = LazyLock::new(|| {
         check_path_var(
             "LOCALAPPDATA",
-            "C:\\Users\\{username}\\Desktop\\".to_string(), //Punish user for missing env var
+            "C:\\Users\\{username}\\Desktop".to_string(), //Punish user for missing env var
         )
     });
 }

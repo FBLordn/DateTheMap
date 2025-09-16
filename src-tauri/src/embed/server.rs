@@ -14,7 +14,7 @@ async fn json() -> impl IntoResponse {
     ([(header::CONTENT_TYPE, "application/json")], STYLE_JSON)
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Clone)]
 pub struct Coords {
     pub path: String,
     pub x: String,

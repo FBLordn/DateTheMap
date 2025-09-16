@@ -17,6 +17,7 @@ export default function Settings({onApply}: SettingsProps) {
   const [music, setMusic] = React.useState<number>(0.5);
   const [sound, setSound] = React.useState<number>(0.5);
   const [theme, setTheme] = React.useState<Theme>(Theme.System);
+  const [cache, setCache] = React.useState<number>(3);
   const { setSettings } = useContext(SettingsContext);
 
   React.useEffect(() => {
@@ -25,12 +26,13 @@ export default function Settings({onApply}: SettingsProps) {
       setMusic(sett.music_volume);
       setSound(sett.sound_volume);
       setTheme(sett.theme);
+      setCache(sett.cache_level);
       setSettings(sett);
     });
   }, []);
 
   function applySettings() {
-    let settings = {music_volume:music, sound_volume:sound, theme};
+    let settings = {music_volume:music, sound_volume:sound, theme, cache_level:cache};
     setSettings(settings);
     invoke('set_settings', {settings});
     onApply();
@@ -56,7 +58,7 @@ export default function Settings({onApply}: SettingsProps) {
         <PrefLine title="Theme">
           <ThemeButtons theme={theme} setTheme={(new_theme) => {
               setTheme(new_theme);
-              setSettings({music_volume:music, sound_volume:sound, theme:new_theme})
+              setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_level:cache})
             }}
           />
         </PrefLine>

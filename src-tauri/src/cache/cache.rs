@@ -1,6 +1,7 @@
 use crate::{
     embed::server::Coords,
     file_manager::{FileManager, RequestType},
+    settings::Settings,
 };
 
 #[derive(Debug, Clone)]
@@ -27,7 +28,15 @@ impl MapCache {
     }
 
     pub async fn get_tile(&self, coords: Coords) -> Vec<u8> {
-        MapCache::read_cache(&coords).unwrap_or(MapCache::get_api_tile(self, coords).await)
+        if let Some(tile) = MapCache::read_cache(&coords) {
+            tile
+        } else {
+            let tile = MapCache::get_api_tile(self, coords.clone()).await;
+            if coords.x.parse::<i8>().unwrap_or(i8::MAX) <= Settings::pull_settings().cache_level {
+                MapCache::write_cache(tile.clone(), &coords);
+            }
+            tile
+        }
     }
 
     fn write_cache(tile: Vec<u8>, coords: &Coords) {
