@@ -118,4 +118,11 @@ impl FileManager {
             }
         }
     }
+
+    pub fn reset_cache() {
+        fs::remove_dir_all(&*CACHE_PATH)
+            .unwrap_or_else(|_| println!("Cache directory could not be cleared and removed."));
+        fs::create_dir(&*CACHE_PATH)
+            .unwrap_or_else(|_| println!("Cache directory could not be recreated."));
+    }
 }

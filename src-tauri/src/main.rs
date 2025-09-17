@@ -46,7 +46,8 @@ async fn main() {
             tauri_api::set_sound_volume,
             tauri_api::set_settings,
             tauri_api::get_settings,
-            tauri_api::close_game
+            tauri_api::close_game,
+            tauri_api::reset_cache
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
