@@ -728,6 +728,7 @@ name = "date_the_map"
 version = "0.0.0"
 dependencies = [
  "axum",
+ "log",
  "rand 0.9.0",
  "regex",
  "reqwest",

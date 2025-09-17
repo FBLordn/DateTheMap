@@ -1,4 +1,4 @@
-import { Button, Divider, Stack, Typography } from "@mui/material";
+import { Button, Divider, Slider, Stack, Typography } from "@mui/material";
 import PrefLine from "../components/PrefLine";
 import { useContext } from "react";
 import { SettingsContext } from "../App";
@@ -17,6 +17,7 @@ export default function Settings({onApply}: SettingsProps) {
   const [music, setMusic] = React.useState<number>(0.5);
   const [sound, setSound] = React.useState<number>(0.5);
   const [theme, setTheme] = React.useState<Theme>(Theme.System);
+  const [cache, setCache] = React.useState<number>(3);
   const { setSettings } = useContext(SettingsContext);
 
   React.useEffect(() => {
@@ -25,12 +26,13 @@ export default function Settings({onApply}: SettingsProps) {
       setMusic(sett.music_volume);
       setSound(sett.sound_volume);
       setTheme(sett.theme);
+      setCache(sett.cache_level);
       setSettings(sett);
     });
   }, []);
 
   function applySettings() {
-    let settings = {music_volume:music, sound_volume:sound, theme};
+    let settings = {music_volume:music, sound_volume:sound, theme, cache_level:cache};
     setSettings(settings);
     invoke('set_settings', {settings});
     onApply();
@@ -56,9 +58,15 @@ export default function Settings({onApply}: SettingsProps) {
         <PrefLine title="Theme">
           <ThemeButtons theme={theme} setTheme={(new_theme) => {
               setTheme(new_theme);
-              setSettings({music_volume:music, sound_volume:sound, theme:new_theme})
+              setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_level:cache})
             }}
           />
+        </PrefLine>
+        <PrefLine title="Cache Level">
+              <Slider sx={{mr:3}} valueLabelDisplay="auto" aria-label="Cache Level" min={0} max={10} value={cache} onChange={(_event, level, _thumb) => setCache(Array.isArray(level) ? level[0] : level)}/>
+              <Button sx={{minWidth:2/13}} color="warning" variant="contained" onClick={() => invoke('reset_cache')}>
+                {"Reset Cache"}
+              </Button>
         </PrefLine>
       <Stack direction="row" display="flex" justifyContent="space-evenly" width="100vw">
         <Button onClick={() => invoke('close_game')} color="warning" variant="contained">

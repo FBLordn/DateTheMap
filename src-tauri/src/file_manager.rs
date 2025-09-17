@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::{env, fs};
 
+use crate::embed::server::Coords;
+
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 mod osfs {
     use super::check_path_var;
@@ -14,8 +16,12 @@ mod osfs {
         );
         path + "/config.json"
     });
-    pub static CACHE_PATH: LazyLock<String> =
-        LazyLock::new(|| check_path_var("XDG_CACHE_HOME", "~/.cache/".to_string()));
+    pub static CACHE_PATH: LazyLock<String> = LazyLock::new(|| {
+        check_path_var(
+            "XDG_CACHE_HOME",
+            env::var_os("HOME").unwrap().into_string().unwrap() + "/.cache",
+        )
+    });
 }
 #[cfg(target_os = "windows")]
 mod osfs {
@@ -23,8 +29,8 @@ mod osfs {
     use std::sync::LazyLock;
     pub static CONFIG_PATH: LazyLock<String> = LazyLock::new(|| {
         let mut path = check_path_var(
-            "LOCALAPPDATA",
-            "C:\\Users\\{username}\\AppData\\Local".to_string(),
+            "APPDATA",
+            "C:\\Users\\{username}\\AppData\\Roaming".to_string(),
         );
         path.push_str(&String::from("\\config.json"));
         path
@@ -32,7 +38,7 @@ mod osfs {
     pub static CACHE_PATH: LazyLock<String> = LazyLock::new(|| {
         check_path_var(
             "LOCALAPPDATA",
-            "C:\\Users\\{username}\\Desktop\\".to_string(), //Punish user for missing env var
+            "C:\\Users\\{username}\\Desktop".to_string(), //Punish user for missing env var
         )
     });
 }
@@ -54,9 +60,13 @@ fn check_path_var(var: &str, alternative: String) -> String {
     path
 }
 
-pub enum RequestType {
+pub enum RequestType<'a> {
     Config,
-    OfflineMap((u8, u8)),
+    OfflineMap(&'a Coords),
+}
+pub enum FileError {
+    ConfigReadError,
+    CacheReadError,
 }
 
 pub struct FileManager {}
@@ -70,28 +80,49 @@ impl FileManager {
             }
             RequestType::OfflineMap(coords) => {
                 let serialised = serde_json::to_string(&data).unwrap();
-                let mut path = PathBuf::from(&*CACHE_PATH);
-                path = path.join(format!("{}_{}", coords.0, coords.1));
+                let path = PathBuf::from(&*CACHE_PATH).join(format!(
+                    "tile_{x}_{y}_{z}.pbf",
+                    x = coords.x,
+                    y = coords.y,
+                    z = coords.z
+                ));
                 let _ = fs::write(path, serialised);
             }
         }
     }
 
-    pub fn read<T: for<'a> Deserialize<'a> + Default>(request: &RequestType) -> T {
+    pub fn read<T: for<'a> Deserialize<'a> + Default>(
+        request: &RequestType,
+    ) -> Result<T, FileError> {
         match request {
             RequestType::Config => {
                 if let Ok(data) = fs::read_to_string(&*CONFIG_PATH) {
-                    serde_json::from_str::<T>(&data).unwrap()
+                    serde_json::from_str::<T>(&data).map_err(|_| FileError::ConfigReadError)
                 } else {
-                    T::default()
+                    Err(FileError::ConfigReadError)
                 }
             }
             RequestType::OfflineMap(coords) => {
-                let mut path = PathBuf::from(&*CACHE_PATH);
-                path = path.join(format!("{}_{}", coords.0, coords.1));
-                let data = fs::read_to_string(path).unwrap();
-                serde_json::from_str::<T>(&data).unwrap()
+                let path = PathBuf::from(&*CACHE_PATH).join(format!(
+                    "tile_{x}_{y}_{z}.pbf",
+                    x = coords.x,
+                    y = coords.y,
+                    z = coords.z
+                ));
+                let data = fs::read_to_string(path);
+                if let Ok(unwrapped) = data {
+                    serde_json::from_str::<T>(&unwrapped).map_err(|_| FileError::CacheReadError)
+                } else {
+                    Err(FileError::CacheReadError)
+                }
             }
         }
+    }
+
+    pub fn reset_cache() {
+        fs::remove_dir_all(&*CACHE_PATH)
+            .unwrap_or_else(|_| println!("Cache directory could not be cleared and removed."));
+        fs::create_dir(&*CACHE_PATH)
+            .unwrap_or_else(|_| println!("Cache directory could not be recreated."));
     }
 }
