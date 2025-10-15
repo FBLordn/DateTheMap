@@ -1,4 +1,4 @@
-import { Theme } from "./Definitions";
+import { Theme, Cache } from "./Definitions";
 
 type GameState = {
   total: number;
@@ -21,7 +21,7 @@ type SettingsAPI = {
   sound_volume: number;
   music_volume: number;
   theme: Theme;
-  cache_level: number;
+  cache: Cache;
 }
 
 export type { GameState, WorldMapAPI, Range, SettingsAPI};

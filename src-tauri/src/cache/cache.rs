@@ -1,7 +1,7 @@
 use crate::{
     embed::server::Coords,
     file_manager::{FileManager, RequestType},
-    settings::Settings,
+    settings::{Cache, Settings},
 };
 
 #[derive(Debug, Clone)]
@@ -32,7 +32,7 @@ impl MapCache {
             tile
         } else {
             let tile = MapCache::get_api_tile(self, coords.clone()).await;
-            if coords.x.parse::<i8>().unwrap_or(i8::MAX) <= Settings::pull_settings().cache_level {
+            if Settings::pull_settings().cache == Cache::On {
                 MapCache::write_cache(tile.clone(), &coords);
             }
             tile

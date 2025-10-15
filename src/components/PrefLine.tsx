@@ -7,10 +7,10 @@ interface PrefLineProps {
 export default function PrefLine({title, children}: React.PropsWithChildren<PrefLineProps>) {
   return (
     <Stack 
-      sx={{width:1}}
+      sx={{width:1, alignItems:"center"}}
       direction={"row"}
     >
-      <Typography variant="h6" sx={{width:0.25}}> {title} </Typography>
+      <Typography variant="h6" sx={{width:1/4}}> {title} </Typography>
       {children}
     </Stack>
   )

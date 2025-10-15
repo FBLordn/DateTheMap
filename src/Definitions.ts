@@ -10,10 +10,15 @@ enum Theme {
     System="System"
 }
 
+enum Cache {
+    On="On",
+    Off="Off"
+}
+
 enum SettingType {
 SOUND,
 MUSIC,
 THEME
 }
 
-export {Page, Theme, SettingType};
+export {Page, Theme, SettingType, Cache};
