@@ -1,12 +1,12 @@
 use osfs::{CACHE_PATH, CONFIG_PATH};
 use serde::{Deserialize, Serialize};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::{env, fs};
 
 use crate::embed::server::Coords;
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]
-mod osfs {
+pub mod osfs {
     use super::check_path_var;
     use std::{env, sync::LazyLock};
     pub static CONFIG_PATH: LazyLock<String> = LazyLock::new(|| {
@@ -24,7 +24,7 @@ mod osfs {
     });
 }
 #[cfg(target_os = "windows")]
-mod osfs {
+pub mod osfs {
     use super::check_path_var;
     use std::sync::LazyLock;
     pub static CONFIG_PATH: LazyLock<String> = LazyLock::new(|| {
@@ -63,57 +63,71 @@ fn check_path_var(var: &str, alternative: String) -> String {
 pub enum RequestType<'a> {
     Config,
     OfflineMap(&'a Coords),
+    CacheFrequence,
 }
-pub enum FileError {
-    ConfigReadError,
-    CacheReadError,
+pub enum FileReadError {
+    Config,
+    Cache,
+    CacheFrequence,
 }
 
 pub struct FileManager {}
 
 impl FileManager {
     pub fn write<T: Serialize>(request: &RequestType, data: T) {
+        let serialised = serde_json::to_string(&data).unwrap();
         match request {
             RequestType::Config => {
-                let serialised = serde_json::to_string(&data).unwrap();
-                let _ = fs::write(Path::new(&*CONFIG_PATH), serialised);
+                let _ = fs::write(PathBuf::from(&*CONFIG_PATH), serialised);
             }
             RequestType::OfflineMap(coords) => {
-                let serialised = serde_json::to_string(&data).unwrap();
                 let path = PathBuf::from(&*CACHE_PATH).join(format!(
-                    "tile_{x}_{y}_{z}.pbf",
+                    "tile_{z}_{x}_{y}.pbf",
                     x = coords.x,
                     y = coords.y,
                     z = coords.z
                 ));
                 let _ = fs::write(path, serialised);
             }
+            RequestType::CacheFrequence => {
+                let _ = fs::write(
+                    PathBuf::from(&*CACHE_PATH).join("tile_frequence.json"),
+                    serialised,
+                );
+            }
         }
     }
 
-    pub fn read<T: for<'a> Deserialize<'a> + Default>(
-        request: &RequestType,
-    ) -> Result<T, FileError> {
+    pub fn read<T: for<'a> Deserialize<'a>>(request: &RequestType) -> Result<T, FileReadError> {
         match request {
             RequestType::Config => {
                 if let Ok(data) = fs::read_to_string(&*CONFIG_PATH) {
-                    serde_json::from_str::<T>(&data).map_err(|_| FileError::ConfigReadError)
+                    serde_json::from_str::<T>(&data).map_err(|_| FileReadError::Config)
                 } else {
-                    Err(FileError::ConfigReadError)
+                    Err(FileReadError::Config)
                 }
             }
             RequestType::OfflineMap(coords) => {
                 let path = PathBuf::from(&*CACHE_PATH).join(format!(
-                    "tile_{x}_{y}_{z}.pbf",
+                    "tile_{z}_{x}_{y}.pbf",
                     x = coords.x,
                     y = coords.y,
                     z = coords.z
                 ));
                 let data = fs::read_to_string(path);
                 if let Ok(unwrapped) = data {
-                    serde_json::from_str::<T>(&unwrapped).map_err(|_| FileError::CacheReadError)
+                    serde_json::from_str::<T>(&unwrapped).map_err(|_| FileReadError::Cache)
                 } else {
-                    Err(FileError::CacheReadError)
+                    Err(FileReadError::Cache)
+                }
+            }
+            RequestType::CacheFrequence => {
+                let path = PathBuf::from(&*CACHE_PATH).join("tile_frequency.json");
+                let data = fs::read_to_string(path);
+                if let Ok(unwrapped) = data {
+                    serde_json::from_str::<T>(&unwrapped).map_err(|_| FileReadError::CacheFrequence)
+                } else {
+                    Err(FileReadError::CacheFrequence)
                 }
             }
         }

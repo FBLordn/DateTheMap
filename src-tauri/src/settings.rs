@@ -10,19 +10,12 @@ pub enum Theme {
     System,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default, PartialEq)]
-pub enum Cache {
-    #[default]
-    On,
-    Off,
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Settings {
     pub theme: Theme,
     pub sound_volume: f32,
     pub music_volume: f32,
-    pub cache: Cache,
+    pub cache_size: Option<usize>,
 }
 
 impl Settings {
@@ -42,7 +35,7 @@ impl Default for Settings {
             theme: Theme::default(),
             sound_volume: 0.5,
             music_volume: 0.5,
-            cache: Cache::On,
+            cache_size: Some(500_000_000),
         }
     }
 }

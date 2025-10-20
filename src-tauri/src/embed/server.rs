@@ -36,9 +36,7 @@ async fn filter(query: Query<Coords>, cache: MapCache) -> impl IntoResponse {
 }
 
 pub async fn start() {
-    let cache = MapCache {
-        uri: "https://vtiles.openhistoricalmap.org/maps/{path}/{z}/{x}/{y}.pbf".to_string(),
-    };
+    let cache = MapCache::new();
     let app = Router::new()
         .route("/map-styles/main/main.json", get(json))
         .route(
