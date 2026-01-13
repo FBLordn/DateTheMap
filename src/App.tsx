@@ -16,7 +16,7 @@ interface ISettingsContext {
 }
 
 export const SettingsContext = React.createContext<ISettingsContext>({
-  settings: {music_volume: 0.5, sound_volume:0.5, theme:Theme.System},
+  settings: {music_volume: 0.5, sound_volume:0.5, theme:Theme.System, cacheSize:500},
   setSettings: () => {}
 });
 

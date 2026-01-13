@@ -47,11 +47,8 @@ impl MapCache {
         let cache_size = Settings::pull_settings().cache_size;
         let mut cache_entry = self.not_cached_map.remove(&tilename).unwrap_or(0);
         cache_entry += 1;
-        let mut is_valid = cache_size.is_none() || tile.len() < cache_size.unwrap();
-        while cache_size.is_some()
-            && tile.len() + MapCache::dir_size().unwrap_or(cache_size.unwrap())
-                >= cache_size.unwrap()
-        {
+        let mut is_valid = tile.len() < cache_size;
+        while tile.len() + MapCache::dir_size().unwrap_or(cache_size) >= cache_size {
             if let Some(min_tile) = self.cached_map.iter().min_by_key(|x| x.1) {
                 if cache_entry > *min_tile.1 {
                     is_valid = false;

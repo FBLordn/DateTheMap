@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
-import { GameState, Range, SettingsAPI } from '../../ApiTypes';
+import { GameState, Range } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api/core';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';

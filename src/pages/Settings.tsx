@@ -1,4 +1,4 @@
-import { Button, Divider, Stack, Switch, Typography } from "@mui/material";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 import PrefLine from "../components/PrefLine";
 import { useContext } from "react";
 import { SettingsContext } from "../App";
@@ -6,18 +6,19 @@ import VolumeSlider from "../components/VolumeSlider";
 import { invoke } from "@tauri-apps/api/core";
 import ThemeButtons from "../components/ThemeButtons";
 import React from "react";
-import { Cache, Theme } from "../Definitions";
+import { Theme } from "../Definitions";
 import { SettingsAPI } from "../ApiTypes";
+import NumberField from "../components/NumberField";
 
 interface SettingsProps {
-    onApply : () => void
+  onApply : () => void
 }
 
 export default function Settings({onApply}: SettingsProps) {
   const [music, setMusic] = React.useState<number>(0.5);
   const [sound, setSound] = React.useState<number>(0.5);
   const [theme, setTheme] = React.useState<Theme>(Theme.System);
-  const [cache, setCache] = React.useState<Cache>(Cache.On);
+  const [cacheSize, setCacheSize] = React.useState<number>(500);
   const { setSettings } = useContext(SettingsContext);
 
   React.useEffect(() => {
@@ -26,13 +27,13 @@ export default function Settings({onApply}: SettingsProps) {
       setMusic(sett.music_volume);
       setSound(sett.sound_volume);
       setTheme(sett.theme);
-      setCache(sett.cache);
+      setCacheSize(sett.cache_size);
       setSettings(sett);
     });
   }, []);
 
   function applySettings() {
-    let settings = {music_volume:music, sound_volume:sound, theme, cache};
+    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize};
     setSettings(settings);
     invoke('set_settings', {settings});
     onApply();
@@ -58,13 +59,18 @@ export default function Settings({onApply}: SettingsProps) {
         <PrefLine title="Theme">
           <ThemeButtons sx={{width:1, paddingLeft:1}} theme={theme} setTheme={(new_theme) => {
               setTheme(new_theme);
-              setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache})
+              setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_size:cacheSize})
             }}
           />
         </PrefLine>
         <PrefLine title="Cache">
           <Stack direction={"row"} sx={{width:1}} justifyContent="space-between">
-              <Switch sx={{paddingLeft:1}} checked={cache == Cache.On} onChange={(event) => setCache(event.target.checked ? Cache.On : Cache.Off)}/>
+              <NumberField
+                label="Cache Size in MB" 
+                value={cacheSize} 
+                onValueCommitted={(value) => setCacheSize( value==null ? cacheSize : value)}
+                min={0}
+              />
               <Button sx={{minWidth:1/4}} color="warning" variant="contained" onClick={() => invoke('reset_cache')}>
                 {"Reset Cache"}
               </Button>

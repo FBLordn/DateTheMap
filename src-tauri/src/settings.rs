@@ -15,7 +15,7 @@ pub struct Settings {
     pub theme: Theme,
     pub sound_volume: f32,
     pub music_volume: f32,
-    pub cache_size: Option<usize>,
+    pub cache_size: usize,
 }
 
 impl Settings {
@@ -35,7 +35,7 @@ impl Default for Settings {
             theme: Theme::default(),
             sound_volume: 0.5,
             music_volume: 0.5,
-            cache_size: Some(500_000_000),
+            cache_size: 500_000_000,
         }
     }
 }
