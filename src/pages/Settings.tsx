@@ -6,19 +6,19 @@ import VolumeSlider from "../components/VolumeSlider";
 import { invoke } from "@tauri-apps/api/core";
 import ThemeButtons from "../components/ThemeButtons";
 import React from "react";
-import { Theme } from "../Definitions";
+import { DEFAULTSETTINGS, Theme } from "../Definitions";
 import { SettingsAPI } from "../ApiTypes";
 import NumberField from "../components/NumberField";
 
 interface SettingsProps {
-  onApply : () => void
+  onApply : () => void 
 }
 
 export default function Settings({onApply}: SettingsProps) {
-  const [music, setMusic] = React.useState<number>(0.5);
-  const [sound, setSound] = React.useState<number>(0.5);
-  const [theme, setTheme] = React.useState<Theme>(Theme.System);
-  const [cacheSize, setCacheSize] = React.useState<number>(500);
+  const [music, setMusic] = React.useState<number>(DEFAULTSETTINGS.music_volume);
+  const [sound, setSound] = React.useState<number>(DEFAULTSETTINGS.sound_volume);
+  const [theme, setTheme] = React.useState<Theme>(DEFAULTSETTINGS.theme);
+  const [cacheSize, setCacheSize] = React.useState<number>(DEFAULTSETTINGS.cache_size);
   const { setSettings } = useContext(SettingsContext);
 
   React.useEffect(() => {
@@ -27,13 +27,13 @@ export default function Settings({onApply}: SettingsProps) {
       setMusic(sett.music_volume);
       setSound(sett.sound_volume);
       setTheme(sett.theme);
-      setCacheSize(sett.cache_size);
+      setCacheSize(sett.cache_size / 1_000_000);
       setSettings(sett);
     });
   }, []);
 
   function applySettings() {
-    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize};
+    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize*1_000_000};
     setSettings(settings);
     invoke('set_settings', {settings});
     onApply();

@@ -4,7 +4,7 @@ import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./Themes.tsx";
 import { CssBaseline, useMediaQuery } from "@mui/material";
-import { Page, Theme } from "./Definitions.ts";
+import { DEFAULTSETTINGS, Page, Theme } from "./Definitions.ts";
 import { SettingsAPI } from "./ApiTypes.ts";
 import _default from "@emotion/styled";
 import MainMenu from "./pages/MainMenu.tsx";
@@ -16,13 +16,13 @@ interface ISettingsContext {
 }
 
 export const SettingsContext = React.createContext<ISettingsContext>({
-  settings: {music_volume: 0.5, sound_volume:0.5, theme:Theme.System, cacheSize:500},
+  settings: DEFAULTSETTINGS,
   setSettings: () => {}
 });
 
 function App() {
 
-  const [settings, setSettings] = React.useState({music_volume: 0.5, sound_volume:0.5, theme:Theme.System} as SettingsAPI);
+  const [settings, setSettings] = React.useState(DEFAULTSETTINGS as SettingsAPI);
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
