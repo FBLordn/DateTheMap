@@ -4,11 +4,12 @@ import GameLayout from "./pages/game_layout/GameLayout.tsx";
 import { ThemeProvider } from "@emotion/react";
 import { darkTheme, lightTheme } from "./Themes.tsx";
 import { CssBaseline, useMediaQuery } from "@mui/material";
-import { DEFAULTSETTINGS, Page, Theme } from "./Definitions.ts";
+import { DEFAULTSETTINGS, Page, Theme} from "./Definitions.ts";
 import { SettingsAPI } from "./ApiTypes.ts";
 import _default from "@emotion/styled";
 import MainMenu from "./pages/MainMenu.tsx";
 import Settings from "./pages/Settings.tsx";
+import Information from "./pages/Information.tsx"
 
 interface ISettingsContext {
   settings: SettingsAPI,
@@ -35,6 +36,8 @@ function App() {
         return <GameLayout onMainMenuSelect={() => setCurrentPage(Page.MENU)}/>
       case Page.SETTINGS:
         return <Settings onApply={() => setCurrentPage(Page.MENU)}/>
+      case Page.INFO:
+        return <Information onApply={() => setCurrentPage(Page.MENU)}/>
       case Page.MENU:
       default:
         return <MainMenu onPageSelect={setCurrentPage}/>

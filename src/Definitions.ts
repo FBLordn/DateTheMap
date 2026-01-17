@@ -3,7 +3,8 @@ import { SettingsAPI } from "./ApiTypes";
 enum Page {
     MENU,
     PLAYING,
-    SETTINGS
+    SETTINGS,
+    INFO
 }
 
 enum Theme {
