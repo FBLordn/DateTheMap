@@ -50,23 +50,23 @@ export default function Settings({onApply}: SettingsProps) {
         direction="column" sx={{ alignItems: 'center', mb: 1}}
         divider={<Divider flexItem orientation="horizontal"/>}
       >
-        <PrefLine title="Music">
+        <PrefLine title="Music" sx={{width:1, justifyContent:"center", paddingRight:5}}>
           <VolumeSlider sx={{width:1, paddingLeft:1}}  onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
         </PrefLine>
-        <PrefLine title="Sound">
+        <PrefLine title="Sound" sx={{width:1, justifyContent:"center", paddingRight:5}}>
           <VolumeSlider sx={{width:1, paddingLeft:1}} onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
         </PrefLine>
-        <PrefLine title="Theme">
+        <PrefLine title="Theme" sx={{width:1, justifyContent:"center", paddingRight:10}}>
           <ThemeButtons sx={{width:1, paddingLeft:1}} theme={theme} setTheme={(new_theme) => {
               setTheme(new_theme);
               setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_size:cacheSize})
             }}
           />
         </PrefLine>
-        <PrefLine title="Cache">
+        <PrefLine title="Cache" sx={{width:1, justifyContent:"center", paddingRight:5}}>
           <Stack direction={"row"} sx={{width:1}} justifyContent="space-between">
               <NumberField
-                label="Cache Size in MB" 
+                label="Max Cache Size in MB" 
                 value={cacheSize} 
                 onValueCommitted={(value) => setCacheSize( value==null ? cacheSize : value)}
                 min={0}
