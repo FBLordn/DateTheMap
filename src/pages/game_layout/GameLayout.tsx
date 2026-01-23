@@ -130,11 +130,13 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
               index={buttonInUse}
             />
             <GameEndDialog 
+              paperSx={{minWidth:'30%', minHeight:'16%', justifySelf:'center'}}
               resetGame={resetGame}
               isOpen={gameEndOpen}
               setIsOpen={setGameEndOpen}
               onReturnToMenu={onMainMenuSelect}
-              scoreText= {`${gameState.total} / ${5000*round_amount}`}
+              score={gameState.total}
+              roundAmount={round_amount}
             />
           </Stack>
         </Item>

@@ -10,6 +10,7 @@ export default function PrefLine({title, children, sx}: React.PropsWithChildren<
     <Stack 
       sx={sx}
       direction={"row"}
+      display={"flex"}
     >
       <Typography variant="h6" sx={{width:1/4}}> {title} </Typography>
       {children}
