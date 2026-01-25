@@ -11100,10 +11100,10 @@
             }
         },
         {
-            "id": "transport_points",
+            "id": "transport_points_centroids",
             "type": "symbol",
             "source": "osm",
-            "source-layer": "transport_points",
+            "source-layer": "transport_points_centroids",
             "minzoom": 14,
             "maxzoom": 24,
             "filter": [

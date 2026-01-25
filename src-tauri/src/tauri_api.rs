@@ -4,7 +4,9 @@ use tauri::State;
 
 use crate::{
     audio::provider::AUDIO_PROVIDER,
+    file_manager::FileManager,
     logic::{GameState, GameStateToJS, MAXIMUM_YEAR, MINIMUM_YEAR, ROUND_AMOUNT},
+    settings::Settings,
     util::Range,
 };
 
@@ -55,4 +57,24 @@ pub fn set_music_volume(volume: f32) {
 pub fn set_sound_volume(volume: f32) {
     AUDIO_PROVIDER.set_sound_volume(volume);
     AUDIO_PROVIDER.success();
+}
+
+#[tauri::command]
+pub fn set_settings(settings: Settings) {
+    settings.push_settings();
+}
+
+#[tauri::command]
+pub fn get_settings() -> Settings {
+    Settings::pull_settings()
+}
+
+#[tauri::command]
+pub fn close_game() {
+    std::process::exit(0);
+}
+
+#[tauri::command]
+pub fn reset_cache() {
+    FileManager::reset_cache();
 }

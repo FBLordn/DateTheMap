@@ -10,6 +10,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@base-ui/react": "^1.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.1",
@@ -24,7 +25,7 @@
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.8.2",
+    "typescript": "^5.9.3",
     "vite": ">=6.2.6"
   }
 }

@@ -73,6 +73,7 @@ export default function IncrementInput(props : IncrementInputProps) {
           ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
           {
             minWidth: maxInputLength * WIDTH_MULTIPLIER,
+            width: maxInputLength * WIDTH_MULTIPLIER,
             borderTopRightRadius: 0,
             borderBottomRightRadius: 0,
             borderTopLeftRadius: theme.shape.borderRadius,
@@ -81,6 +82,7 @@ export default function IncrementInput(props : IncrementInputProps) {
             backgroundColor: props.bgColor?.main || theme.palette.secondary.main
           },
         ]}
+        inputProps={{sx:{boxShadow:'none'}}}
         disableUnderline={true}
         value={value}
         onChange={onInputChange}

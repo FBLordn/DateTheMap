@@ -2,7 +2,7 @@ import * as React from 'react';
 import Slider from '@mui/material/Slider';
 import { Stack, Tooltip, useTheme } from '@mui/material';
 import { SxProps, Theme } from '@mui/material/styles';
-import IncrementInput from './IncrementInput';
+import NumberField from './NumberField';
 
 
 interface InputRangeSliderProps {
@@ -17,7 +17,7 @@ interface InputRangeSliderProps {
 
 export default function InputRangeSlider({sx = [], callbackFunction, minValue, maxValue, disabled, additionalThumbs }: InputRangeSliderProps) {
   const [wasDisabled, setDisabled] = React.useState<boolean>(disabled || false);
-  const [value, setValue] = React.useState<(number | '')[]>([minValue, maxValue]);
+  const [value, setValue] = React.useState<(number)[]>([minValue, maxValue]);
   if(wasDisabled != disabled) {
     if(wasDisabled) {
       setValue([minValue, maxValue]);
@@ -27,8 +27,14 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
   }
   const thumbs = [value[0] || minValue, value[1] || maxValue, ...additionalThumbs || []];
   const theme = useTheme();
-  const handleSliderChange = (
+
+  const onSliderChange = (
     _event: Event,
+    newValue: number | number[],
+    activeThumb: number,
+  ) => onValueChange(newValue, activeThumb)
+
+  const onValueChange = (
     newValue: number | number[],
     activeThumb: number,
   ) => {
@@ -44,21 +50,13 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
       } else {
         setValue(newValue)
       }
-      callbackFunction([newValue[0] || minValue, newValue[1] || maxValue]);
+      callbackFunction([newValue[0], newValue[1]]);
     }
-  };
-
-  const handleMinInputChange = (event: SyntheticIncrementEvent) => {
-    handleSliderChange(event as unknown as Event, Number(event.target.value), 0)
-  };
-
-  const handleMaxInputChange = (event: SyntheticIncrementEvent) => {
-    handleSliderChange(event as unknown as Event, Number(event.target.value), 1)
   };
 
   const onChangeCommited = (event: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) =>
     {
-      handleSliderChange(event as unknown as Event, value, 2)
+      onSliderChange(event as unknown as Event, value, 2)
     }
   
   function isInGuessRange(val: number) {
@@ -118,23 +116,17 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
       spacing={3}
       sx={sx}
     >
-
-      <IncrementInput
+      <NumberField
         disabled={disabled}
-        value={value[0]}
-        size="small"
-        sx={{minWidth:65}}
-        onChange={handleMinInputChange}
-        inputProps={{
-          step: 5,
-          min: minValue,
-          max: maxValue,
-          maxLength: 4,
-          type: 'number',
-          'aria-labelledby': 'input-slider',
-        }}
+        label="From" 
+        value={value[0]} 
+        onValueCommitted={(new_val) => onValueChange(new_val==null ? value[0] : Math.round(new_val), 0)}
+        min={minValue}
+        max={maxValue}
+        size='small'
+        format={{useGrouping:false}}
       />
-      
+
       <Slider
         getAriaLabel={() => 'year range'}
         color='secondary'
@@ -147,29 +139,23 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
         min={minValue} 
         max={maxValue}
         value={thumbs}
-        onChange={handleSliderChange}
+        onChange={onSliderChange}
         onChangeCommitted={onChangeCommited}
         getAriaValueText={(v)=> `${v}`}
         valueLabelDisplay='auto'
         slotProps={{valueLabel: CustomValueLabel}}
       />
 
-      <IncrementInput
+      <NumberField
         disabled={disabled}
-        value={value[1]}
-        size="small"
-        sx={{minWidth:65}}
-        onChange={handleMaxInputChange}
-        inputProps={{
-          step: 5,
-          min: minValue,
-          max: maxValue,
-          maxLength: 4,
-          type: 'number',
-          'aria-labelledby': 'input-slider',
-        }}
+        label="To" 
+        value={value[1]} 
+        onValueCommitted={(new_val) => onValueChange(new_val==null ? value[0] : Math.round(new_val), 0)}
+        min={minValue}
+        max={maxValue}
+        size='small'
+        format={{useGrouping:false}}
       />
-        
     </Stack>
   );
 }

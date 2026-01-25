@@ -4,6 +4,8 @@ use reqwest::header::CONTENT_TYPE;
 use serde::Deserialize;
 use tokio::net::TcpListener;
 
+use crate::cache::MapCache;
+
 const ADDR: &str = "127.0.0.1:3456";
 const INDEX_HTML: &str = include_str!("index.html");
 const STYLE_JSON: &str = include_str!("main.json");
@@ -12,21 +14,17 @@ async fn json() -> impl IntoResponse {
     ([(header::CONTENT_TYPE, "application/json")], STYLE_JSON)
 }
 
-#[derive(Deserialize)]
-struct Coords {
-    path: String,
-    x: String,
-    y: String,
-    z: String,
+#[derive(Deserialize, Clone)]
+pub struct Coords {
+    pub path: String,
+    pub x: String,
+    pub y: String,
+    pub z: String,
 }
 
-async fn filter(query: Query<Coords>) -> impl IntoResponse {
-    let Coords { x, y, z, path } = query.0;
-    let uri = format!("https://vtiles.openhistoricalmap.org/maps/{path}/{z}/{x}/{y}.pbf");
-
-    let resp = reqwest::get(uri).await.unwrap().bytes().await.unwrap();
+async fn filter(query: Query<Coords>, cache: MapCache) -> impl IntoResponse {
     let re = Regex::new(r"(?-u)\x28\d+\x2d\d+\x29").unwrap();
-
+    let resp = cache.get_tile(query.0).await;
     let resp = re
         .replace_all(&resp, |captured: &Captures| {
             let res = captured.extract::<0>().0.to_vec();
@@ -38,13 +36,14 @@ async fn filter(query: Query<Coords>) -> impl IntoResponse {
 }
 
 pub async fn start() {
+    let cache = MapCache::new();
     let app = Router::new()
         .route("/map-styles/main/main.json", get(json))
         .route(
             "/",
             get(|| async { ([(header::CONTENT_TYPE, "text/html")], INDEX_HTML) }),
         )
-        .route("/maps/", get(filter));
+        .route("/maps/", get(async |query| filter(query, cache).await));
     let listener = TcpListener::bind(ADDR).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }

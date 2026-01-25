@@ -6,9 +6,11 @@ import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
 import { GameState, Range } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api/core';
-import { Typography } from '@mui/material';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
+import Settings from '../Settings';
+import { Button, Typography } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -30,6 +32,8 @@ invoke('get_possible_range').then((range) =>  possible_range = range as Range);
 
 export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
   
+  const [inSettings, setInSettings] = React.useState<boolean>(false);
+
   const [gameState, setGameState] = React.useState<GameState>();
 
   const [roundOver, setRoundOver] = React.useState<boolean>(false);
@@ -80,9 +84,31 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
   }
 
   return (
+    inSettings ? 
+      <Settings
+        onApply={() => setInSettings(false)}
+      /> 
+    :
     gameState ?
       <Stack sx={{p:2}} spacing={3} height="100vh" display="flex" flexDirection="column">
-        <Item> <GameStats scoreRound={[gameState.total, gameState.round]} /> </Item>
+        <Item style={{boxShadow:'none', background:'transparent'}} sx={{p:0}}>
+          <Stack direction="row">
+            <Item sx={{flexGrow:50, marginRight:1, flexDirection:"column", alignContent:"center"}}> 
+              <GameStats scoreRound={[gameState.total, gameState.round]} /> 
+            </Item>
+            <Item sx={{flexGrow:1, marginLeft:1}}>
+              <Button
+                sx={{alignSelf:'flex-end', p:0}}
+                disableElevation
+              >
+                <SettingsIcon
+                  sx={{fontSize:'xx-large'}}
+                  onClick={() => setInSettings(true)}
+                />
+              </Button>
+            </Item>
+          </Stack> 
+        </Item>
         <Item sx={{m:1, flexGrow:1}}> <div dangerouslySetInnerHTML={{__html: gameState.world_map.html}} style={css} /> </Item>
         <Item> 
           <Stack
@@ -104,18 +130,20 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
               index={buttonInUse}
             />
             <GameEndDialog 
+              paperSx={{minWidth:'30%', minHeight:'16%', justifySelf:'center'}}
               resetGame={resetGame}
               isOpen={gameEndOpen}
               setIsOpen={setGameEndOpen}
               onReturnToMenu={onMainMenuSelect}
-              scoreText= {`${gameState.total} / ${5000*round_amount}`}
+              score={gameState.total}
+              roundAmount={round_amount}
             />
           </Stack>
         </Item>
       </Stack>
       :
-      <Item>
-        <Typography> "Sorgy, accident" </Typography>
-      </Item>
+      <Typography> 
+      {":3"}
+      </Typography>
   );
 }

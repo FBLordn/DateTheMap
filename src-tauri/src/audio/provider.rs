@@ -15,12 +15,12 @@ pub struct AudioData<'a, const N: usize> {
     next: &'a [u8],
     background: [&'a [u8]; N],
     bg_thread: Option<Sender<Action>>,
-    sound_volume: f32,
-    music_volume: f32,
+    pub sound_volume: f32,
+    pub music_volume: f32,
 }
 
 pub struct Provider<'a, const N: usize> {
-    audio: Mutex<AudioData<'a, N>>,
+    pub audio: Mutex<AudioData<'a, N>>,
 }
 
 pub static AUDIO_PROVIDER: Provider<'_, 4> = Provider {
@@ -85,7 +85,7 @@ impl<const N: usize> AudioData<'_, N> {
                         Action::SetVolume(v) => {
                             sink.set_volume(v);
                         }
-                    };
+                    }
                 }
             }
         });
@@ -141,10 +141,12 @@ impl<const N: usize> Provider<'_, N> {
     }
 
     pub fn set_music_volume(&self, volume: f32) {
+        AUDIO_PROVIDER.audio.lock().unwrap().music_volume = volume;
         self.run(|x| x.set_bg_volume(volume));
     }
 
     pub fn set_sound_volume(&self, volume: f32) {
+        AUDIO_PROVIDER.audio.lock().unwrap().sound_volume = volume;
         self.run(|mut x| x.sound_volume = volume);
     }
 }
