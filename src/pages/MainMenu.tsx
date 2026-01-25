@@ -12,10 +12,9 @@ interface MainMenuProps {
 export default function MainMenu({onPageSelect : setCurrentPage} : MainMenuProps) {
   return (
     <Stack
-      sx={{p:2, minHeight:'100vh'}}
-      spacing={3}
+      sx={{height:'100vh', display:"flex"}}
     >
-      <Stack direction={"row"} justifyContent="space-between">
+      <Stack sx={{minHeight:1/10}} direction={"row"} justifyContent="space-between">
         <Button
           sx={{alignSelf:'flex-start', margin:"1%"}}
           disableElevation
@@ -37,14 +36,13 @@ export default function MainMenu({onPageSelect : setCurrentPage} : MainMenuProps
 
       </Stack>
       <GameMenu 
-        sx={{flexGrow:1, justifyContent:'center', display:'flex', alignItems:'center'}}
+        sx={{alignItems:'center', display:'flex', minHeight:8/10, padding:5}}
         onSubmit={() => setCurrentPage(Page.PLAYING)} 
         //title="Date The Map"
         children={
-          <div style={{margin:10, alignItems:'center'}}>
-            <img src={logo} alt="Logo"/>
+          <div style={{flexGrow:1}}>
+            <img src={logo} alt="Logo" style={{minHeight:"90%"}}/>
           </div>
-      
         }
         buttonName="Start Game"
       /> 
