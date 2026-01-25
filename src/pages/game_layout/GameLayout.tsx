@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import InputRangeSlider from '../../components/InputRangeSlider';
 import GameStats from './GameStats';
-import { GameState, Range, SettingsAPI } from '../../ApiTypes';
+import { GameState, Range } from '../../ApiTypes';
 import { invoke } from '@tauri-apps/api/core';
 import PolyButtons from '../../components/PolyButtons';
 import GameEndDialog from './GameEndDialog';
@@ -130,11 +130,13 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
               index={buttonInUse}
             />
             <GameEndDialog 
+              paperSx={{minWidth:'30%', minHeight:'16%', justifySelf:'center'}}
               resetGame={resetGame}
               isOpen={gameEndOpen}
               setIsOpen={setGameEndOpen}
               onReturnToMenu={onMainMenuSelect}
-              scoreText= {`${gameState.total} / ${5000*round_amount}`}
+              score={gameState.total}
+              roundAmount={round_amount}
             />
           </Stack>
         </Item>

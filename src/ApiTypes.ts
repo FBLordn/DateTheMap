@@ -21,7 +21,7 @@ type SettingsAPI = {
   sound_volume: number;
   music_volume: number;
   theme: Theme;
-  cache_level: number;
+  cache_size: number;
 }
 
 export type { GameState, WorldMapAPI, Range, SettingsAPI};
