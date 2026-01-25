@@ -1,7 +1,10 @@
+import { SettingsAPI } from "./ApiTypes";
+
 enum Page {
     MENU,
     PLAYING,
-    SETTINGS
+    SETTINGS,
+    INFO
 }
 
 enum Theme {
@@ -16,4 +19,6 @@ MUSIC,
 THEME
 }
 
-export {Page, Theme, SettingType};
+const DEFAULTSETTINGS: SettingsAPI = {music_volume: 0.5, sound_volume:0.5, theme:Theme.System, cache_size:500_000_000}
+
+export {Page, Theme, SettingType, DEFAULTSETTINGS};

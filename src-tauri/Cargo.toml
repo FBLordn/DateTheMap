@@ -3,7 +3,7 @@ name = "date_the_map"
 version = "0.0.0"
 description = "A Tauri App"
 authors = ["you"]
-edition = "2021"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -20,6 +20,7 @@ tokio = "1.44.1"
 reqwest = { version = "0.12.15", features = ["charset", "gzip"] }
 regex = "1.11.1"
 tauri-plugin-shell = "2"
+log = "0.4.26"
 rodio = "0.20.1"
 
 [features]

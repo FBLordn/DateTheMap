@@ -4,6 +4,7 @@ use tauri::State;
 
 use crate::{
     audio::provider::AUDIO_PROVIDER,
+    file_manager::FileManager,
     logic::{GameState, GameStateToJS, MAXIMUM_YEAR, MINIMUM_YEAR, ROUND_AMOUNT},
     settings::Settings,
     util::Range,
@@ -71,4 +72,9 @@ pub fn get_settings() -> Settings {
 #[tauri::command]
 pub fn close_game() {
     std::process::exit(0);
+}
+
+#[tauri::command]
+pub fn reset_cache() {
+    FileManager::reset_cache();
 }

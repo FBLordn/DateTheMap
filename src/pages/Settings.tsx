@@ -6,17 +6,19 @@ import VolumeSlider from "../components/VolumeSlider";
 import { invoke } from "@tauri-apps/api/core";
 import ThemeButtons from "../components/ThemeButtons";
 import React from "react";
-import { Theme } from "../Definitions";
+import { DEFAULTSETTINGS, Theme } from "../Definitions";
 import { SettingsAPI } from "../ApiTypes";
+import NumberField from "../components/NumberField";
 
 interface SettingsProps {
-    onApply : () => void
+  onApply : () => void 
 }
 
 export default function Settings({onApply}: SettingsProps) {
-  const [music, setMusic] = React.useState<number>(0.5);
-  const [sound, setSound] = React.useState<number>(0.5);
-  const [theme, setTheme] = React.useState<Theme>(Theme.System);
+  const [music, setMusic] = React.useState<number>(DEFAULTSETTINGS.music_volume);
+  const [sound, setSound] = React.useState<number>(DEFAULTSETTINGS.sound_volume);
+  const [theme, setTheme] = React.useState<Theme>(DEFAULTSETTINGS.theme);
+  const [cacheSize, setCacheSize] = React.useState<number>(DEFAULTSETTINGS.cache_size);
   const { setSettings } = useContext(SettingsContext);
 
   React.useEffect(() => {
@@ -25,12 +27,13 @@ export default function Settings({onApply}: SettingsProps) {
       setMusic(sett.music_volume);
       setSound(sett.sound_volume);
       setTheme(sett.theme);
+      setCacheSize(sett.cache_size / 1_000_000);
       setSettings(sett);
     });
   }, []);
 
   function applySettings() {
-    let settings = {music_volume:music, sound_volume:sound, theme};
+    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize*1_000_000};
     setSettings(settings);
     invoke('set_settings', {settings});
     onApply();
@@ -42,23 +45,36 @@ export default function Settings({onApply}: SettingsProps) {
         {"Settings"}
       </Typography>
       <Stack 
-        spacing={2}
-        margin={5} 
-        direction="column" sx={{ alignItems: 'center', mb: 1 }}
+        spacing={3}
+        margin={4}
+        direction="column" sx={{ alignItems: 'center', mb: 1}}
         divider={<Divider flexItem orientation="horizontal"/>}
       >
-        <PrefLine title="Music">
-          <VolumeSlider onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
+        <PrefLine title="Music" sx={{width:1, justifyContent:"center", paddingRight:5}}>
+          <VolumeSlider sx={{width:1, paddingLeft:1}}  onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
         </PrefLine>
-        <PrefLine title="Sound">
-          <VolumeSlider onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
+        <PrefLine title="Sound" sx={{width:1, justifyContent:"center", paddingRight:5}}>
+          <VolumeSlider sx={{width:1, paddingLeft:1}} onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
         </PrefLine>
-        <PrefLine title="Theme">
-          <ThemeButtons theme={theme} setTheme={(new_theme) => {
+        <PrefLine title="Theme" sx={{width:1, justifyContent:"center", paddingRight:10}}>
+          <ThemeButtons sx={{width:1, paddingLeft:1}} theme={theme} setTheme={(new_theme) => {
               setTheme(new_theme);
-              setSettings({music_volume:music, sound_volume:sound, theme:new_theme})
+              setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_size:cacheSize})
             }}
           />
+        </PrefLine>
+        <PrefLine title="Cache" sx={{width:1, justifyContent:"center", paddingRight:5}}>
+          <Stack direction={"row"} sx={{width:1}} justifyContent="space-between">
+              <NumberField
+                label="Max Cache Size in MB" 
+                value={cacheSize} 
+                onValueCommitted={(value) => setCacheSize( value==null ? cacheSize : value)}
+                min={0}
+              />
+              <Button sx={{minWidth:1/4}} color="warning" variant="contained" onClick={() => invoke('reset_cache')}>
+                {"Reset Cache"}
+              </Button>
+          </Stack>
         </PrefLine>
       <Stack direction="row" display="flex" justifyContent="space-evenly" width="100vw">
         <Button onClick={() => invoke('close_game')} color="warning" variant="contained">
