@@ -9,7 +9,6 @@ use super::world_map::WorldMapToJS;
 
 pub const MINIMUM_YEAR: i16 = 1400;
 pub const MAXIMUM_YEAR: i16 = 2024;
-pub const ROUND_AMOUNT: i8 = 5;
 
 /// Represents the game state
 #[derive(Clone)]

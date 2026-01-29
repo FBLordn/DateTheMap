@@ -29,13 +29,14 @@ function App() {
 
   const [currentPage, setCurrentPage] = React.useState<Page>(Page.MENU);
 
+  const [roundAmount, setRoundAmount] = React.useState<number>(DEFAULTSETTINGS.round_amount);
 
   function getPageHtml(page: Page) {
     switch (page) {
       case Page.PLAYING:
-        return <GameLayout onMainMenuSelect={() => setCurrentPage(Page.MENU)}/>
+        return <GameLayout onMainMenuSelect={() => setCurrentPage(Page.MENU)} roundAmount={roundAmount} setRoundAmount={setRoundAmount}/>
       case Page.SETTINGS:
-        return <Settings onApply={() => setCurrentPage(Page.MENU)}/>
+        return <Settings onApply={() => setCurrentPage(Page.MENU)} roundAmount={roundAmount} setRoundAmount={setRoundAmount}/>
       case Page.INFO:
         return <Information onApply={() => setCurrentPage(Page.MENU)}/>
       case Page.MENU:

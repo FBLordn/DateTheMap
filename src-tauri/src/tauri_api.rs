@@ -5,7 +5,7 @@ use tauri::State;
 use crate::{
     audio::provider::AUDIO_PROVIDER,
     file_manager::FileManager,
-    logic::{GameState, GameStateToJS, MAXIMUM_YEAR, MINIMUM_YEAR, ROUND_AMOUNT},
+    logic::{GameState, GameStateToJS, MAXIMUM_YEAR, MINIMUM_YEAR},
     settings::Settings,
     util::Range,
 };
@@ -44,8 +44,8 @@ pub fn get_possible_range() -> Range<i16> {
 }
 
 #[tauri::command]
-pub fn get_round_amount() -> i8 {
-    ROUND_AMOUNT
+pub fn get_round_amount() -> u8 {
+    Settings::pull_settings().round_amount
 }
 
 #[tauri::command]

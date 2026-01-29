@@ -16,6 +16,7 @@ pub struct Settings {
     pub sound_volume: f32,
     pub music_volume: f32,
     pub cache_size: usize,
+    pub round_amount: u8,
 }
 
 impl Settings {
@@ -36,6 +37,7 @@ impl Default for Settings {
             sound_volume: 0.5,
             music_volume: 0.5,
             cache_size: 500_000_000,
+            round_amount: 5,
         }
     }
 }

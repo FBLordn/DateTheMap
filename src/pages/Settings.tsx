@@ -13,14 +13,16 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 interface SettingsProps {
-  onApply : () => void 
+  onApply : () => void,
+  roundAmount: number,
+  setRoundAmount: (value: React.SetStateAction<number>) => void,
 }
 
 const KB_MULT = 1_000;
 const MB_MULT = 1_000_000;
 const GB_MULT = 1_000_000_000;
 
-export default function Settings({onApply}: SettingsProps) {
+export default function Settings({onApply, roundAmount, setRoundAmount}: SettingsProps) {
   const [music, setMusic] = React.useState<number>(DEFAULTSETTINGS.music_volume);
   const [sound, setSound] = React.useState<number>(DEFAULTSETTINGS.sound_volume);
   const [theme, setTheme] = React.useState<Theme>(DEFAULTSETTINGS.theme);
@@ -35,12 +37,14 @@ export default function Settings({onApply}: SettingsProps) {
       setSound(sett.sound_volume);
       setTheme(sett.theme);
       setCacheSize(sett.cache_size / cacheMult);
+      //console.log(setRoundAmount);
+      setRoundAmount(sett.round_amount);
       setSettings(sett);
     });
   }, []);
 
   function applySettings() {
-    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize*cacheMult};
+    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize*cacheMult, round_amount:roundAmount};
     setSettings(settings);
     invoke('set_settings', {settings});
     onApply();
@@ -53,30 +57,42 @@ export default function Settings({onApply}: SettingsProps) {
   }
 
   return (
-    <Stack height="100vh">
+    <Stack flexGrow={1}>
       <Typography variant='h1'>
         {"Settings"}
       </Typography>
       <Stack 
         spacing={3}
-        margin={4}
+        padding={3}
         direction="column" sx={{ alignItems: 'center', mb: 1}}
         divider={<Divider flexItem orientation="horizontal"/>}
       >
-        <PrefLine title="Music" sx={{width:1, justifyContent:"center", paddingRight:5}}>
+        <PrefLine title="Music" sx={{width:1, paddingRight:5}}>
           <VolumeSlider sx={{width:1, paddingLeft:1}}  onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
         </PrefLine>
-        <PrefLine title="Sound" sx={{width:1, justifyContent:"center", paddingRight:5}}>
+        <PrefLine title="Sound" sx={{width:1, paddingRight:5}}>
           <VolumeSlider sx={{width:1, paddingLeft:1}} onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
         </PrefLine>
-        <PrefLine title="Theme" sx={{width:1, justifyContent:"center", paddingRight:10}}>
-          <ThemeButtons sx={{width:1, paddingLeft:1}} theme={theme} setTheme={(new_theme) => {
+        <PrefLine title="Theme" sx={{width:1, paddingRight:5}}>
+          <ThemeButtons 
+            sx={{width:1, paddingLeft:1}} 
+            theme={theme} 
+            setTheme={(new_theme) => {
               setTheme(new_theme);
               setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_size:cacheSize})
             }}
           />
         </PrefLine>
-        <PrefLine title="Cache" sx={{width:1, justifyContent:"center", paddingRight:5}}>
+        <PrefLine title="Rounds" sx={{width:1, paddingRight:5}}>
+            <NumberField 
+              label="Amount of rounds per game"
+              value={roundAmount}
+              onValueCommitted={(value) => setRoundAmount(value==null ? roundAmount : value)}
+              min={1}
+              max={255}
+            />
+        </PrefLine>
+        <PrefLine title="Cache" sx={{width:1, paddingRight:5}}>
           <Stack direction={"row"} sx={{width:1}} justifyContent="space-between">
               <NumberField
                 label="Max Cache Size" 

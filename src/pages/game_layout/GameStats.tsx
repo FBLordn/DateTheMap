@@ -5,9 +5,10 @@ import PublicIcon from '@mui/icons-material/Public';
 interface GameStatsProps {
   children?: React.ReactNode;
   scoreRound: number[];
+  roundAmount: number;
 }
 
-export default function GameStats({scoreRound}: GameStatsProps) {
+export default function GameStats({scoreRound, roundAmount}: GameStatsProps) {
   
   return(
     <Stack
@@ -17,7 +18,7 @@ export default function GameStats({scoreRound}: GameStatsProps) {
       sx={{width:"auto", height:"auto"}}
     >
       <Typography>
-        Round: {scoreRound[1]}/5
+        Round: {scoreRound[1]}/{roundAmount}
       </Typography>
   
       <PublicIcon />
