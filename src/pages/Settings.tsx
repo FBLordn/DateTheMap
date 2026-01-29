@@ -9,15 +9,22 @@ import React from "react";
 import { DEFAULTSETTINGS, Theme } from "../Definitions";
 import { SettingsAPI } from "../ApiTypes";
 import NumberField from "../components/NumberField";
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 interface SettingsProps {
   onApply : () => void 
 }
 
+const KB_MULT = 1_000;
+const MB_MULT = 1_000_000;
+const GB_MULT = 1_000_000_000;
+
 export default function Settings({onApply}: SettingsProps) {
   const [music, setMusic] = React.useState<number>(DEFAULTSETTINGS.music_volume);
   const [sound, setSound] = React.useState<number>(DEFAULTSETTINGS.sound_volume);
   const [theme, setTheme] = React.useState<Theme>(DEFAULTSETTINGS.theme);
+  const [cacheMult, setCacheMult] = React.useState<number>(MB_MULT);
   const [cacheSize, setCacheSize] = React.useState<number>(DEFAULTSETTINGS.cache_size);
   const { setSettings } = useContext(SettingsContext);
 
@@ -27,16 +34,22 @@ export default function Settings({onApply}: SettingsProps) {
       setMusic(sett.music_volume);
       setSound(sett.sound_volume);
       setTheme(sett.theme);
-      setCacheSize(sett.cache_size / 1_000_000);
+      setCacheSize(sett.cache_size / cacheMult);
       setSettings(sett);
     });
   }, []);
 
   function applySettings() {
-    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize*1_000_000};
+    let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize*cacheMult};
     setSettings(settings);
     invoke('set_settings', {settings});
     onApply();
+  }
+
+  const onCacheMultChange = (event: SelectChangeEvent<number>) => {
+    const newCacheMult = event.target.value as unknown as number;
+    setCacheSize((cacheSize * cacheMult) / newCacheMult);
+    setCacheMult(newCacheMult);
   }
 
   return (
@@ -66,11 +79,20 @@ export default function Settings({onApply}: SettingsProps) {
         <PrefLine title="Cache" sx={{width:1, justifyContent:"center", paddingRight:5}}>
           <Stack direction={"row"} sx={{width:1}} justifyContent="space-between">
               <NumberField
-                label="Max Cache Size in MB" 
+                label="Max Cache Size" 
                 value={cacheSize} 
                 onValueCommitted={(value) => setCacheSize( value==null ? cacheSize : value)}
                 min={0}
               />
+              <Select
+                label="Unit"
+                value={cacheMult}
+                onChange={onCacheMultChange}
+              >
+                <MenuItem value={KB_MULT}>KB</MenuItem>
+                <MenuItem value={MB_MULT}>MB</MenuItem>
+                <MenuItem value={GB_MULT}>GB</MenuItem>
+              </Select>
               <Button sx={{minWidth:1/4}} color="warning" variant="contained" onClick={() => invoke('reset_cache')}>
                 {"Reset Cache"}
               </Button>
