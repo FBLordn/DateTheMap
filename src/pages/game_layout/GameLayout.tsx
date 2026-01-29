@@ -21,16 +21,16 @@ const Item = styled(Paper)(({ theme }) => ({
 
 interface GameLayoutProps {
   onMainMenuSelect: () => void;
+  roundAmount: number;
+  setRoundAmount: (value: React.SetStateAction<number>) => void;
 }
 
 const css:React.CSSProperties={"height":"100%", "maxWidth":"100%"};
 
-let round_amount: number;
-invoke('get_round_amount').then((result) => round_amount = result as number);
 let possible_range: Range;
 invoke('get_possible_range').then((range) =>  possible_range = range as Range);
 
-export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
+export default function GameLayout({onMainMenuSelect, roundAmount, setRoundAmount}: GameLayoutProps) {
   
   const [inSettings, setInSettings] = React.useState<boolean>(false);
 
@@ -50,7 +50,7 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
 
   function getActiveButtonIndex(roundOver: boolean, round: number | undefined) {
     if (roundOver) {
-      return round===round_amount ? 2 : 1;
+      return round===roundAmount ? 2 : 1;
     } else {
       return 0;
     }
@@ -83,10 +83,14 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
     setRoundOver(false);
   }
 
+  console.log(setRoundAmount);
+
   return (
     inSettings ? 
       <Settings
         onApply={() => setInSettings(false)}
+        roundAmount={roundAmount}
+        setRoundAmount={setRoundAmount}
       /> 
     :
     gameState ?
@@ -94,7 +98,7 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
         <Item style={{boxShadow:'none', background:'transparent'}} sx={{p:0}}>
           <Stack direction="row">
             <Item sx={{flexGrow:50, marginRight:1, flexDirection:"column", alignContent:"center"}}> 
-              <GameStats scoreRound={[gameState.total, gameState.round]} /> 
+              <GameStats scoreRound={[gameState.total, gameState.round]} roundAmount={roundAmount} /> 
             </Item>
             <Item sx={{flexGrow:1, marginLeft:1}}>
               <Button
@@ -136,7 +140,7 @@ export default function GameLayout({onMainMenuSelect}: GameLayoutProps) {
               setIsOpen={setGameEndOpen}
               onReturnToMenu={onMainMenuSelect}
               score={gameState.total}
-              roundAmount={round_amount}
+              roundAmount={roundAmount}
             />
           </Stack>
         </Item>

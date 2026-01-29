@@ -10,6 +10,7 @@ interface MainMenuProps {
 }
 
 export default function MainMenu({onPageSelect : setCurrentPage} : MainMenuProps) {
+
   return (
     <Stack
       sx={{height:'100vh', display:"flex"}}
