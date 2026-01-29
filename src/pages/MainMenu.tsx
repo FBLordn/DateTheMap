@@ -1,7 +1,7 @@
 import { Button, Stack } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
-import logo from '../assets/idea_logo.png';
+import logo from '../assets/dtm_logo.png';
 import GameMenu from "../components/Menu.tsx";
 import { Page } from "../Definitions";
 
@@ -41,7 +41,7 @@ export default function MainMenu({onPageSelect : setCurrentPage} : MainMenuProps
         //title="Date The Map"
         children={
           <div style={{flexGrow:1}}>
-            <img src={logo} alt="Logo" style={{minHeight:"90%"}}/>
+            <img src={logo} alt="Logo" style={{minHeight:"30%"}}/>
           </div>
         }
         buttonName="Start Game"
