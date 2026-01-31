@@ -43,6 +43,13 @@ export default function Settings({onApply, roundAmount, setRoundAmount}: Setting
     });
   }, []);
 
+  function cacheSizeChange(value: number) {
+    if(value * cacheMult < 1) {
+      value = 0;
+    }
+    setCacheSize(value);
+  }
+
   function applySettings() {
     let settings = {music_volume:music, sound_volume:sound, theme, cache_size:cacheSize*cacheMult, round_amount:roundAmount};
     setSettings(settings);
@@ -57,25 +64,25 @@ export default function Settings({onApply, roundAmount, setRoundAmount}: Setting
   }
 
   return (
-    <Stack flexGrow={1}>
+    <Stack sx={{height:'100vh', display:"flex"}}>
       <Typography variant='h1'>
         {"Settings"}
       </Typography>
       <Stack 
         spacing={3}
         padding={3}
-        direction="column" sx={{ alignItems: 'center', mb: 1}}
+        direction="column" sx={{ alignItems: 'center'}}
         divider={<Divider flexItem orientation="horizontal"/>}
       >
         <PrefLine title="Music" sx={{width:1, paddingRight:5}}>
-          <VolumeSlider sx={{width:1, paddingLeft:1}}  onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
+          <VolumeSlider sx={{width:1}}  onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
         </PrefLine>
         <PrefLine title="Sound" sx={{width:1, paddingRight:5}}>
-          <VolumeSlider sx={{width:1, paddingLeft:1}} onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
+          <VolumeSlider sx={{width:1}} onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
         </PrefLine>
         <PrefLine title="Theme" sx={{width:1, paddingRight:5}}>
           <ThemeButtons 
-            sx={{width:1, paddingLeft:1}} 
+            sx={{width:1}} 
             theme={theme} 
             setTheme={(new_theme) => {
               setTheme(new_theme);
@@ -97,7 +104,7 @@ export default function Settings({onApply, roundAmount, setRoundAmount}: Setting
               <NumberField
                 label="Max Cache Size" 
                 value={cacheSize} 
-                onValueCommitted={(value) => setCacheSize( value==null ? cacheSize : value)}
+                onValueCommitted={(value) => cacheSizeChange( value==null ? cacheSize : value)}
                 min={0}
               />
               <Select
