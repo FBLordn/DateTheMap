@@ -9,7 +9,6 @@ use super::world_map::WorldMapToJS;
 
 pub const MINIMUM_YEAR: i16 = 1400;
 pub const MAXIMUM_YEAR: i16 = 2024;
-pub const ROUND_AMOUNT: i8 = 5;
 
 /// Represents the game state
 #[derive(Clone)]
@@ -34,7 +33,12 @@ impl GameState {
         if guess_range.is_in_range(&self.world_map.correct) {
             AUDIO_PROVIDER.success();
             let diff = f32::from(guess_range.upper_bound - guess_range.lower_bound);
-            (5000_f32 * f32::powf(1.08, -diff.sqrt())).round() as i16
+            if diff < 1000_f32 {
+                (5000_f32 * f32::powf(2_f32, (-0.000_284_605_f32) * f32::powf(diff, 1.5_f32)))
+                    .ceil() as i16
+            } else {
+                0
+            }
         } else {
             AUDIO_PROVIDER.fail();
             0
@@ -98,21 +102,18 @@ mod tests {
     #[test]
     fn test_calculate_score() {
         let game_state = GameState::default();
-        let wrong_guess_over = Range::new([
-            game_state.world_map.correct + 7,
-            game_state.world_map.correct + 3642,
-        ]);
-        let wrong_guess_under = Range::new([
-            game_state.world_map.correct - 3,
-            game_state.world_map.correct - 6,
-        ]);
-        let correct_guess = Range::new([
-            game_state.world_map.correct - 39,
-            game_state.world_map.correct + 10,
-        ]);
+        let correct = game_state.world_map.correct;
+        let wrong_guess_over = Range::new([correct + 7, correct + 3642]);
+        let wrong_guess_under = Range::new([correct - 3, correct - 6]);
+        let correct_guess = Range::new([correct - 39, correct + 10]);
+        let lazy_correct_guess = Range::new([1000, 2024]);
+        let perfect_correct_guess = Range::new([correct, correct]);
+
         assert_eq!(game_state.calculate_score(wrong_guess_over), 0);
         assert_eq!(game_state.calculate_score(wrong_guess_under), 0);
         assert!(game_state.calculate_score(correct_guess) > 0);
+        assert_eq!(game_state.calculate_score(lazy_correct_guess), 0);
+        assert_eq!(game_state.calculate_score(perfect_correct_guess), 5000);
     }
 
     #[test]

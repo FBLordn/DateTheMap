@@ -1,7 +1,7 @@
 import { Button, Stack } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
-import logo from '../assets/idea_logo.png';
+import logo from '../../src-tauri/icons/icon.png';
 import GameMenu from "../components/Menu.tsx";
 import { Page } from "../Definitions";
 
@@ -10,38 +10,41 @@ interface MainMenuProps {
 }
 
 export default function MainMenu({onPageSelect : setCurrentPage} : MainMenuProps) {
+
   return (
     <Stack
-      sx={{height:'100vh', display:"flex"}}
+      sx={{height:'100vh', display:"flex", width:"100vw"}}
     >
-      <Stack sx={{minHeight:1/10}} direction={"row"} justifyContent="space-between">
+      <Stack sx={{height:"15%", padding:1}} direction={"row"} justifyContent="space-between">
+        <div style={{height:"100%"}}>
+          <Button
+            sx={{alignSelf:'flex-start', height:"100%", width:"100%"}}
+            disableElevation
+          >
+            <InfoOutlineIcon 
+              sx={{fontSize:'xxx-large', height:"100%", width:"100%"}} 
+              onClick={() => setCurrentPage(Page.INFO)}
+            />
+          </Button>
+        </div>
+        <div style={{height:"100%"}}>
         <Button
-          sx={{alignSelf:'flex-start', margin:"1%"}}
-          disableElevation
-        >
-          <InfoOutlineIcon 
-            sx={{fontSize:'xxx-large'}} 
-            onClick={() => setCurrentPage(Page.INFO)}
-          />
-        </Button>
-        <Button
-          sx={{alignSelf:'flex-end', margin:"1%"}}
+          sx={{alignSelf:'flex-end', height:"100%", width:"100%"}}
           disableElevation
         >
           <SettingsIcon
-            sx={{fontSize:'xxx-large'}} 
+            sx={{fontSize:'xxx-large', height:"100%", width:"100%"}} 
             onClick={() => setCurrentPage(Page.SETTINGS)}
           />
         </Button>
-
+        </div>
       </Stack>
       <GameMenu 
-        sx={{alignItems:'center', display:'flex', minHeight:8/10, padding:5}}
+        sx={{alignItems:'center', display:'flex', height:"85%", paddingBottom:3}}
         onSubmit={() => setCurrentPage(Page.PLAYING)} 
-        //title="Date The Map"
         children={
-          <div style={{flexGrow:1}}>
-            <img src={logo} alt="Logo" style={{minHeight:"90%"}}/>
+          <div style={{height:"100%"}}>
+            <img src={logo} alt="Logo" style={{height:"100%"}}/>
           </div>
         }
         buttonName="Start Game"
