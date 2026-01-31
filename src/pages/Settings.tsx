@@ -1,4 +1,4 @@
-import { Button, Divider, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
 import PrefLine from "../components/PrefLine";
 import { useContext } from "react";
 import { SettingsContext } from "../App";
@@ -64,74 +64,80 @@ export default function Settings({onApply, roundAmount, setRoundAmount}: Setting
   }
 
   return (
-    <Stack sx={{height:'100vh', display:"flex"}}>
-      <Typography variant='h1'>
+    <Stack sx={{height:'100vh'}}>
+      <Typography variant='h1' sx={{height:"15%"}}>
         {"Settings"}
       </Typography>
-      <Stack 
-        spacing={3}
-        padding={3}
-        direction="column" sx={{ alignItems: 'center'}}
-        divider={<Divider flexItem orientation="horizontal"/>}
+      <Box
+        overflow={'auto'}
+        sx={{height:"75%"}}
       >
-        <PrefLine title="Music" sx={{width:1, paddingRight:5}}>
-          <VolumeSlider sx={{width:1}}  onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
-        </PrefLine>
-        <PrefLine title="Sound" sx={{width:1, paddingRight:5}}>
-          <VolumeSlider sx={{width:1}} onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
-        </PrefLine>
-        <PrefLine title="Theme" sx={{width:1, paddingRight:5}}>
-          <ThemeButtons 
-            sx={{width:1}} 
-            theme={theme} 
-            setTheme={(new_theme) => {
-              setTheme(new_theme);
-              setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_size:cacheSize})
-            }}
-          />
-        </PrefLine>
-        <PrefLine title="Rounds" sx={{width:1, paddingRight:5}}>
-            <NumberField 
-              label="Amount of rounds per game"
-              value={roundAmount}
-              onValueCommitted={(value) => setRoundAmount(value==null ? roundAmount : value)}
-              min={1}
-              max={255}
+        <Stack 
+          spacing={3}
+          padding={3}
+          direction="column" 
+          sx={{ alignItems: 'center'}}
+          divider={<Divider flexItem orientation="horizontal"/>}
+        >
+          <PrefLine title="Music" sx={{width:1, paddingRight:5}}>
+            <VolumeSlider sx={{width:1}}  onChange={(volume) => invoke('set_music_volume', {volume: volume/100})} volume={music*100} setVolume={(volume: number) => setMusic(volume/100)}/>
+          </PrefLine>
+          <PrefLine title="Sound" sx={{width:1, paddingRight:5}}>
+            <VolumeSlider sx={{width:1}} onChange={(volume) => invoke('set_sound_volume', {volume: volume/100})} volume={sound*100} setVolume={(volume: number) => setSound(volume/100)}/>
+          </PrefLine>
+          <PrefLine title="Theme" sx={{width:1, paddingRight:5}}>
+            <ThemeButtons 
+              sx={{width:1}} 
+              theme={theme} 
+              setTheme={(new_theme) => {
+                setTheme(new_theme);
+                setSettings({music_volume:music, sound_volume:sound, theme:new_theme, cache_size:cacheSize})
+              }}
             />
-        </PrefLine>
-        <PrefLine title="Cache" sx={{width:1, paddingRight:5}}>
-          <Stack direction={"row"} sx={{width:1}} justifyContent="space-between">
-              <NumberField
-                label="Max Cache Size" 
-                value={cacheSize} 
-                onValueCommitted={(value) => cacheSizeChange( value==null ? cacheSize : value)}
-                min={0}
+          </PrefLine>
+          <PrefLine title="Rounds" sx={{width:1, paddingRight:5}}>
+              <NumberField 
+                label="Amount of rounds per game"
+                value={roundAmount}
+                onValueCommitted={(value) => setRoundAmount(value==null ? roundAmount : value)}
+                min={1}
+                max={255}
               />
-              <Select
-                label="Unit"
-                value={cacheMult}
-                onChange={onCacheMultChange}
-              >
-                <MenuItem value={KB_MULT}>KB</MenuItem>
-                <MenuItem value={MB_MULT}>MB</MenuItem>
-                <MenuItem value={GB_MULT}>GB</MenuItem>
-              </Select>
-              <Button sx={{minWidth:1/4}} color="warning" variant="contained" onClick={() => invoke('reset_cache')}>
-                {"Reset Cache"}
-              </Button>
-          </Stack>
-        </PrefLine>
-      <Stack direction="row" display="flex" justifyContent="space-evenly" width="100vw">
-        <Button onClick={() => invoke('close_game')} color="warning" variant="contained">
+          </PrefLine>
+          <PrefLine title="Cache" sx={{width:1, paddingRight:5}}>
+            <Stack direction={"row"} sx={{width:1}} justifyContent="space-between">
+                <NumberField
+                  label="Max Cache Size" 
+                  value={cacheSize} 
+                  onValueCommitted={(value) => cacheSizeChange( value==null ? cacheSize : value)}
+                  min={0}
+                />
+                <Select
+                  label="Unit"
+                  value={cacheMult}
+                  onChange={onCacheMultChange}
+                >
+                  <MenuItem value={KB_MULT}>KB</MenuItem>
+                  <MenuItem value={MB_MULT}>MB</MenuItem>
+                  <MenuItem value={GB_MULT}>GB</MenuItem>
+                </Select>
+                <Button sx={{minWidth:1/4}} color="warning" variant="contained" onClick={() => invoke('reset_cache')}>
+                  {"Reset Cache"}
+                </Button>
+            </Stack>
+          </PrefLine>
+        </Stack>
+      </Box>
+      <Stack direction="row" display="flex" height={"10%"} justifyContent="space-evenly" paddingTop={1} paddingBottom={1}>
+        <Button onClick={() => invoke('close_game')} color="warning" variant="contained" sx={{height:"50%"}}>
           {"Exit Game"}
         </Button>
-        <Button onClick={() => {invoke('reset'); window.location.reload()}} color="info" variant="contained">
+        <Button onClick={() => {invoke('reset'); window.location.reload()}} color="info" variant="contained" sx={{height:"50%"}}>
           {"Main Menu"}
         </Button>
-        <Button onClick={applySettings} color="primary" variant="contained">
+        <Button onClick={applySettings} color="primary" variant="contained" sx={{height:"50%"}}>
           {"Apply"}
         </Button>
-      </Stack>
       </Stack>
     </Stack>
   );
