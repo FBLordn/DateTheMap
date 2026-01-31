@@ -10,17 +10,37 @@ interface MenuProps {
 }
 
 export default function Menu({sx, onSubmit, title, buttonName, children}: React.PropsWithChildren<MenuProps>) {
-  return (
-    <Stack sx={sx}>
-      <Typography variant='h1'>
-        {title}
-      </Typography>
+  if(title) {
+    return (
+      <Stack sx={sx}>
+        <Typography variant='h1' sx={{height:"10%"}}>
+          {title}
+        </Typography>
 
-      {children}
-      
-      <Button onClick={onSubmit} color="primary" variant="contained" sx={{minWidth:1/4, maxWidth:1/3, alignSelf:'center'}}>
-        {buttonName}
-      </Button>
-    </Stack>
-  ) 
+        <div style={{height:"80%"}}>
+        {children}
+        </div>
+        
+        <Button onClick={onSubmit} color="primary" variant="contained" sx={{minWidth:1/4, maxWidth:1/3, alignSelf:'center', height:"10%"}}>
+          <Typography sx={{height:"100%"}}>
+            {buttonName}
+          </Typography>
+        </Button>
+      </Stack>
+    ) 
+  } else {
+    return (
+      <Stack sx={sx}>
+        <div style={{height:"93%"}}>
+          {children}
+        </div>
+
+        <Button onClick={onSubmit} color="primary" variant="contained" sx={{minWidth:1/4, maxWidth:1/3, alignSelf:'center', height:"7%"}}>
+          <Typography sx={{fontSize:"3vh"}}>
+            {buttonName}
+          </Typography>
+        </Button>
+      </Stack>
+    ) 
+  }
 }
