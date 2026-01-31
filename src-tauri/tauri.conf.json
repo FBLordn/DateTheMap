@@ -18,8 +18,8 @@
   },
   "productName": "DateTheMap",
   "mainBinaryName": "DateTheMap",
-  "version": "0.0.0",
-  "identifier": "com.tauri.dev",
+  "version": "1.0.0",
+  "identifier": "com.datethemap.fblordn",
   "plugins": {},
   "app": {
     "withGlobalTauri": true,
