@@ -22,6 +22,9 @@ export default function Information({onApply} : InformationProps) {
         <PrefLine title="Source" sx={{width:1, justifyContent:"space-between", paddingRight:5}}>
           <a href='https://www.openhistoricalmap.org/' color="inherit" target="_blank" rel="noopener"> <Typography variant="h5"> {"OpenHistoricalMap"} </Typography> </a>
         </PrefLine>
+        <PrefLine title="Logo Design" sx={{width:1, justifyContent:"space-between", paddingRight:5}}>
+          <Typography variant="h5"> {"Jarenissen"} </Typography>
+        </PrefLine>
         <Button onClick={onApply} color="primary" variant="contained" sx={{minWidth:1/4, maxWidth:1/3, alignSelf:'center'}}>
           {"Main Menu"}
         </Button>
