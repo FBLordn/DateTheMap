@@ -13,7 +13,7 @@ export default function PrefLine({title, children, sx}: React.PropsWithChildren<
       display={"flex"}
     >
       <Typography variant="h6" sx={{width:"20%"}}> {title} </Typography>
-      <div style={{width:"80%"}}>
+      <div style={{width:"80%", justifyContent:"start", alignContent:'center'}}>
         {children}
       </div>
     </Stack>
