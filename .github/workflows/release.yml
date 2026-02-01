@@ -32,6 +32,10 @@ jobs:
         artifacts: "src-tauri/target/release/bundle/*"
         tag: ${{ steps.version.outputs.TAG_NAME }}
   release-windows:
+    permissions:
+      contents: read
+      pull-requests: write
+
     runs-on: windows
     steps:
     - uses: actions/checkout@v4
