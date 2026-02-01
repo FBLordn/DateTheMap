@@ -25,6 +25,8 @@ jobs:
       run: sudo rm -rf /var/lib/apt/lists/*; sudo apt update
     - name: install glib
       run: sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libasound2-dev
+    - name: npm reqs install 
+      run: npm install
     - name: Build
       run: npm run tauri build
     - uses: ncipollo/release-action@v1
@@ -43,6 +45,8 @@ jobs:
       run: |
         $json = Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json "TAG_NAME=$($json.version)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
       id: version
+    - name: npm reqs install 
+      run: npm install
     - name: Build
       run: npm run tauri build
     - uses: ncipollo/release-action@v1
