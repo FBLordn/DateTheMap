@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    branches: [ "release" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release-linux:
+    permissions:
+      contents: read
+      pull-requests: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Retrieve version
+      run: |
+        echo "TAG_NAME=$(cat src-tauri/tauri.conf.json | grep -Po '\"version\": "\\K.*?(?=\")')" >> $GITHUB_OUTPUT
+      id: version
+    - name: update apt
+      run: sudo rm -rf /var/lib/apt/lists/*; sudo apt update
+    - name: install glib
+      run: sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libasound2-dev
+    - name: Build
+      run: npm run tauri build
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "src-tauri/target/release/bundle/*"
+        tag: ${{ steps.version.outputs.TAG_NAME }}
+  release-windows:
+    permissions:
+      contents: read
+      pull-requests: write
+
+    runs-on: windows
+    steps:
+    - uses: actions/checkout@v4
+    - name: Retrieve version
+      run: |
+        $json = Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json "TAG_NAME=$($json.version)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+      id: version
+    - name: Build
+      run: npm run tauri build
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "src-tauri/target/release/bundle/*"
+        tag: ${{ steps.version.outputs.TAG_NAME }}
