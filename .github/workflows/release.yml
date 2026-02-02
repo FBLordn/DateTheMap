@@ -2,7 +2,8 @@ name: Release
 
 on:
   push:
-    branches: [ "release" ]
+    tags:
+      - '*'
 
 env:
   CARGO_TERM_COLOR: always
@@ -34,6 +35,7 @@ jobs:
         artifacts: "src-tauri/target/release/bundle/*"
         commit: "release"
         tag: ${{ steps.version.outputs.TAG_NAME }}
+
   release-windows:
     permissions:
       contents: read
