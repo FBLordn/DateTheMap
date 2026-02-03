@@ -31,7 +31,7 @@ jobs:
       run: npm run tauri build
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "src-tauri/target/release/bundle/*.*"
+        artifacts: "src-tauri/target/release/bundle/**/.*"
         tag: "v${{ steps.version.outputs.TAG_NAME }}"
         #commit: "release"
 
@@ -52,6 +52,6 @@ jobs:
       run: npm run tauri build
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "src-tauri/target/release/bundle/*.*"
+        artifacts: "src-tauri/target/release/bundle/**/.*"
         #commit: "release"
         tag: "v${{ steps.version.outputs.TAG_NAME }}"
