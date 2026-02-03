@@ -32,8 +32,6 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "src-tauri/target/release/bundle/**/.*"
-        tag: "v${{ steps.version.outputs.TAG_NAME }}"
-        #commit: "release"
 
   release-windows:
     permissions:
@@ -53,5 +51,3 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "src-tauri/target/release/bundle/**/.*"
-        #commit: "release"
-        tag: "v${{ steps.version.outputs.TAG_NAME }}"
