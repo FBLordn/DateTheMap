@@ -2,7 +2,8 @@ name: Release
 
 on:
   push:
-    branches: [ "release" ]
+    tags:
+      - '*'
 
 env:
   CARGO_TERM_COLOR: always
@@ -10,17 +11,12 @@ env:
 jobs:
   release-linux:
     permissions:
-      contents: read
-      pull-requests: write
+      contents: write
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
-    - name: Retrieve version
-      run: |
-        echo "TAG_NAME=$(cat src-tauri/tauri.conf.json | grep -Po '\"version\": "\\K.*?(?=\")')" >> $GITHUB_OUTPUT
-      id: version
     - name: update apt
       run: sudo rm -rf /var/lib/apt/lists/*; sudo apt update
     - name: install glib
@@ -31,25 +27,21 @@ jobs:
       run: npm run tauri build
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "src-tauri/target/release/bundle/*"
-        tag: ${{ steps.version.outputs.TAG_NAME }}
+        artifacts: "src-tauri/target/release/bundle/**/*.deb,src-tauri/target/release/bundle/**/*.AppImage"
+        allowUpdates: true
+
   release-windows:
     permissions:
-      contents: read
-      pull-requests: write
+      contents: write
 
-    runs-on: windows
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Retrieve version
-      run: |
-        $json = Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json "TAG_NAME=$($json.version)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-      id: version
     - name: npm reqs install 
       run: npm install
     - name: Build
       run: npm run tauri build
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "src-tauri/target/release/bundle/*"
-        tag: ${{ steps.version.outputs.TAG_NAME }}
+        artifacts: "src-tauri/target/release/bundle/msi/*.msi,src-tauri/target/release/bundle/nsis/*.exe"
+        allowUpdates: true
