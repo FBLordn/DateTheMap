@@ -37,7 +37,7 @@ jobs:
     permissions:
       contents: write
 
-    runs-on: windows
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
     - name: Retrieve version
