@@ -17,10 +17,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Retrieve version
-      run: |
-        echo "TAG_NAME=$(cat src-tauri/tauri.conf.json | grep -Po '\"version\": "\\K.*?(?=\")')" >> $GITHUB_OUTPUT
-      id: version
     - name: update apt
       run: sudo rm -rf /var/lib/apt/lists/*; sudo apt update
     - name: install glib
@@ -40,10 +36,6 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Retrieve version
-      run: |
-        $json = Get-Content src-tauri/tauri.conf.json | ConvertFrom-Json "TAG_NAME=$($json.version)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-      id: version
     - name: npm reqs install 
       run: npm install
     - name: Build
