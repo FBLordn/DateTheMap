@@ -17,12 +17,12 @@
     "@mui/material": "^7.3.7",
     "@tauri-apps/api": "^2.4.1",
     "@tauri-apps/plugin-shell": "^2.2.0",
-    "react": "^19.1.0",
+    "react": "^19.2.4",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.4.1",
-    "@types/react": "^19.0.12",
+    "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "typescript": "^5.9.3",
