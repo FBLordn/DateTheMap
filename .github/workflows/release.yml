@@ -2,7 +2,8 @@ name: Release
 
 on:
   push:
-    branches: [ "release" ]
+    tags:
+      - '*'
 env:
   CARGO_TERM_COLOR: always
 
@@ -30,8 +31,8 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "src-tauri/target/release/bundle/*"
-        tag: "${{ steps.version.outputs.TAG_NAME }}"
-        commit: "release"
+        #tag: "${{ steps.version.outputs.TAG_NAME }}"
+        #commit: "release"
 
   release-windows:
     permissions:
@@ -51,5 +52,5 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "src-tauri/target/release/bundle/*"
-        commit: "release"
-        tag: "${{ steps.version.outputs.TAG_NAME }}"
+        #commit: "release"
+        #tag: "${{ steps.version.outputs.TAG_NAME }}"
