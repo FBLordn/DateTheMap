@@ -65,6 +65,19 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
     return ((val >= first && val <= second) || (val <= first && val >= second));
   }
 
+  function onValueInput(new_value: number | null, thumb: number) {
+    new_value = new_value == null ? value[thumb] : new_value;
+    if (new_value < minValue) {
+      new_value = minValue;
+    } 
+    else if (new_value > maxValue) {
+      new_value = maxValue;
+    } else {
+      new_value = Math.round(new_value);
+    }
+    onValueChange(new_value, thumb);
+  }
+
   function getThumbColours() { 
     const sortedThumbs = thumbs.toSorted();
     let list = {};
@@ -120,7 +133,7 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
         disabled={disabled}
         label="From" 
         value={value[0]} 
-        onValueCommitted={(new_val) => onValueChange(new_val==null ? value[0] : Math.round(new_val), 0)}
+        onValueCommitted={(new_val) => onValueInput(new_val, 0)}
         min={minValue}
         max={maxValue}
         size='small'
@@ -150,7 +163,7 @@ export default function InputRangeSlider({sx = [], callbackFunction, minValue, m
         disabled={disabled}
         label="To" 
         value={value[1]} 
-        onValueCommitted={(new_val) => onValueChange(new_val==null ? value[0] : Math.round(new_val), 0)}
+        onValueCommitted={(new_val) => onValueInput(new_val, 1)}
         min={minValue}
         max={maxValue}
         size='small'
