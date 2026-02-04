@@ -75,6 +75,7 @@ export default function Settings({onApply, roundAmount, setRoundAmount}: Setting
         <Stack 
           spacing={3}
           padding={3}
+          paddingTop={5}
           direction="column" 
           sx={{ alignItems: 'center'}}
           divider={<Divider flexItem orientation="horizontal"/>}
