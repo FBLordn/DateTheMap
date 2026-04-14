@@ -39,7 +39,7 @@ export default function GameLayout({onMainMenuSelect, roundAmount, setRoundAmoun
   const [roundOver, setRoundOver] = React.useState<boolean>(false);
 
   const [guessRange, setRange] = React.useState([possible_range.lower_bound, possible_range.upper_bound]);
-
+  
   function getGameState() {
     invoke('get_game_state').then((gameState) => setGameState(gameState as GameState));
   }
@@ -47,6 +47,8 @@ export default function GameLayout({onMainMenuSelect, roundAmount, setRoundAmoun
   React.useEffect(() => {
     getGameState();
   }, []);
+
+  const mapComponent = React.useMemo( () => gameState ? <Item sx={{m:1, flexGrow:1}}> <div dangerouslySetInnerHTML={{__html: gameState.world_map.html}} style={css} /> </Item> : <Item sx={{m:1, flexGrow:1}}/>, [gameState]);
 
   function getActiveButtonIndex(roundOver: boolean, round: number | undefined) {
     if (roundOver) {
@@ -113,7 +115,7 @@ export default function GameLayout({onMainMenuSelect, roundAmount, setRoundAmoun
             </Item>
           </Stack> 
         </Item>
-        <Item sx={{m:1, flexGrow:1}}> <div dangerouslySetInnerHTML={{__html: gameState.world_map.html}} style={css} /> </Item>
+        {mapComponent}
         <Item> 
           <Stack
             direction="row"
